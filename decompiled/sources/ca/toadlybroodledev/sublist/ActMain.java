@@ -33,18 +33,16 @@ import ca.toadlybroodledev.sublist.p031b.InterfaceC0549a;
 import ca.toadlybroodledev.sublist.p031b.InterfaceC0550b;
 import ca.toadlybroodledev.sublist.p032c.C0554a;
 import ca.toadlybroodledev.sublist.p032c.C0556c;
+// Phase 3.4 (deferred): com.google.android.gms.ads.{C0657a,C0676c,C0687h} stay until
+//                       the 3.4 ad-call-site sweep below.
 import com.google.android.gms.ads.C0657a;
 import com.google.android.gms.ads.C0676c;
 import com.google.android.gms.ads.C0687h;
-import com.google.android.gms.appinvite.C0908a;
-import com.google.android.gms.appinvite.C0910c;
-import com.google.android.gms.appinvite.C0912e;
-import com.google.android.gms.appinvite.InterfaceC0911d;
-import com.google.android.gms.auth.api.C0915a;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.C1071a;
-import com.google.android.gms.common.api.AbstractC1079f;
-import com.google.android.gms.common.api.InterfaceC1194l;
+// Phase 3.3: removed com.google.android.gms.appinvite.{C0908a,C0910c,C0912e,InterfaceC0911d}
+// Phase 3.3: removed com.google.android.gms.auth.api.{C0915a, signin.GoogleSignInOptions}
+// Phase 3.3: removed com.google.android.gms.common.C1071a (ConnectionResult)
+// Phase 3.3: removed com.google.android.gms.common.api.{AbstractC1079f, InterfaceC1194l}
+//            (GoogleApiClient + ResultCallback)
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -52,13 +50,14 @@ import java.util.Iterator;
 import java.util.List;
 
 /* JADX INFO: loaded from: classes.dex */
-public class ActMain extends ActivityC0348e implements View.OnClickListener, InterfaceC0549a, InterfaceC0550b, AbstractC1079f.c {
+// Phase 3.3: removed `, AbstractC1079f.c` (GoogleApiClient.OnConnectionFailedListener)
+//            from the implements clause.
+public class ActMain extends ActivityC0348e implements View.OnClickListener, InterfaceC0549a, InterfaceC0550b {
 
     /* JADX INFO: renamed from: m */
     static Fab f3694m;
 
-    /* JADX INFO: renamed from: n */
-    static AbstractC1079f f3695n;
+    // Phase 3.3: removed `static AbstractC1079f f3695n` — GoogleApiClient handle.
 
     /* JADX INFO: renamed from: w */
     private static boolean f3696w = false;
@@ -96,8 +95,8 @@ public class ActMain extends ActivityC0348e implements View.OnClickListener, Int
     /* JADX INFO: renamed from: q */
     public ViewOnClickListenerC0558e f3707q;
 
-    /* JADX INFO: renamed from: r */
-    public ViewOnClickListenerC0559f f3708r;
+    // Phase 3.3: removed `public ViewOnClickListenerC0559f f3708r` — handle to the
+    //   Sign-In fragment (class file deleted in this phase).
 
     /* JADX INFO: renamed from: s */
     public ViewOnClickListenerC0562i f3709s;
@@ -125,10 +124,9 @@ public class ActMain extends ActivityC0348e implements View.OnClickListener, Int
         return TypedValue.applyDimension(1, f, context.getResources().getDisplayMetrics());
     }
 
-    /* JADX INFO: renamed from: A */
-    void m4754A() {
-        f3695n = new AbstractC1079f.a(this).m6687a(this, this).m6689a(C0915a.f5000e, new GoogleSignInOptions.C0927a(GoogleSignInOptions.f5052f).m6144a("REDACTED_OAUTH_CLIENT_ID").m6145b().m6147d()).m6688a(C0908a.f4987a).m6693b();
-    }
+    // Phase 3.3: removed void m4754A() — GoogleApiClient init with GoogleSignInOptions
+    //   for OAuth2 client id REDACTED_OAUTH_CLIENT_ID
+    //   plus AppInvite API. Sole caller (in ActMain.onCreate, line 584-ish) also removed.
 
     /* JADX INFO: renamed from: B */
     void m4755B() {
@@ -160,10 +158,10 @@ public class ActMain extends ActivityC0348e implements View.OnClickListener, Int
         }
     }
 
-    /* JADX INFO: renamed from: D */
-    protected void m4757D() {
-        startActivityForResult(new C0910c.a(getString(R.string.invitation_title)).m6091a(getString(R.string.invitation_message)).m6090a(Uri.parse("https://jg5ms.app.goo.gl/XktS")).m6092b(Uri.parse("http://toadlybroodle.ca/wp-content/uploads/2016/11/email-promo-square.png")).m6093b(getString(R.string.invitation_cta)).m6089a(), 10101);
-    }
+    // Phase 3.3: removed protected void m4757D() — launched the App-Invites send
+    //   activity (request code 10101). Deep link `https://jg5ms.app.goo.gl/XktS`
+    //   was the Firebase Dynamic Links short-link domain associated with this app,
+    //   also deprecated. Sole caller (menu item, line ~704) also removed.
 
     @Override // ca.toadlybroodledev.sublist.p031b.InterfaceC0549a
     /* JADX INFO: renamed from: E */
@@ -302,12 +300,9 @@ public class ActMain extends ActivityC0348e implements View.OnClickListener, Int
         this.f3700D.m4976a(false, false);
     }
 
-    @Override // com.google.android.gms.common.api.AbstractC1079f.c
-    /* JADX INFO: renamed from: a */
-    public void mo4766a(C1071a c1071a) {
-        Log.d(this.f3712v, "onConnectionFailed:" + c1071a);
-        Toast.makeText(this, R.string.play_services_error, 0).show();
-    }
+    // Phase 3.3: removed @Override public void mo4766a(C1071a c1071a) —
+    //   GoogleApiClient.OnConnectionFailedListener implementation; toasted
+    //   R.string.play_services_error and logged the connection result.
 
     @Override // ca.toadlybroodledev.sublist.p031b.InterfaceC0550b
     /* JADX INFO: renamed from: a */
@@ -483,34 +478,20 @@ public class ActMain extends ActivityC0348e implements View.OnClickListener, Int
         return this.f3707q;
     }
 
-    @Override // ca.toadlybroodledev.sublist.p031b.InterfaceC0549a
-    /* JADX INFO: renamed from: o */
-    public ViewOnClickListenerC0559f mo4777o() {
-        return this.f3708r;
-    }
+    // Phase 3.3: removed @Override public ViewOnClickListenerC0559f mo4777o() —
+    //   returned the Sign-In fragment (deleted in this phase). The
+    //   InterfaceC0549a contract method itself should be deleted from
+    //   p031b/InterfaceC0549a.java during the Phase 4 port (no remaining caller).
 
     @Override // android.support.v4.p006a.ActivityC0155k, android.app.Activity
     public void onActivityResult(int i, int i2, Intent intent) {
         super.onActivityResult(i, i2, intent);
-        if (i == 10101) {
-            if (i2 != -1) {
-                Toast.makeText(this, R.string.invites_failed, 0).show();
-                return;
-            }
-            ArrayList<String> arrayList = new ArrayList();
-            try {
-                Collections.addAll(arrayList, C0910c.m6087a(i2, intent));
-                C0567n.m4963b((ArrayList<String>) arrayList);
-            } catch (Exception e) {
-                e.getMessage();
-                Log.e(this.f3712v, "Error uploading invites data");
-            }
-            for (String str : arrayList) {
-                this.f3707q.m4867ae();
-                Log.d(this.f3712v, "onActivityResult: sent invitation " + str);
-            }
-            this.f3707q.mo4868af();
-        }
+        // Phase 3.3: removed `if (i == 10101)` App-Invites send-result handler block.
+        //   Decoded the invite-IDs array via C0910c.m6087a (AppInviteInvitation.getInvitationIds),
+        //   wrote it to RTDB via C0567n.m4963b (already removed in this phase), then for each
+        //   invitee bumped the profile-fragment's "invites sent" counter via f3707q.m4867ae and
+        //   refreshed the fragment via f3707q.mo4868af. Both counter + refresh have local-only
+        //   semantics so they can be reused if a future phase reintroduces local invite tracking.
     }
 
     @Override // android.support.v4.p006a.ActivityC0155k, android.app.Activity
@@ -583,7 +564,7 @@ public class ActMain extends ActivityC0348e implements View.OnClickListener, Int
         });
         C0572s.m5009a(this);
         this.f3701E = new C0564k(this);
-        m4754A();
+        // Phase 3.3: removed `m4754A()` GoogleApiClient init call.
         this.f3705o = new C0687h(this);
         this.f3705o.m5428a("ca-app-pub-1334740097475606/9485517375");
         this.f3705o.m5425a(new C0657a() { // from class: ca.toadlybroodledev.sublist.ActMain.2
@@ -631,7 +612,7 @@ public class ActMain extends ActivityC0348e implements View.OnClickListener, Int
         this.f3706p = m1012f();
         AbstractC0164t abstractC0164tMo1073a = this.f3706p.mo1073a();
         this.f3707q = (ViewOnClickListenerC0558e) this.f3706p.mo1072a(string);
-        this.f3708r = (ViewOnClickListenerC0559f) this.f3706p.mo1072a(string2);
+        // Phase 3.3: removed `this.f3708r = (ViewOnClickListenerC0559f) ...mo1072a(string2)` — Sign-In fragment lookup.
         this.f3709s = (ViewOnClickListenerC0562i) this.f3706p.mo1072a(string3);
         this.f3710t = (ViewOnClickListenerC0561h) this.f3706p.mo1072a(string4);
         this.f3711u = (C0560g) this.f3706p.mo1072a(string5);
@@ -639,10 +620,7 @@ public class ActMain extends ActivityC0348e implements View.OnClickListener, Int
             this.f3707q = new ViewOnClickListenerC0558e();
             abstractC0164tMo1073a.mo836a(R.id.placeholder_for_fragments, this.f3707q, string);
         }
-        if (this.f3708r == null) {
-            this.f3708r = new ViewOnClickListenerC0559f();
-            abstractC0164tMo1073a.mo836a(R.id.placeholder_for_fragments, this.f3708r, string2);
-        }
+        // Phase 3.3: removed Sign-In fragment construction/attachment for f3708r/string2.
         if (this.f3709s == null) {
             this.f3709s = new ViewOnClickListenerC0562i();
             abstractC0164tMo1073a.mo836a(R.id.placeholder_for_fragments, this.f3709s, string3);
@@ -658,53 +636,28 @@ public class ActMain extends ActivityC0348e implements View.OnClickListener, Int
         abstractC0164tMo1073a.mo847b();
         this.f3702F = new ArrayList<>();
         m4755B();
-        C0908a.f4988b.mo6085a(f3695n, this, true).mo6696a(new InterfaceC1194l<InterfaceC0911d>() { // from class: ca.toadlybroodledev.sublist.ActMain.5
-            @Override // com.google.android.gms.common.api.InterfaceC1194l
-            /* JADX INFO: renamed from: a, reason: merged with bridge method [inline-methods] */
-            public void mo4791a(InterfaceC0911d interfaceC0911d) {
-                String string6;
-                Log.d(ActMain.this.f3712v, "getInvitation:onResult:" + interfaceC0911d.mo6094a());
-                if (!interfaceC0911d.mo6094a().m6626d()) {
-                    Log.d(ActMain.this.f3712v, "No deep link intercepted");
-                    return;
-                }
-                if (C0912e.m6097b(interfaceC0911d.mo6095b()).equals("https://jg5ms.app.goo.gl/XktS")) {
-                    string6 = ActMain.this.getString(R.string.invite_promo_text, new Object[]{ActMain.this.getString(R.string.invite_friends_format)});
-                } else {
-                    string6 = ActMain.this.getString(R.string.invite_promo_text, new Object[]{""});
-                }
-                C0566m.f3943f = true;
-                DialogInterfaceC0347d.a aVar = new DialogInterfaceC0347d.a(ActMain.this);
-                aVar.m2591a(R.string.invite_welcome);
-                aVar.m2601b(string6);
-                aVar.m2592a(R.string.ok, new DialogInterface.OnClickListener() { // from class: ca.toadlybroodledev.sublist.ActMain.5.1
-                    @Override // android.content.DialogInterface.OnClickListener
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        ActMain.this.mo4771b((ComponentCallbacksC0154j) ActMain.this.f3708r);
-                    }
-                });
-                aVar.m2599b(R.string.cancel, null);
-                aVar.m2603c();
-                Log.d(ActMain.this.f3712v, "Invite succeeded!");
-            }
-        });
+        // Phase 3.3: removed `C0908a.f4988b.mo6085a(f3695n, this, true)…` AppInvite
+        //   deep-link receive handler (AppInvite.AppInviteApi.getInvitation). On a
+        //   matching invite for https://jg5ms.app.goo.gl/XktS it set the f3943f
+        //   "got-promo" flag in C0566m, popped a welcome dialog (invite_welcome /
+        //   invite_promo_text / invite_friends_format strings), and on OK pushed the
+        //   Sign-In fragment (f3708r). The f3943f flag may also gate the trial-hours
+        //   path in C0567n.m4975z (already removed in 3.1) — safe to drop entirely.
     }
 
     @Override // ca.toadlybroodledev.sublist.p031b.InterfaceC0549a
     public void onFragmentInput(View view) {
         switch (view.getId()) {
-            case R.id.base_google_sign_in_button /* 2131296301 */:
-                mo4771b((ComponentCallbacksC0154j) this.f3708r);
-                break;
-            case R.id.base_profile_sign_out_button /* 2131296302 */:
-                mo4771b((ComponentCallbacksC0154j) this.f3708r);
-                break;
+            // Phase 3.3: removed cases R.id.base_google_sign_in_button + base_profile_sign_out_button.
+            //   Both swapped to the Sign-In fragment (f3708r); the button views themselves
+            //   live in res/layout (still present in decompiled/resources/, dropped during
+            //   the Phase 1 resource port). The R.id constants stay reserved for now and
+            //   the corresponding views should be deleted from the source layouts during
+            //   the Phase 1 res import.
             case R.id.profile_purchase_premium_button /* 2131296544 */:
                 this.f3701E.m4916d();
                 break;
-            case R.id.profile_share_button /* 2131296545 */:
-                m4757D();
-                break;
+            // Phase 3.3: removed case R.id.profile_share_button calling m4757D() — App-Invites send.
         }
     }
 

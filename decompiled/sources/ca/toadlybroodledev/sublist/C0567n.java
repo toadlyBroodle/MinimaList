@@ -10,13 +10,11 @@ import android.view.View;
 import android.widget.Toast;
 import ca.toadlybroodledev.sublist.p031b.InterfaceC0549a;
 import ca.toadlybroodledev.sublist.p032c.C0554a;
-import ca.toadlybroodledev.sublist.p032c.C0555b;
-import ca.toadlybroodledev.sublist.p032c.C0556c;
-import com.google.firebase.auth.AbstractC2198l;
-import com.google.firebase.auth.FirebaseAuth;
+// Phase 3.3: removed import ca.toadlybroodledev.sublist.p032c.C0555b (App-Invites tracker; class deleted)
+// Phase 3.3: removed import ca.toadlybroodledev.sublist.p032c.C0556c (cloud user profile; sole live use was here)
+// Phase 3.3: removed com.google.firebase.auth.{AbstractC2198l, FirebaseAuth}
 // Phase 3.1: removed com.google.firebase.database.{C2225a,C2226b,C2266d,C2268f,C2269g,InterfaceC2276n}
 //            (DataSnapshot, DatabaseError, DatabaseReference, FirebaseDatabase, GenericTypeIndicator, ValueEventListener)
-// Phase 3.3 will also remove the remaining FirebaseAuth import + AbstractC2198l import above.
 import com.google.p036a.C0614e;
 import com.google.p036a.p041c.C0608a;
 import java.io.File;
@@ -34,39 +32,22 @@ import java.util.HashMap;
 /* JADX INFO: loaded from: classes.dex */
 public class C0567n extends C0566m {
 
-    /* JADX INFO: renamed from: p */
-    static FirebaseAuth f3972p;
-
+    // Phase 3.3: removed `static FirebaseAuth f3972p` — singleton auth handle.
     // Phase 3.1: removed `static C2266d f3973r` — Firebase Realtime Database root reference.
 
     /* JADX INFO: renamed from: s */
     private static final String f3974s = "fuckn" + C0567n.class.getSimpleName();
 
-    /* JADX INFO: renamed from: q */
-    FirebaseAuth.InterfaceC2155a f3975q;
+    // Phase 3.3: removed `FirebaseAuth.InterfaceC2155a f3975q` — AuthStateListener that
+    //   dispatched on sign-in (calling m4975z to materialize cloud profile, since
+    //   removed in 3.1) and on sign-out (nulling local profile cache). Local-only app
+    //   has no auth state to listen on.
 
     C0567n(InterfaceC0549a interfaceC0549a) {
         super(interfaceC0549a);
-        f3972p = FirebaseAuth.getInstance();
-        this.f3975q = new FirebaseAuth.InterfaceC2155a() { // from class: ca.toadlybroodledev.sublist.n.1
-            @Override // com.google.firebase.auth.FirebaseAuth.InterfaceC2155a
-            /* JADX INFO: renamed from: a */
-            public void mo4978a(FirebaseAuth firebaseAuth) {
-                AbstractC2198l abstractC2198lM12838a = firebaseAuth.m12838a();
-                if (abstractC2198lM12838a != null) {
-                    Log.d(C0567n.f3974s, "onAuthStateChanged:signed_in:" + abstractC2198lM12838a.mo12866a());
-                    C0567n.m4975z();
-                } else {
-                    Log.d(C0567n.f3974s, "onAuthStateChanged:signed_out");
-                    C0566m.f3938a.mo4762a((C0556c) null);
-                }
-                try {
-                    C0566m.f3938a.mo4777o().mo4868af();
-                } catch (Exception e) {
-                    e.getMessage();
-                }
-            }
-        };
+        // Phase 3.3: removed `f3972p = FirebaseAuth.getInstance()`
+        // Phase 3.3: removed `f3975q = new FirebaseAuth.InterfaceC2155a(...)` AuthStateListener
+        //   inner-class instantiation; the listener body lived here too.
         // Phase 3.1: removed `f3973r = C2268f.m13000a().m13004b()` — FirebaseDatabase.getInstance().getReference()
     }
 
@@ -141,14 +122,10 @@ public class C0567n extends C0566m {
         }
     }
 
-    /* JADX INFO: renamed from: b */
-    static void m4963b(ArrayList<String> arrayList) {
-        AbstractC2198l abstractC2198lM12838a = FirebaseAuth.getInstance().m12838a();
-        if (abstractC2198lM12838a == null || arrayList.isEmpty()) {
-            return;
-        }
-        f3973r.m12996a("invites").m12995a().m12994a(new C0555b(C0572s.m5014c(), abstractC2198lM12838a.mo12866a(), arrayList));
-    }
+    // Phase 3.3: removed static void m4963b(ArrayList<String> inviteIds)
+    //   Wrote a new node under `invites/` in RTDB carrying the current user's id, the
+    //   timestamp, and the list of invitee ids. Sole part of the App-Invites tracking
+    //   loop; counterparts in ActMain (send + receive paths) also removed in this phase.
 
     /* JADX INFO: renamed from: c */
     private static File m4964c(boolean z, boolean z2) {

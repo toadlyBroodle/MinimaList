@@ -103,6 +103,53 @@ $ grep -rEn 'AppMain\.m4792a|AppMain\.m4794b|m4795a|gms\.analytics|firebase\.ana
 
 The only remaining mentions are the `Phase 3.2: removed …` breadcrumb comments in `AppMain.java` itself.
 
-## Phases 3.3–3.6
+## Phase 3.3 — Google Sign-In + App Invites + residual Firebase Auth
 
-To be appended as each phase closes. Each section uses the same per-file structure: surface removed, line range, port guidance.
+Surface owned by `com.google.android.gms.auth.api.signin.*`, `com.google.android.gms.appinvite.*`, `com.google.android.gms.common.api.{GoogleApiClient,ResultCallback}`, `com.google.android.gms.common.ConnectionResult`, and `com.google.firebase.auth.{FirebaseAuth,FirebaseUser}`. Note: Google sunset the entire App Invites product in 2020 and Firebase Dynamic Links in 2025, so the invite surface was already non-functional on a modern device.
+
+### Files deleted entirely
+- `decompiled/sources/ca/toadlybroodledev/sublist/p032c/C0555b.java` — 17-line POJO holding `time`/`inviter`/`inviteIDs` for the RTDB `invites/` collection. No remaining caller after C0567n.m4963b removal.
+- `decompiled/sources/ca/toadlybroodledev/sublist/ViewOnClickListenerC0559f.java` — 164-line Sign-In fragment (`mo914a` / `mo919a` / `mo935a` / `mo877d` / `mo982t` / `mo4868af` / `onClick`). Entirely Google-Sign-In and Firebase-Auth-Credential surface; nothing locally reusable.
+
+### `decompiled/sources/ca/toadlybroodledev/sublist/C0567n.java`
+- Removed imports for `p032c.C0555b`, `p032c.C0556c`, `com.google.firebase.auth.{AbstractC2198l,FirebaseAuth}`.
+- Removed `static FirebaseAuth f3972p` field — singleton auth handle.
+- Removed `FirebaseAuth.InterfaceC2155a f3975q` field — AuthStateListener.
+- Removed AuthStateListener inner-class body from the constructor (5-line dispatch: on signed-in called `m4975z` to materialize the cloud profile, on signed-out nulled the local profile cache).
+- Removed `f3972p = FirebaseAuth.getInstance()` and the `f3975q = new InterfaceC2155a()` instantiation from the constructor.
+- Removed `static void m4963b(ArrayList<String> inviteIds)` — wrote an `invites/<auto-id>` node to RTDB with the current user's uid + timestamp + invitee-ids array.
+
+### `decompiled/sources/ca/toadlybroodledev/sublist/ActMain.java` (~50 lines removed)
+- Removed imports `com.google.android.gms.{appinvite.{C0908a,C0910c,C0912e,InterfaceC0911d}, auth.api.{C0915a, signin.GoogleSignInOptions}, common.C1071a, common.api.{AbstractC1079f, InterfaceC1194l}}`.
+- Removed `AbstractC1079f.c` from the `implements` clause.
+- Removed `static AbstractC1079f f3695n` field (GoogleApiClient handle).
+- Removed `public ViewOnClickListenerC0559f f3708r` field (Sign-In fragment handle).
+- Removed `void m4754A()` — GoogleApiClient builder with `GoogleSignInOptions` (OAuth2 client id `REDACTED_OAUTH_CLIENT_ID`) + AppInvite API. Sole caller deleted.
+- Removed `protected void m4757D()` — launched the App-Invites send activity (request 10101) with deep link `https://jg5ms.app.goo.gl/XktS` (Firebase Dynamic Links — also deprecated).
+- Removed `@Override public void mo4766a(C1071a c1071a)` — `GoogleApiClient.OnConnectionFailedListener.onConnectionFailed`.
+- Removed `@Override public ViewOnClickListenerC0559f mo4777o()` — Sign-In fragment getter.
+- Removed `if (i == 10101)` block from `onActivityResult` — App-Invites send result handler (decoded invite-IDs via `AppInviteInvitation.getInvitationIds`, wrote them to RTDB via `C0567n.m4963b`, then bumped the profile-fragment invite counter for each invitee).
+- Removed Sign-In fragment construction + attachment in `onCreate` (`f3708r = (ViewOnClickListenerC0559f) .mo1072a(string2)` lookup + the null-check + `new ViewOnClickListenerC0559f()` + `transaction.add(R.id.placeholder_for_fragments, this.f3708r, string2)`).
+- Removed the `C0908a.f4988b.mo6085a(f3695n, this, true).mo6696a(new InterfaceC1194l<InterfaceC0911d>() { ... })` deep-link receive handler (~30 lines): on a matching invite deep link it set the `f3943f` "got-promo" flag in `C0566m` and popped a welcome dialog with `invite_welcome` / `invite_promo_text` / `invite_friends_format` strings, then opened the Sign-In fragment on OK. The trial-hours `f3943f` gate is dead (paired with the removed `m4975z`).
+- Removed `m4754A()` call from `onCreate`.
+- Removed `R.id.base_google_sign_in_button` and `R.id.base_profile_sign_out_button` cases from `onFragmentInput` switch.
+- Removed `R.id.profile_share_button` case from `onFragmentInput` (called `m4757D()`).
+
+### Resource impact (deferred to Phase 1)
+- `res/menu/`: any menu item with id `R.id.profile_share_button` and the Sign-In / Sign-Out buttons (`R.id.base_google_sign_in_button`, `R.id.base_profile_sign_out_button`) drops.
+- `res/values/strings.xml` entries no longer referenced after this phase: `invitation_title`, `invitation_message`, `invitation_cta`, `invites_failed`, `invite_welcome`, `invite_promo_text`, `invite_friends_format`, `invite_friends`, `play_services_error`. Phase 1 deletes the orphans.
+- `res/layout/`: any Sign-In layout (likely `fragment_signin.xml` or similar) drops.
+- `R.java` decompiled copy: not touched — `R` is generated and a clean one comes from the Phase 1 resource port.
+
+### Reverse-grep verification (Phase 3.3 end-state)
+
+```
+$ grep -rEn 'gms\.appinvite|gms\.auth|firebase\.auth|GoogleSignIn|FirebaseAuth|AbstractC2198l|AbstractC1079f|C0908a|C0910c|C0912e|InterfaceC0911d|C0915a|C0929b|C0555b' \
+    decompiled/sources/ca/toadlybroodledev/sublist/ \
+    | grep -vE 'Phase 3\.[123]:|// Phase'
+(only descriptive text inside Phase 3 comment blocks remains)
+```
+
+## Phases 3.4–3.6
+
+To be appended as each phase closes.
