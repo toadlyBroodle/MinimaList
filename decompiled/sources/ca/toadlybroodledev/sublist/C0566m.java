@@ -5,11 +5,9 @@ import android.graphics.Color;
 import android.util.Log;
 import ca.toadlybroodledev.sublist.p031b.InterfaceC0549a;
 import ca.toadlybroodledev.sublist.p032c.C0554a;
-import com.google.firebase.auth.AbstractC2198l;
-import com.google.firebase.database.C2225a;
-import com.google.firebase.database.C2226b;
-import com.google.firebase.database.C2269g;
-import com.google.firebase.database.InterfaceC2276n;
+// Phase 3.1: removed com.google.firebase.auth.AbstractC2198l (was: FirebaseUser, Phase 3.3 owns Sign-In removal)
+// Phase 3.1: removed com.google.firebase.database.{C2225a,C2226b,C2269g,InterfaceC2276n}
+//            (DataSnapshot, DatabaseError, GenericTypeIndicator, ValueEventListener)
 import com.google.p036a.C0614e;
 import com.google.p036a.p041c.C0608a;
 import java.io.File;
@@ -326,27 +324,13 @@ public class C0566m {
         return f3954q;
     }
 
-    /* JADX INFO: renamed from: n */
-    protected static ArrayList<C0554a> m4949n() {
-        final AbstractC2198l abstractC2198lM12838a = C0567n.f3972p.m12838a();
-        if (abstractC2198lM12838a != null) {
-            C0567n.f3973r.m13010a(new InterfaceC2276n() { // from class: ca.toadlybroodledev.sublist.m.3
-                @Override // com.google.firebase.database.InterfaceC2276n
-                /* JADX INFO: renamed from: a */
-                public void mo4958a(C2225a c2225a) {
-                    ArrayList unused = C0566m.f3954q = (ArrayList) c2225a.m12957a("sublists").m12957a(abstractC2198lM12838a.mo12866a()).m12959a(new C2269g<ArrayList<C0554a>>() { // from class: ca.toadlybroodledev.sublist.m.3.1
-                    });
-                }
-
-                @Override // com.google.firebase.database.InterfaceC2276n
-                /* JADX INFO: renamed from: a */
-                public void mo4959a(C2226b c2226b) {
-                    Log.d(C0566m.f3953p, "cancelled pull legacy from database");
-                }
-            });
-        }
-        return f3954q;
-    }
+    // Phase 3.1: removed protected static ArrayList<C0554a> m4949n()
+    //   Original: legacy-pull of the current FirebaseAuth user's "sublists/<uid>" subtree
+    //   from Firebase Realtime Database, reading via ValueEventListener and decoding via
+    //   GenericTypeIndicator<ArrayList<OutlineRow>>. Sole caller: C0567n.java:185 (also
+    //   being gutted). With cloud sync removed, legacy-pull has no destination — local
+    //   outlines live in f3954q populated only via the local SharedPrefs/JSON load path
+    //   in the surrounding methods.
 
     /* JADX INFO: renamed from: p */
     private static String m4951p() {

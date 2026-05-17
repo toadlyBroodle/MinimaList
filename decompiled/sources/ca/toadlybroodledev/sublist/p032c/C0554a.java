@@ -1,20 +1,18 @@
 package ca.toadlybroodledev.sublist.p032c;
 
 import ca.toadlybroodledev.sublist.C0557d;
-import com.google.firebase.database.InterfaceC2267e;
-import com.google.firebase.database.InterfaceC2270h;
 import java.io.Serializable;
 import java.util.ArrayList;
 
 /* JADX INFO: renamed from: ca.toadlybroodledev.sublist.c.a */
 /* JADX INFO: loaded from: classes.dex */
-@InterfaceC2270h
+// Phase 3.1: removed @com.google.firebase.database.IgnoreExtraProperties (jadx: @InterfaceC2270h)
 public class C0554a implements Serializable {
     public boolean collapsed;
     public boolean complete;
     public int indent;
 
-    @InterfaceC2267e
+    // Phase 3.1: removed @com.google.firebase.database.Exclude (jadx: @InterfaceC2267e)
     public boolean isInstr;
     public long reminder;
     public String text;

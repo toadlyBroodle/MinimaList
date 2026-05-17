@@ -16,6 +16,7 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Append-on-close, newest first. Trim to most recent 10.
 -->
 
+- 3.1 [medium] Stripped Firebase Realtime Database from decompiled tree (4 files, ~110 lines removed): annotations off `OutlineRow` + `C0556c`; `C0566m.m4949n()` deleted; `C0567n.{f3973r, m4965p, m4966q, m4971v, m4972w, m4975z}` + RTDB imports deleted. `docs/REMOVED-CLOUD-SURFACE.md` catalogues each surgery with port guidance for Phase 4. Reverse-grep returns zero live refs — by hand at 2026-05-18T08:45Z
 - 2.2 [easy] Seeded `docs/RENAME-MAP.md` with sub-package renames (util/iface/model), `OutlineRow` (model), 3 of 4 interface names, 6 named root classes, deletion list for analytics symbols — by hand at 2026-05-18T08:30Z
 - 0.3 [easy] Installed debug APK on Moto G via Windows-side adb (WSL UNC path); `am start` launches `MainActivity` cleanly, no `AndroidRuntime` errors in logcat. Added `applicationIdSuffix = ".dev"` to debug build type so the stub installed as `ca.toadlybroodledev.sublist.dev` alongside the user's still-installed prod app — by hand at 2026-05-18T08:22Z
 - 0.2 [easy] Stub `MainActivity` (Kotlin, AppCompatActivity, empty FrameLayout); manifest declares MAIN/LAUNCHER intent filter; `./gradlew :app:assembleDebug` green (5.8M debug APK at `app/build/outputs/apk/debug/app-debug.apk`). Side-effect: installed Android SDK at `~/Android/Sdk` (platform-tools, platforms;android-35, build-tools;35.0.0) and `local.properties` — by hand at 2026-05-18T08:18Z
@@ -35,5 +36,8 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
 -->
 
 - [medium] 2.1 Read every decompiled class and produce `docs/RENAME-MAP.md` covering all `C05NN` / `ViewOnClickListenerC05NN` / `InterfaceC05NN` and the `p030a` / `p031b` / `p032c` sub-package renames. Reason: SPEC Phase 2; blocks Phase 4 ports.
-- [medium] 3.1 Strip Firebase Realtime DB annotations + call sites from `decompiled/sources/`; produce `docs/REMOVED-CLOUD-SURFACE.md`. Reason: SPEC Phase 3; user's top-stated goal alongside deobfuscation.
+- [easy] 3.2 Strip Firebase Analytics + GMS Analytics (`AppMain.{f3724a,f3725b,f3726c,m4792a}` + 15+ call sites). Reason: SPEC Phase 3.
+- [easy] 3.3 Strip Google Sign-In + App Invites (already-dead Google product) + delete `C0555b` invite tracker class. Reason: SPEC Phase 3.
+- [easy] 3.4 Strip AdMob (`gms.ads.*`, InterstitialAd, AdListener, AdView in layouts). Reason: SPEC Phase 3.
+- [easy] 3.5 Strip FCM / Cast / Crashlytics / Billing. Reason: SPEC Phase 3.
 - [easy] 3.6 Grep-audit pass confirming zero `firebase|gms|admob|crashlytics|billingclient|c2dm` references remain. Reason: SPEC Phase 3; closes Phase 3.

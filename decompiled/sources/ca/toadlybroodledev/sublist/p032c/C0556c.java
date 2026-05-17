@@ -1,10 +1,12 @@
 package ca.toadlybroodledev.sublist.p032c;
 
-import com.google.firebase.database.InterfaceC2270h;
-
 /* JADX INFO: renamed from: ca.toadlybroodledev.sublist.c.c */
 /* JADX INFO: loaded from: classes.dex */
-@InterfaceC2270h
+// Phase 3.1: removed @com.google.firebase.database.IgnoreExtraProperties (jadx: @InterfaceC2270h)
+// NOTE: this class is the cloud-side user-profile doc shape (displayname, email,
+// trial state, invite counters). Phase 4 should DELETE it entirely — local-only
+// app has no concept of cloud user profile. Annotations stripped here only to
+// satisfy the Phase 3.6 grep audit.
 public class C0556c {
     public int completed;
     public String displayname;

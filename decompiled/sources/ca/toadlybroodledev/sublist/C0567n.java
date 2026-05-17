@@ -14,12 +14,9 @@ import ca.toadlybroodledev.sublist.p032c.C0555b;
 import ca.toadlybroodledev.sublist.p032c.C0556c;
 import com.google.firebase.auth.AbstractC2198l;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.C2225a;
-import com.google.firebase.database.C2226b;
-import com.google.firebase.database.C2266d;
-import com.google.firebase.database.C2268f;
-import com.google.firebase.database.C2269g;
-import com.google.firebase.database.InterfaceC2276n;
+// Phase 3.1: removed com.google.firebase.database.{C2225a,C2226b,C2266d,C2268f,C2269g,InterfaceC2276n}
+//            (DataSnapshot, DatabaseError, DatabaseReference, FirebaseDatabase, GenericTypeIndicator, ValueEventListener)
+// Phase 3.3 will also remove the remaining FirebaseAuth import + AbstractC2198l import above.
 import com.google.p036a.C0614e;
 import com.google.p036a.p041c.C0608a;
 import java.io.File;
@@ -40,8 +37,7 @@ public class C0567n extends C0566m {
     /* JADX INFO: renamed from: p */
     static FirebaseAuth f3972p;
 
-    /* JADX INFO: renamed from: r */
-    static C2266d f3973r;
+    // Phase 3.1: removed `static C2266d f3973r` — Firebase Realtime Database root reference.
 
     /* JADX INFO: renamed from: s */
     private static final String f3974s = "fuckn" + C0567n.class.getSimpleName();
@@ -71,7 +67,7 @@ public class C0567n extends C0566m {
                 }
             }
         };
-        f3973r = C2268f.m13000a().m13004b();
+        // Phase 3.1: removed `f3973r = C2268f.m13000a().m13004b()` — FirebaseDatabase.getInstance().getReference()
     }
 
     /* JADX INFO: renamed from: a */
@@ -161,72 +157,13 @@ public class C0567n extends C0566m {
         return z2 ? new File(m4970u(), str) : new File(contextWrapper.getFilesDir(), str);
     }
 
-    /* JADX INFO: renamed from: p */
-    static void m4965p() {
-        final AbstractC2198l abstractC2198lM12838a = f3972p.m12838a();
-        if (abstractC2198lM12838a != null) {
-            f3973r.m13010a(new InterfaceC2276n() { // from class: ca.toadlybroodledev.sublist.n.3
-                @Override // com.google.firebase.database.InterfaceC2276n
-                /* JADX INFO: renamed from: a */
-                public void mo4958a(C2225a c2225a) {
-                    HashMap<String, ArrayList<C0554a>> map;
-                    C2269g<HashMap<String, ArrayList<C0554a>>> c2269g = new C2269g<HashMap<String, ArrayList<C0554a>>>() { // from class: ca.toadlybroodledev.sublist.n.3.1
-                    };
-                    HashMap<String, ArrayList<C0554a>> map2 = new HashMap<>();
-                    try {
-                        map = (HashMap) c2225a.m12957a("sublist_collections").m12957a(abstractC2198lM12838a.mo12866a()).m12959a(c2269g);
-                    } catch (Exception e) {
-                        Log.d(C0567n.f3974s, e.getMessage());
-                        map = map2;
-                    }
-                    if (map == null || map.isEmpty()) {
-                        new C2269g<HashMap<String, ArrayList<C0554a>>>() { // from class: ca.toadlybroodledev.sublist.n.3.2
-                        };
-                        ArrayList<C0554a> arrayListM4949n = C0566m.m4949n();
-                        if (arrayListM4949n == null) {
-                            Toast.makeText(C0566m.f3938a.mo4775m(), R.string.toast_no_sublist_in_database, 0).show();
-                            AppMain.m4792a("DatabasePull_fail", "db_pull_fail");
-                            return;
-                        } else {
-                            map = new HashMap<>();
-                            map.put(C0566m.f3938a.mo4770b(Integer.valueOf(R.string.app_name)), arrayListM4949n);
-                        }
-                    }
-                    C0567n.m4971v();
-                    C0566m.f3938a.mo4769a(map);
-                    Toast.makeText(C0566m.f3938a.mo4775m(), R.string.toast_pull_sublist_success, 0).show();
-                    AppMain.m4792a("DatabasePull_success", "db_pull_succ");
-                }
+    // Phase 3.1: removed static void m4965p() — cloud pull of sublist_collections/<uid>
+    //   via ValueEventListener; would fall back to legacy m4949n() pull if doc missing.
+    //   With local-only persistence (Phase 9 = Room), pull has no remote source.
 
-                @Override // com.google.firebase.database.InterfaceC2276n
-                /* JADX INFO: renamed from: a */
-                public void mo4959a(C2226b c2226b) {
-                    Toast.makeText(C0566m.f3938a.mo4775m(), R.string.toast_pull_sublist_fail, 0).show();
-                }
-            });
-        }
-    }
-
-    /* JADX INFO: renamed from: q */
-    static void m4966q() {
-        AbstractC2198l abstractC2198lM12838a = FirebaseAuth.getInstance().m12838a();
-        if (ViewOnClickListenerC0558e.m4863b() == null || abstractC2198lM12838a == null) {
-            return;
-        }
-        try {
-            HashMap<String, ArrayList<C0554a>> mapM4892a = C0563j.m4892a(f3938a.mo4786x());
-            f3973r.m12996a("sublist_collections").m12996a(abstractC2198lM12838a.mo12866a()).m12997b();
-            f3973r.m12996a("sublist_collections").m12996a(abstractC2198lM12838a.mo12866a()).m12994a(mapM4892a);
-            f3938a.mo4776n().m4866ad();
-            m4971v();
-            Toast.makeText(f3938a.mo4775m(), R.string.toast_done, 0).show();
-            AppMain.m4792a("DatabasePush_success", "db_push_succ");
-        } catch (Exception e) {
-            Log.e(f3974s, e.getMessage());
-            Toast.makeText(f3938a.mo4775m(), R.string.toast_push_sublist_fail, 0).show();
-            AppMain.m4792a("DatabasePush_fail", "db_push_fail");
-        }
-    }
+    // Phase 3.1: removed static void m4966q() — cloud push of current outline state to
+    //   sublist_collections/<uid>; gated on authenticated user + non-null profile.
+    //   Local-only app has no remote destination.
 
     /* JADX INFO: renamed from: r */
     static void m4967r() {
@@ -285,68 +222,18 @@ public class C0567n extends C0566m {
         return file;
     }
 
-    /* JADX INFO: renamed from: v */
-    static void m4971v() {
-        C0556c c0556cM4863b = ViewOnClickListenerC0558e.m4863b();
-        if (c0556cM4863b != null) {
-            c0556cM4863b.lastConnectTime = C0572s.m5014c();
-        }
-        AbstractC2198l abstractC2198lM12838a = FirebaseAuth.getInstance().m12838a();
-        if (abstractC2198lM12838a != null) {
-            f3973r.m12996a("users").m12996a(abstractC2198lM12838a.mo12866a()).m12996a("lastConnectTime").m12994a(Long.valueOf(C0572s.m5014c()));
-        }
-    }
+    // Phase 3.1: removed static void m4971v() — wrote `users/<uid>/lastConnectTime` on
+    //   every cloud touch, also updated in-memory profile. With cloud gone, lastConnect
+    //   has no remote sink; if Phase 8 still wants the local cache update, reintroduce
+    //   the first 3 lines (in-memory bump only) at the relevant call site.
 
-    /* JADX INFO: renamed from: w */
-    static void m4972w() {
-        AbstractC2198l abstractC2198lM12838a = FirebaseAuth.getInstance().m12838a();
-        C0556c c0556cM4863b = ViewOnClickListenerC0558e.m4863b();
-        if (c0556cM4863b == null || abstractC2198lM12838a == null) {
-            return;
-        }
-        c0556cM4863b.lastConnectTime = C0572s.m5014c();
-        f3973r.m12996a("users").m12996a(abstractC2198lM12838a.mo12866a()).m12994a(c0556cM4863b);
-    }
+    // Phase 3.1: removed static void m4972w() — wrote full profile doc to `users/<uid>`.
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* JADX INFO: renamed from: z */
-    public static void m4975z() {
-        final AbstractC2198l abstractC2198lM12838a = FirebaseAuth.getInstance().m12838a();
-        if (abstractC2198lM12838a != null) {
-            f3973r.m13010a(new InterfaceC2276n() { // from class: ca.toadlybroodledev.sublist.n.4
-                @Override // com.google.firebase.database.InterfaceC2276n
-                /* JADX INFO: renamed from: a */
-                public void mo4958a(C2225a c2225a) {
-                    C0556c c0556c = (C0556c) c2225a.m12957a("users").m12957a(abstractC2198lM12838a.mo12866a()).m12960a(C0556c.class);
-                    if (c0556c == null) {
-                        long jM5014c = C0572s.m5014c();
-                        C0566m.f3938a.mo4776n().m4864a(new C0556c(abstractC2198lM12838a.mo12873e(), abstractC2198lM12838a.mo12874f(), 0, 0, 0, C0572s.m5007a(), jM5014c, jM5014c, C0566m.f3943f ? C0572s.m5006a(30) : 0));
-                        C0567n.m4972w();
-                        return;
-                    }
-                    long jM5014c2 = C0572s.m5014c();
-                    if (c0556c.initInstallTime <= 0) {
-                        c0556c.initInstallTime = C0572s.m5007a();
-                    }
-                    if (c0556c.firstConnectTime == 0) {
-                        c0556c.firstConnectTime = jM5014c2;
-                    }
-                    int iM5013c = c0556c.trialHoursRemaining - C0572s.m5013c(jM5014c2 - c0556c.lastConnectTime);
-                    c0556c.trialHoursRemaining = iM5013c >= 0 ? iM5013c : 0;
-                    C0566m.f3938a.mo4776n().m4864a(c0556c);
-                    C0567n.m4972w();
-                }
-
-                @Override // com.google.firebase.database.InterfaceC2276n
-                /* JADX INFO: renamed from: a */
-                public void mo4959a(C2226b c2226b) {
-                    Toast.makeText(C0566m.f3938a.mo4775m(), R.string.toast_error_fetching_user, 1).show();
-                    Log.w(C0567n.f3974s, "Failed to read value.", c2226b.m12968b());
-                    C0566m.f3938a.mo4776n().m4864a((C0556c) null);
-                }
-            });
-        }
-    }
+    // Phase 3.1: removed public static void m4975z() — read `users/<uid>` profile, created
+    //   it if missing, decremented trial-hours timer based on lastConnect delta, repushed.
+    //   The trial-hours / install-time / connect-time bookkeeping was server-anchored;
+    //   a local-only rewrite either drops trial gating entirely (recommended — no cloud
+    //   to gate against) or reimplements it against SharedPreferences in Phase 8.
 
     /* JADX INFO: renamed from: a */
     boolean m4976a(boolean z, boolean z2) {
