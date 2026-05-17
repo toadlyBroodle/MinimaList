@@ -13,6 +13,7 @@ Resurrect the abandoned `ca.toadlybroodledev.sublist` Android outliner (versionC
 - Persistence: local-only. Room for the outline tree; JSON export/import for user-driven backup. Replaces Firebase Realtime DB.
 - Build: Gradle Kotlin DSL, AGP 8.x, minSdk 21, targetSdk 35
 - Deployment: signed APK side-loaded via `adb install` (no Play Store re-listing planned)
+- Build flavors: `debug` carries `applicationIdSuffix = ".dev"` so dev installs land as `ca.toadlybroodledev.sublist.dev` alongside (not over) the user's still-installed production `ca.toadlybroodledev.sublist`. Until the production app is fully replaced, never reuse the prod applicationId in a debug build — it'll fail with `INSTALL_FAILED_UPDATE_INCOMPATIBLE` (different signing key) and any "fix" by uninstalling first wipes the user's real outline data.
 
 ## Phases
 
@@ -22,7 +23,7 @@ Stand up a buildable Android Studio project shell that the decompiled artifacts 
 
 - [x] 0.1 Initialize Gradle Kotlin-DSL project at repo root with package `ca.toadlybroodledev.sublist`, minSdk 21, targetSdk 35, AGP 8.x, Kotlin 2.x; commit `settings.gradle.kts`, `app/build.gradle.kts`, `gradle/libs.versions.toml`.
 - [x] 0.2 Add a stub `MainActivity` extending `AppCompatActivity` with an empty layout; `./gradlew :app:assembleDebug` succeeds.
-- [ ] 0.3 [easy] Side-load the stub APK on the Moto G via `adb install -r` and confirm launcher icon opens an empty activity (smoke test for signing + install path).
+- [x] 0.3 Side-load the stub APK on the Moto G via `adb install -r` and confirm launcher icon opens an empty activity (smoke test for signing + install path).
 - [x] 0.4 Move `sources/` + `resources/` into a sibling `decompiled/` directory so the port reads from there without polluting the active source tree.
 
 ### Phase 1: Manifest + resources port
