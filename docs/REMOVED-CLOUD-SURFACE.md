@@ -150,6 +150,33 @@ $ grep -rEn 'gms\.appinvite|gms\.auth|firebase\.auth|GoogleSignIn|FirebaseAuth|A
 (only descriptive text inside Phase 3 comment blocks remains)
 ```
 
-## Phases 3.4–3.6
+## Phase 3.4 — AdMob
+
+Surface owned by `com.google.android.gms.ads.{AdListener, AdRequest, InterstitialAd}`.
+
+### `decompiled/sources/ca/toadlybroodledev/sublist/ActMain.java`
+- Removed imports `com.google.android.gms.ads.{C0657a,C0676c,C0687h}` (`AdListener`, `AdRequest`, `InterstitialAd`).
+- Removed `C0687h f3705o` field — InterstitialAd instance.
+- Emptied `@Override mo4756C()` — the InterfaceC0549a hook that gated "show interstitial if loaded + not premium + cooldown-elapsed, else load a new one."
+- Emptied `@Override mo4758E()` — the InterfaceC0549a hook that built an AdRequest with two test-device hashes and called `f3705o.loadAd(...)`. Removed test-device hashes: `B3EEABB8EE11C2BE770B684D95219ECB`, `340881060997B582C0F0D1E4759A61D7`.
+- Removed InterstitialAd init in `onCreate`: removed AdMob ad unit id `ca-app-pub-1334740097475606/9485517375` (real production AdMob slot tied to the toadlybroodledev publisher account) and the inner `AdListener` class whose `onAdClosed` re-triggered `mo4758E()` to preload the next interstitial.
+
+### `InterfaceC0549a` (Phase 4 follow-up)
+- The two methods `mo4756C()` and `mo4758E()` declared on the interface are now no-ops in ActMain. Phase 4 should drop both from `p031b/InterfaceC0549a.java` along with any remaining call sites; they have no non-ad meaning.
+
+### Resource / manifest impact (deferred to Phase 1)
+- `AndroidManifest.xml` still declares `<activity android:name="com.google.android.gms.ads.AdActivity" ... />`. Phase 1 rewrites the manifest from scratch — drop.
+- No `<com.google.android.gms.ads.AdView>` views were found in `decompiled/resources/res/layout/` — interstitials are full-screen overlays, not embedded views.
+
+### Reverse-grep verification (Phase 3.4 end-state)
+
+```
+$ grep -rEn 'gms\.ads|AdView|InterstitialAd|AdListener|AdRequest|C0657a|C0676c|C0687h|f3705o|ca-app-pub' \
+    decompiled/sources/ca/toadlybroodledev/sublist/ \
+    | grep -vE 'Phase 3\.[1234]:|// Phase'
+(only descriptive text inside Phase 3.4 comment blocks remains)
+```
+
+## Phases 3.5–3.6
 
 To be appended as each phase closes.

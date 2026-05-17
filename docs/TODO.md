@@ -16,6 +16,7 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Append-on-close, newest first. Trim to most recent 10.
 -->
 
+- 3.4 [easy] Stripped AdMob from ActMain: 3 imports, `C0687h f3705o` InterstitialAd field, `mo4756C` show-gate body, `mo4758E` load-call body, ctor init (ad unit id `ca-app-pub-1334740097475606/9485517375` + AdListener inner-class). Manifest `gms.ads.AdActivity` declaration tagged for Phase 1 manifest rewrite. InterfaceC0549a hooks `mo4756C/mo4758E` tagged for Phase 4 deletion — by hand at 2026-05-18T09:15Z
 - 3.3 [easy] Stripped Google Sign-In + App Invites + residual Firebase Auth: deleted `C0555b` (invite tracker, 17 lines) and `ViewOnClickListenerC0559f` (Sign-In fragment, 164 lines) entirely; surgical removal in `C0567n` (FirebaseAuth field/init/listener + `m4963b` invite-write) and `ActMain` (~50 lines: imports, `f3695n` GoogleApiClient field, `f3708r` Sign-In fragment field, `m4754A`/`m4757D` methods, `mo4766a` onConnectionFailed override, `mo4777o` getter, the request-10101 onActivityResult block, AppInvite deep-link receive handler, sign-in/sign-out/share menu cases, fragment construction). App Invites was a dead Google product (sunset 2020); Firebase Dynamic Links shortlink also deprecated. `REMOVED-CLOUD-SURFACE.md` extended — by hand at 2026-05-18T09:05Z
 - 3.2 [easy] Stripped Firebase Analytics + GMS Analytics across 12 files (49 lines deleted): `AppMain` rewritten to remove fields/init/log wrappers (m4792a, m4794b, m4795a); 44 `m4792a` + 4 `m4794b` + 1 `m4795a` call sites swept. Event-name catalog preserved in `REMOVED-CLOUD-SURFACE.md`. Hard-coded UA tracker id was `UA-85711908-1` (UA service sunset by Google 2023, already dead). `AppMain.m4793b()` left intact for Phase 3.5 — by hand at 2026-05-18T08:55Z
 - 3.1 [medium] Stripped Firebase Realtime Database from decompiled tree (4 files, ~110 lines removed): annotations off `OutlineRow` + `C0556c`; `C0566m.m4949n()` deleted; `C0567n.{f3973r, m4965p, m4966q, m4971v, m4972w, m4975z}` + RTDB imports deleted. `docs/REMOVED-CLOUD-SURFACE.md` catalogues each surgery with port guidance for Phase 4. Reverse-grep returns zero live refs — by hand at 2026-05-18T08:45Z
@@ -38,6 +39,5 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
 -->
 
 - [medium] 2.1 Read every decompiled class and produce `docs/RENAME-MAP.md` covering all `C05NN` / `ViewOnClickListenerC05NN` / `InterfaceC05NN` and the `p030a` / `p031b` / `p032c` sub-package renames. Reason: SPEC Phase 2; blocks Phase 4 ports.
-- [easy] 3.4 Strip AdMob (`gms.ads.*`, InterstitialAd, AdListener, AdView in layouts). Reason: SPEC Phase 3.
 - [easy] 3.5 Strip FCM / Cast / Crashlytics / Billing. Reason: SPEC Phase 3.
 - [easy] 3.6 Grep-audit pass confirming zero `firebase|gms|admob|crashlytics|billingclient|c2dm` references remain. Reason: SPEC Phase 3; closes Phase 3.

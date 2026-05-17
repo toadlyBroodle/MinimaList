@@ -33,11 +33,8 @@ import ca.toadlybroodledev.sublist.p031b.InterfaceC0549a;
 import ca.toadlybroodledev.sublist.p031b.InterfaceC0550b;
 import ca.toadlybroodledev.sublist.p032c.C0554a;
 import ca.toadlybroodledev.sublist.p032c.C0556c;
-// Phase 3.4 (deferred): com.google.android.gms.ads.{C0657a,C0676c,C0687h} stay until
-//                       the 3.4 ad-call-site sweep below.
-import com.google.android.gms.ads.C0657a;
-import com.google.android.gms.ads.C0676c;
-import com.google.android.gms.ads.C0687h;
+// Phase 3.4: removed com.google.android.gms.ads.{C0657a,C0676c,C0687h}
+//            (AdListener, AdRequest, InterstitialAd).
 // Phase 3.3: removed com.google.android.gms.appinvite.{C0908a,C0910c,C0912e,InterfaceC0911d}
 // Phase 3.3: removed com.google.android.gms.auth.api.{C0915a, signin.GoogleSignInOptions}
 // Phase 3.3: removed com.google.android.gms.common.C1071a (ConnectionResult)
@@ -86,8 +83,7 @@ public class ActMain extends ActivityC0348e implements View.OnClickListener, Int
     /* JADX INFO: renamed from: H */
     private C0557d f3704H;
 
-    /* JADX INFO: renamed from: o */
-    C0687h f3705o;
+    // Phase 3.4: removed `C0687h f3705o` — AdMob InterstitialAd instance.
 
     /* JADX INFO: renamed from: p */
     AbstractC0159o f3706p;
@@ -151,11 +147,11 @@ public class ActMain extends ActivityC0348e implements View.OnClickListener, Int
     @Override // ca.toadlybroodledev.sublist.p031b.InterfaceC0549a
     /* JADX INFO: renamed from: C */
     public void mo4756C() {
-        if (!C0564k.m4911a() && this.f3705o.m5430a() && C0572s.m5012b()) {
-            this.f3705o.m5431b();
-        } else {
-            mo4758E();
-        }
+        // Phase 3.4: removed interstitial-ad show/load gate. Original behaviour:
+        //   `if (!premium && f3705o.isLoaded() && shouldShow()) f3705o.show(); else loadAd()`.
+        //   No-op now. InterfaceC0549a still declares this method; Phase 4 can either
+        //   delete the contract method (no remaining callers serve a purpose) or keep it
+        //   as a hook for a future non-ad nag (which is what most cases like this end up doing).
     }
 
     // Phase 3.3: removed protected void m4757D() — launched the App-Invites send
@@ -166,10 +162,10 @@ public class ActMain extends ActivityC0348e implements View.OnClickListener, Int
     @Override // ca.toadlybroodledev.sublist.p031b.InterfaceC0549a
     /* JADX INFO: renamed from: E */
     public void mo4758E() {
-        if (C0564k.m4911a()) {
-            return;
-        }
-        this.f3705o.m5426a(new C0676c.a().m5394b("B3EEABB8EE11C2BE770B684D95219ECB").m5394b("340881060997B582C0F0D1E4759A61D7").m5393a());
+        // Phase 3.4: removed interstitial-ad load. Original behaviour: build an
+        //   AdRequest with two test-device hashes (B3EEABB8EE11C2BE770B684D95219ECB,
+        //   340881060997B582C0F0D1E4759A61D7) and call f3705o.loadAd(...); gated
+        //   on the non-premium branch via C0564k.m4911a().
     }
 
     @Override // ca.toadlybroodledev.sublist.p031b.InterfaceC0549a
@@ -565,15 +561,12 @@ public class ActMain extends ActivityC0348e implements View.OnClickListener, Int
         C0572s.m5009a(this);
         this.f3701E = new C0564k(this);
         // Phase 3.3: removed `m4754A()` GoogleApiClient init call.
-        this.f3705o = new C0687h(this);
-        this.f3705o.m5428a("ca-app-pub-1334740097475606/9485517375");
-        this.f3705o.m5425a(new C0657a() { // from class: ca.toadlybroodledev.sublist.ActMain.2
-            @Override // com.google.android.gms.ads.C0657a
-            /* JADX INFO: renamed from: a */
-            public void mo4789a() {
-                ActMain.this.mo4758E();
-            }
-        });
+        // Phase 3.4: removed InterstitialAd init:
+        //   `f3705o = new InterstitialAd(this);
+        //    f3705o.setAdUnitId("ca-app-pub-1334740097475606/9485517375");
+        //    f3705o.setAdListener(new AdListener() { onAdClosed() { mo4758E(); } });`
+        //   Removed ad unit id was a real production AdMob slot tied to the
+        //   toadlybroodledev publisher account.
         this.f3714y = (Toolbar) findViewById(R.id.toolbar);
         m2608a(this.f3714y);
         this.f3713x = (DrawerCustomLayout) findViewById(R.id.drawer_layout);
