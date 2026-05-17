@@ -71,8 +71,7 @@ public class ActMain extends ActivityC0348e implements View.OnClickListener, Int
     /* JADX INFO: renamed from: D */
     private C0567n f3700D;
 
-    /* JADX INFO: renamed from: E */
-    private C0564k f3701E;
+    // Phase 3.5: removed `private C0564k f3701E` — billing/premium wrapper instance.
 
     /* JADX INFO: renamed from: F */
     private ArrayList<C0563j> f3702F;
@@ -559,7 +558,7 @@ public class ActMain extends ActivityC0348e implements View.OnClickListener, Int
             }
         });
         C0572s.m5009a(this);
-        this.f3701E = new C0564k(this);
+        // Phase 3.5: removed `this.f3701E = new C0564k(this)` — billing/premium init.
         // Phase 3.3: removed `m4754A()` GoogleApiClient init call.
         // Phase 3.4: removed InterstitialAd init:
         //   `f3705o = new InterstitialAd(this);
@@ -647,9 +646,8 @@ public class ActMain extends ActivityC0348e implements View.OnClickListener, Int
             //   the Phase 1 resource port). The R.id constants stay reserved for now and
             //   the corresponding views should be deleted from the source layouts during
             //   the Phase 1 res import.
-            case R.id.profile_purchase_premium_button /* 2131296544 */:
-                this.f3701E.m4916d();
-                break;
+            // Phase 3.5: removed case R.id.profile_purchase_premium_button calling
+            //   `f3701E.m4916d()` (start purchase flow).
             // Phase 3.3: removed case R.id.profile_share_button calling m4757D() — App-Invites send.
         }
     }
@@ -710,11 +708,7 @@ public class ActMain extends ActivityC0348e implements View.OnClickListener, Int
         mo4764a((C0563j) null);
     }
 
-    @Override // ca.toadlybroodledev.sublist.p031b.InterfaceC0549a
-    /* JADX INFO: renamed from: p */
-    public C0564k mo4778p() {
-        return this.f3701E;
-    }
+    // Phase 3.5: removed @Override public C0564k mo4778p() — billing/premium-state getter.
 
     @Override // ca.toadlybroodledev.sublist.p031b.InterfaceC0549a
     /* JADX INFO: renamed from: q */

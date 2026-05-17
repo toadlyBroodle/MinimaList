@@ -69,17 +69,17 @@ public class C0567n extends C0566m {
         FileOutputStream fileOutputStream2 = null;
         Context contextMo4775m = f3938a.mo4775m();
         try {
-            if (C0564k.m4911a()) {
-                view.setDrawingCacheEnabled(true);
-                bitmapDecodeResource = Bitmap.createBitmap(view.getDrawingCache());
-                try {
-                    view.setDrawingCacheEnabled(false);
-                } catch (Exception e2) {
-                    e = e2;
-                    e.printStackTrace();
-                }
-            } else {
-                bitmapDecodeResource = BitmapFactory.decodeResource(contextMo4775m.getResources(), R.drawable.widget_preview);
+            // Phase 3.5: removed `if (C0564k.m4911a())` premium gate. Original premium
+            //   users got a live widget screenshot via setDrawingCacheEnabled; free
+            //   users got the static R.drawable.widget_preview placeholder. With
+            //   billing gone, give everyone the live screenshot path unconditionally.
+            view.setDrawingCacheEnabled(true);
+            bitmapDecodeResource = Bitmap.createBitmap(view.getDrawingCache());
+            try {
+                view.setDrawingCacheEnabled(false);
+            } catch (Exception e2) {
+                e = e2;
+                e.printStackTrace();
             }
         } catch (Exception e3) {
             e = e3;

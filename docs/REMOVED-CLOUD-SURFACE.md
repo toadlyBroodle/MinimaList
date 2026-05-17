@@ -177,6 +177,63 @@ $ grep -rEn 'gms\.ads|AdView|InterstitialAd|AdListener|AdRequest|C0657a|C0676c|C
 (only descriptive text inside Phase 3.4 comment blocks remains)
 ```
 
-## Phases 3.5–3.6
+## Phase 3.5 — FCM / Cast / Crashlytics / Billing
 
-To be appended as each phase closes.
+Source-side scope of this phase ended up being **Play Billing only**. Initial scan returned zero matches for `firebase.messaging`, `FirebaseMessaging`, `gms.cast`, `crashlytics`, `Crashlytics`, or `fabric` in the app package — those surfaces were declared only in the manifest (FCM `RECEIVE` + custom `C2D_MESSAGE` permissions, Cast `MediaIntentReceiver` / `MediaNotificationService` / `ReconnectionService` components). Those manifest entries belong to the Phase 1 manifest rewrite, not this phase.
+
+### Re-classified surface: `p030a` package is Play Billing v3, not utilities
+
+Phase 2.2's rename map asserted `p030a → util` based on the base64 alphabet found in `C0539a`. Closer reading during 3.5 showed `p030a` is the **Google Play In-App Billing v3 sample helper library** (TrivialDrive-style `IabHelper`):
+- `C0539a` — `Base64` encoder (internal to IAB; alphabet was not standalone util)
+- `C0540b` — `IabAsyncInProgressException`
+- `C0541c` — `IabException` (wraps `IabResult`)
+- `C0542d` — `IabHelper` (the main billing helper class)
+- `C0543e` — `IabResult`
+- `C0544f` — `Inventory` (SKU map)
+- `C0545g` — `Purchase` (purchase record)
+- `C0546h` — `Security` (signature verification using `java.security`)
+- `C0547i` — `SkuDetails`
+
+Sole caller: `C0564k.java`, the premium-features gate.
+
+### Files deleted entirely
+- `decompiled/sources/ca/toadlybroodledev/sublist/p030a/` directory (9 files, ~complete IAB v3 helper).
+- `decompiled/sources/ca/toadlybroodledev/sublist/C0564k.java` (~138 lines): premium check + purchase-flow wrapper. Public surface was `m4911a()` static "is premium" gate and `m4916d()` "start purchase flow" trigger.
+
+### `decompiled/sources/ca/toadlybroodledev/sublist/AppMain.java`
+- Removed `static String m4793b()` — returned the first half of the Google Play licensing/billing RSA public-key (base64). The full key was assembled at C0564k construction by concatenating with a second hard-coded fragment and fed into `IabHelper`. No production secret is in the half left in git history (and the second half was inside C0564k which was also deleted in this commit — full key never reconstructable from any single file).
+
+### `decompiled/sources/ca/toadlybroodledev/sublist/p031b/InterfaceC0549a.java`
+- Removed `import ca.toadlybroodledev.sublist.C0564k`.
+- Removed `C0564k mo4778p()` interface method — premium-state accessor.
+
+### `decompiled/sources/ca/toadlybroodledev/sublist/ActMain.java`
+- Removed `private C0564k f3701E` field.
+- Removed `this.f3701E = new C0564k(this)` from `onCreate`.
+- Removed `case R.id.profile_purchase_premium_button` from the `onFragmentInput` switch (called `f3701E.m4916d()` to start the purchase flow).
+- Removed `@Override public C0564k mo4778p()` getter.
+
+### `decompiled/sources/ca/toadlybroodledev/sublist/C0567n.java`
+- Removed `if (C0564k.m4911a()) { … } else { decodeResource(widget_preview); }` premium gate inside `m4962a` (widget screenshot writer). Original: premium users got a live screenshot via `setDrawingCacheEnabled`, free users got a static `R.drawable.widget_preview` placeholder. Local-only app: kept the live-screenshot path unconditionally for everyone.
+
+### `decompiled/sources/ca/toadlybroodledev/sublist/ViewOnClickListenerC0558e.java`
+- Removed the `if (!C0564k.m4911a()) { … return; }` upsell branch inside the profile-render method. Non-premium users had seen an "Unlock premium features" upsell title, the purchase button visible, and server-driven premium-member / premium-expires fields. Kept the original premium branch (premium-share title, purchase button hidden, share button hidden, "Yes" / "Never" hard-codes) and now serves it to everyone.
+
+### Resource / manifest impact (deferred to Phase 1)
+- `AndroidManifest.xml`: drop the FCM `com.google.android.c2dm.permission.RECEIVE` + custom `ca.toadlybroodledev.sublist.permission.C2D_MESSAGE` permissions; drop Cast `MediaIntentReceiver` / `MediaNotificationService` / `ReconnectionService` components; drop `<uses-permission android:name="com.android.vending.BILLING"/>`.
+- `res/values/strings.xml` orphans: `profile_unlock_premium_features_title`, `profile_premium_member`, `profile_premium_expires_text`, `profile_premium_share_title`, `profile_expires_never`, and likely `email_fmt`, `profile_completed_fmt`, `profile_minimalists_converted` (server-driven counters). The Phase 1 audit will identify orphans authoritatively.
+- `res/menu/`: `profile_purchase_premium_button` orphan.
+- `res/drawable/widget_preview` may also become orphan if it was the free-tier placeholder for the live screenshot path.
+
+### Reverse-grep verification (Phase 3.5 end-state)
+
+```
+$ grep -rEn 'C0564k|m4793b|p030a|com\.android\.vending\.billing|m4911a|m4916d' \
+    decompiled/sources/ca/toadlybroodledev/sublist/ \
+    | grep -vE 'Phase 3\.[1-5]:|// Phase'
+(only descriptive text inside Phase 3 comment blocks remains)
+```
+
+## Phase 3.6
+
+To be appended after the final grep-audit closes Phase 3.

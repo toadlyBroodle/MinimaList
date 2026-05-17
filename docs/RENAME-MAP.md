@@ -8,7 +8,7 @@ Symbols are listed `jadx-name → real-name` with a one-line evidence cite. Use 
 
 | jadx | real | evidence |
 |---|---|---|
-| `p030a` (`a`) | `util` | `C0539a` static byte arrays = the standard + URL-safe base64 alphabets (`A–Z a–z 0–9 + /` and `A–Z a–z 0–9 - _`); the package is encoding helpers. |
+| `p030a` (`a`) | — | **DELETED in Phase 3.5.** Mis-identified in the initial pass as base64 utilities; closer reading showed it was the Google Play **In-App Billing v3 sample helper library** (TrivialDrive-style `IabHelper`). Member classes: `C0539a` Base64 (the byte-arrays really were base64 alphabets, but the encoder was internal-to-IAB), `C0540b`/`C0541c` `IabAsyncInProgressException`/`IabException`, `C0542d` `IabHelper`, `C0543e` `IabResult`, `C0544f` `Inventory`, `C0545g` `Purchase`, `C0546h` `Security` (signature verification), `C0547i` `SkuDetails`. Sole caller was the deleted `C0564k` billing wrapper. |
 | `p031b` (`b`) | `iface` | All 4 members are `Interface*` callbacks consumed by `ActMain` (`InterfaceC0549a`, `InterfaceC0550b` row actions; `InterfaceC0551c`, `InterfaceC0552d` fragment-host wiring). |
 | `p032c` (`c`) | `model` | `C0554a` is a plain data class with `text`/`complete`/`collapsed`/`indent`/`reminder`/`isInstr` — outline row data. `C0555b`, `C0556c` are siblings. |
 

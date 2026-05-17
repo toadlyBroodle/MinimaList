@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 import ca.toadlybroodledev.sublist.C0557d;
 import ca.toadlybroodledev.sublist.C0563j;
-import ca.toadlybroodledev.sublist.C0564k;
+// Phase 3.5: removed import ca.toadlybroodledev.sublist.C0564k (billing/premium wrapper; class deleted)
 import ca.toadlybroodledev.sublist.C0567n;
 import ca.toadlybroodledev.sublist.DrawerCustomLayout;
 import ca.toadlybroodledev.sublist.Fab;
@@ -71,8 +71,8 @@ public interface InterfaceC0549a {
 
     void onFragmentInput(View view);
 
-    /* JADX INFO: renamed from: p */
-    C0564k mo4778p();
+    // Phase 3.5: removed `C0564k mo4778p()` — premium-state accessor (sole impl was
+    //   ActMain returning its f3701E field, also removed).
 
     /* JADX INFO: renamed from: q */
     C0567n mo4779q();

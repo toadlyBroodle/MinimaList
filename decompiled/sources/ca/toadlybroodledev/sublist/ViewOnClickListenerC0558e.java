@@ -216,13 +216,14 @@ public class ViewOnClickListenerC0558e extends ComponentCallbacksC0154j implemen
         this.f3840ag.setAlpha(z ? 1.0f : 0.4f);
         this.f3841ah.setEnabled(z);
         this.f3841ah.setAlpha(z ? 1.0f : 0.4f);
-        if (!C0564k.m4911a()) {
-            this.f3848ao.setText(R.string.profile_unlock_premium_features_title);
-            this.f3856i.setVisibility(0);
-            this.f3844ak.setText(m917a(R.string.profile_premium_member, str3));
-            this.f3845al.setText(m917a(R.string.profile_premium_expires_text, str2));
-            return;
-        }
+        // Phase 3.5: removed `if (!C0564k.m4911a())` premium gate branch. Original:
+        //   non-premium users saw an "Unlock premium features" upsell title + the
+        //   purchase button (f3856i) visible + the premium-member / premium-expires
+        //   fields populated from server data (str3 = sku/period, str2 = expiry date).
+        //   Premium users (the kept branch below) saw "Share with friends" title, the
+        //   purchase button hidden, the share button (f3849ap) hidden too, and the
+        //   member/expires fields hard-coded to "Yes" / "Never". Locally-only, give
+        //   everyone the premium branch — there is no upsell, no expiry, no purchase.
         this.f3848ao.setText(R.string.profile_premium_share_title);
         this.f3856i.setVisibility(8);
         this.f3849ap.setVisibility(8);

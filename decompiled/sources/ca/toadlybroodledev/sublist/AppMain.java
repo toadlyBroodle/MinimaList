@@ -18,13 +18,10 @@ public class AppMain extends ApplicationC0022b {
     //   removed in this phase. Event-name catalog preserved in
     //   docs/REMOVED-CLOUD-SURFACE.md.
 
-    // Phase 3.5 (deferred): static String m4793b() returned a base64 fragment of a
-    //   Google Play licensing/billing public key. Will be removed with the rest of
-    //   the billing surface.
-    /* JADX INFO: renamed from: b */
-    static String m4793b() {
-        return "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjKy4VG7hyLiVVxRS7y6vnBAEPmma+KUSbfkH/gK0MrLlwvc8O+bTnD89uTV1iNioibLfmTjY7CIq2qkiOXumLUi8ZJYsqkC4QKLVJ1tIvGbCtk//nNoeSVyfqglNfWYTgoIPHMczmMYc1LXlxUoLZV795tgCnizC6MhcC1yqzngMzNlftqAnT0tbxzikyYPKaQeRFJrJJxeXwq6d5zRb84+YLd1FRNv11i7EWqboy4N11btN";
-    }
+    // Phase 3.5: removed static String m4793b() — first half of the Google Play
+    //   licensing/billing public-key base64 string. Concatenated with the second
+    //   half at the C0564k construction site to form the full key fed into
+    //   IabHelper. Sole consumer (C0564k) also deleted in this phase.
 
     // Phase 3.2: removed public static void m4794b(String name, String value)
     //   Firebase user-property setter; delegated to m4792a. 4 call sites also removed.
