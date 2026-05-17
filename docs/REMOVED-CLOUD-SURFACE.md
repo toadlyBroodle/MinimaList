@@ -234,6 +234,33 @@ $ grep -rEn 'C0564k|m4793b|p030a|com\.android\.vending\.billing|m4911a|m4916d' \
 (only descriptive text inside Phase 3 comment blocks remains)
 ```
 
-## Phase 3.6
+## Phase 3.6 — Final grep audit
 
-To be appended after the final grep-audit closes Phase 3.
+Ran the SPEC-required reverse grep:
+
+```
+$ grep -rEi 'firebase|com\.google\.android\.gms|admob|crashlytics|billingclient|c2dm' \
+    decompiled/sources/ca/toadlybroodledev/sublist/
+```
+
+Two categories of hits, both expected:
+
+1. **`Phase 3.x: removed …` comment breadcrumbs** in `AppMain.java`, `C0566m.java`, `C0567n.java`, `ActMain.java`, `p032c/C0554a.java`, `p032c/C0556c.java`. These are intentional documentation markers; they keep the decompiled tree self-describing for Phase 4 porters.
+2. **`R.java` constants** referencing FirebaseUI-shipped resources (9 hits): `firebaseColorAccent`, `firebaseColorPrimary`, `firebaseColorPrimaryDark`, `desc_firebase_lockup`, `firebase_database_url`, `firebase_status_fmt`, `firebase_user_management`, `ThemeOverlay_FirebaseButton`, `ThemeOverlay_FirebaseIcon`. These came from the bundled FirebaseUI / firebase-auth-ui dependency at original build time. Per SPEC Phase 4.5, the decompiled `R.java` is generated and **never ported** — Phase 4 generates a fresh `R.java` from the post-port `app/src/main/res/` tree, and Phase 1's resource sweep drops the orphaned FirebaseUI colors/strings/styles. These 9 constants disappear automatically as a side-effect.
+
+### Audit conclusion
+
+Zero live Firebase / GMS / AdMob / Crashlytics / Play-Billing / FCM code references in the app-package source tree. **Phase 3 closed.**
+
+### Phase 1 carryover list (manifest + resources)
+
+The strips above explicitly deferred these resource-side cleanups to Phase 1 (manifest port + resource port):
+
+- **`AndroidManifest.xml`** — drop permissions `BILLING`, `com.google.android.c2dm.permission.RECEIVE`, the custom `ca.toadlybroodledev.sublist.permission.C2D_MESSAGE`; drop receivers `MediaIntentReceiver`, `MediaNotificationService`, `ReconnectionService`; drop `<activity android:name="com.google.android.gms.ads.AdActivity"/>`; drop any FirebaseUI / `gms.auth.api.signin.RevocationBoundService` / `firebase.iid.*` components the jadx manifest carries from the bundled deps.
+- **`res/values/strings.xml`** orphans (cite-only — Phase 1 grep authoritatively): `invitation_title`, `invitation_message`, `invitation_cta`, `invites_failed`, `invite_welcome`, `invite_promo_text`, `invite_friends_format`, `invite_friends`, `play_services_error`, `profile_unlock_premium_features_title`, `profile_premium_expires_text`, `firebase_database_url`, `firebase_status_fmt`, `firebase_user_management`, `desc_firebase_lockup`, and any `firebase_*` / `gms_*` / `common_google_*` strings shipped by the bundled libs.
+- **`res/values/colors.xml`** orphans: `firebaseColorAccent`, `firebaseColorPrimary`, `firebaseColorPrimaryDark`.
+- **`res/values/styles.xml`** orphans: `ThemeOverlay.FirebaseButton`, `ThemeOverlay.FirebaseIcon`.
+- **`res/menu/`** orphans: `profile_share_button`, `profile_purchase_premium_button`, `base_google_sign_in_button`, `base_profile_sign_out_button`.
+- **`res/drawable/widget_preview`** may also be orphan once the C0567n premium-gate collapse goes through.
+
+Phase 1 owns the orphan-pruning sweep; SPEC item 1.1 already covers the locale-dir whitelist.
