@@ -1,0 +1,13 @@
+package com.google.firebase.database;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+/* JADX INFO: renamed from: com.google.firebase.database.h */
+/* JADX INFO: loaded from: classes.dex */
+@Target({ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface InterfaceC2270h {
+}

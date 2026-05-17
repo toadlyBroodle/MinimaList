@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="activity_horizontal_margin">64dp</dimen>
+    <dimen name="entry_indent">20dp</dimen>
+    <dimen name="sublist_left_margin">20dp</dimen>
+    <dimen name="sublist_title_text_size">26sp</dimen>
+    <dimen name="sublist_top_margin">10dp</dimen>
+</resources>
