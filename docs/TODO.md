@@ -16,6 +16,7 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Append-on-close, newest first. Trim to most recent 10.
 -->
 
+- 0.4 [easy] Moved `sources/` + `resources/` under `decompiled/` to isolate the read-only jadx tree from the upcoming active `app/` module — by hand at 2026-05-18T08:05Z
 - Decompiled sublist.apk v106 into `sources/` + `resources/` via jadx 1.5.5, committed as initial repo state — by hand at 2026-05-18T07:50Z
 - Authored `docs/SPEC.md` with 10 phases (scaffold → local-persistence) and `docs/TODO.md` handoff — by hand at 2026-05-18T08:00Z
 
@@ -29,7 +30,6 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Order: blockers first, then highest-impact.
 -->
 
-- [easy] 0.4 Move `sources/` + `resources/` into `decompiled/` so the port reads from a separate tree. Reason: SPEC Phase 0; blocks every Phase 4 port item.
 - [easy] 0.1 Initialize Gradle Kotlin-DSL project at repo root (package `ca.toadlybroodledev.sublist`, minSdk 21, targetSdk 35, AGP 8.x). Reason: SPEC Phase 0; blocks every subsequent phase.
 - [easy] 0.2 Add stub `MainActivity` + empty layout; `./gradlew :app:assembleDebug` green. Reason: SPEC Phase 0; gates 0.3 smoke test.
 - [easy] 0.3 Side-load stub APK on Moto G via `adb install -r`; confirm launcher icon opens empty activity. Reason: SPEC Phase 0; validates the signing + install path before any real code crosses over.

@@ -23,7 +23,7 @@ Stand up a buildable Android Studio project shell that the decompiled artifacts 
 - [ ] 0.1 [easy] Initialize Gradle Kotlin-DSL project at repo root with package `ca.toadlybroodledev.sublist`, minSdk 21, targetSdk 35, AGP 8.x, Kotlin 2.x; commit `settings.gradle.kts`, `app/build.gradle.kts`, `gradle/libs.versions.toml`.
 - [ ] 0.2 [easy] Add a stub `MainActivity` extending `AppCompatActivity` with an empty layout; `./gradlew :app:assembleDebug` succeeds.
 - [ ] 0.3 [easy] Side-load the stub APK on the Moto G via `adb install -r` and confirm launcher icon opens an empty activity (smoke test for signing + install path).
-- [ ] 0.4 [easy] Move `sources/` + `resources/` into a sibling `decompiled/` directory so the port reads from there without polluting the active source tree.
+- [x] 0.4 Move `sources/` + `resources/` into a sibling `decompiled/` directory so the port reads from there without polluting the active source tree.
 
 ### Phase 1: Manifest + resources port
 
