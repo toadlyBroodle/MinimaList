@@ -46,6 +46,63 @@ $ grep -rEn 'firebase\.database|C2225a|C2226b|C2266d|C2268f|C2269g|InterfaceC227
 
 Only mentions remaining are the `Phase 3.1: removed …` breadcrumb comments themselves.
 
-## Phases 3.2–3.6
+## Phase 3.2 — Firebase Analytics + GMS Analytics
+
+Surface owned by `com.google.firebase.analytics.FirebaseAnalytics` and `com.google.android.gms.analytics.{GoogleAnalytics, Tracker, HitBuilders}`.
+
+### `decompiled/sources/ca/toadlybroodledev/sublist/AppMain.java`
+- Removed imports `com.google.android.gms.analytics.{C0889d,C0890e,C0893h}` (`GoogleAnalytics`, `HitBuilders`, `Tracker`) and `com.google.firebase.analytics.FirebaseAnalytics`.
+- Removed static fields `f3724a` (GoogleAnalytics tracker root), `f3725b` (Tracker), `f3726c` (FirebaseAnalytics).
+- Removed `public static void m4792a(String item, String type)` — analytics-log wrapper. 44 call sites across 10 caller files; mapped one-to-one to a Firebase `logEvent(type, bundle)` + (when `type == "ScreenView"`) a GMS Tracker screen-view hit.
+- Removed `public static void m4794b(String name, String value)` — Firebase `setUserProperty(name, value)` + duplicate-log via `m4792a`. 4 call sites.
+- Removed `public void m4795a()` — GoogleAnalytics + FirebaseAnalytics init. Hard-coded tracker id was `UA-85711908-1` (a Universal Analytics property — the entire UA service was sunset by Google in July 2023, so this was already dead). Sole caller in `ActMain.java:591`.
+- Left `m4793b()` intact — returns a base64 fragment of a Google Play billing public key, owned by Phase 3.5.
+- **Port (Phase 4.5):** the AppMain Application subclass exists almost solely for analytics init + MultiDex. After Phase 3.5 removes `m4793b`, the class collapses to a `MultiDexApplication` shell — likely deletable entirely once `android.support.multidex` is replaced with the native API 21+ multidex path.
+
+### Caller files — call sites removed (44 × `m4792a` + 4 × `m4794b` + 1 × `m4795a` = 49 lines total)
+
+| file | call sites removed |
+|---|---|
+| `ActMain.java` | 12 × `m4792a` + 1 × `((AppMain) getApplication()).m4795a()` |
+| `C0563j.java` | 1 × `m4792a` |
+| `C0564k.java` | 2 × `m4792a` + 1 × `m4794b("premium_user", "true")` |
+| `C0566m.java` | 1 × `m4794b("anal_opt_out", …)` |
+| `C0567n.java` | 9 × `m4792a` |
+| `ReceiverNotification.java` | 2 × `m4792a` (reminder-notification success/fail) |
+| `ViewOnClickListenerC0548b.java` | 2 × `m4794b` (purchase-flow events) |
+| `ViewOnClickListenerC0558e.java` | 3 × `m4792a` |
+| `ViewOnClickListenerC0559f.java` | 4 × `m4792a` |
+| `ViewOnClickListenerC0561h.java` | 1 × `m4792a` |
+| `ViewOnClickListenerC0562i.java` | 6 × `m4792a` |
+| `WidgetProvider.java` | 2 × `m4792a` (widget update success/fail) |
+
+### Event-name catalog (preserved for reference)
+
+The 44 call sites covered roughly these event groups. Full per-site capture is in `/tmp/sublist-events.txt` at strip time (also reproducible from `git show` against the parent commit of the 3.2 commit):
+
+- `Action` / `Style` / `ScreenView` — UI interaction + screen-view tracking.
+- `Back Button Exit` / `Back Button Exit Prompt` — exit-flow telemetry.
+- `Menu_invite` / `Invite_fail` / `Invite_success` / `Invite_receivedFriend` / `Invite_receivedStudfinder` — App-Invites flow (Phase 3.3 deletes the underlying surface).
+- `Connection Failed` / `GooAuthent_true` / `GooAuthent_false` — Google Sign-In flow telemetry (Phase 3.3 deletes the underlying surface).
+- `BackupExternSave_true` / `BackupExternLoad_false` / `BackupInternSave_*` / `BackupInternLoad_*` / `ExportTxt_*` / `ExternStorgWritbl_false` — backup/export telemetry.
+- `Profile_dbRead` / `Profile_dbWrite` — RTDB profile-doc telemetry (Phase 3.1 already removed underlying calls).
+- `PurchPrem_*` — premium-purchase telemetry (Phase 3.5 deletes underlying billing surface).
+- `RemindNotifSent_true` / `RemindNotifSent_false` — reminder-notification telemetry (the receiver itself stays — Phase 4).
+- `WidgetUpdate_succ` / `WidgetUpdate_fail` — widget-update telemetry.
+- `TempRoot_set` — internal state-change telemetry.
+- `anal_opt_out` (user property) — telemetry-opt-out flag itself. The opt-out toggle UI may want to survive Phase 4 as a no-op setting or be deleted; flagged.
+- `premium_user` (user property) — Phase 3.5 territory.
+
+### Reverse-grep verification (Phase 3.2 end-state)
+
+```
+$ grep -rEn 'AppMain\.m4792a|AppMain\.m4794b|m4795a|gms\.analytics|firebase\.analytics' \
+    decompiled/sources/ca/toadlybroodledev/sublist/ | grep -v 'Phase 3\.2: removed' | grep -v 'AppMain\.java:'
+(no output)
+```
+
+The only remaining mentions are the `Phase 3.2: removed …` breadcrumb comments in `AppMain.java` itself.
+
+## Phases 3.3–3.6
 
 To be appended as each phase closes. Each section uses the same per-file structure: surface removed, line range, port guidance.

@@ -215,7 +215,6 @@ public class ViewOnClickListenerC0548b extends DialogInterfaceOnCancelListenerC0
                 str = null;
                 break;
         }
-        AppMain.m4794b(str, strValueOf);
     }
 
     @Override // android.view.View.OnClickListener
@@ -294,6 +293,5 @@ public class ViewOnClickListenerC0548b extends DialogInterfaceOnCancelListenerC0
                 strValueOf = String.valueOf(C0566m.a.NEXT_ENTRY.m4960a());
                 break;
         }
-        AppMain.m4794b(str, strValueOf);
     }
 }

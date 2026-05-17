@@ -37,7 +37,6 @@ public class C0564k {
             C0564k.this.m4910a(c0544f.m4834a("purchase_premium"));
             if (C0567n.f3942e) {
                 Log.d(C0564k.f3916b, "User is premium!");
-                AppMain.m4794b("premium_user", "true");
             }
         }
     };
@@ -49,11 +48,9 @@ public class C0564k {
         public void mo4826a(C0543e c0543e, C0545g c0545g) {
             if (c0543e.m4831c()) {
                 Log.d(C0564k.f3916b, "Error purchasing: " + c0543e);
-                AppMain.m4792a("PurchPrem_errorPurch", "purch_fail");
             } else if (c0545g.m4837b().equals("purchase_premium")) {
                 Toast.makeText(C0564k.f3917c.mo4775m(), R.string.toast_purchase_premium_thanks, 1).show();
                 C0564k.this.m4910a(true);
-                AppMain.m4792a("PurchPrem_successPurch", "purchase_premium");
             }
         }
     };
@@ -124,7 +121,6 @@ public class C0564k {
         });
         aVar.m2599b(R.string.later, null);
         aVar.m2603c();
-        AppMain.m4792a("PurchPrem_purchPrompt", "purchase_prompt");
     }
 
     /* JADX INFO: renamed from: d */
@@ -134,11 +130,9 @@ public class C0564k {
                 this.f3919d.m4816a();
             }
             this.f3919d.m4817a(f3917c.mo4776n().m969k(), "purchase_premium", 10001, this.f3920e, "android_id");
-            AppMain.m4792a("PurchPrem_initTransaction", "purchase_init");
         } catch (IllegalStateException e) {
             e.printStackTrace();
             Toast.makeText(f3917c.mo4775m(), R.string.error_conn_play, 0).show();
-            AppMain.m4792a("PurchPrem_illegalStateExcept", "purchase_ill_state_exc");
         }
     }
 }

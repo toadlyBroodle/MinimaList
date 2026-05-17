@@ -253,7 +253,6 @@ public class ViewOnClickListenerC0558e extends ComponentCallbacksC0154j implemen
     public void mo877d() {
         super.mo877d();
         if (C0566m.m4946k()) {
-            AppMain.m4792a("ScreenView_" + this.f3850b, "ScreenView");
         }
     }
 
@@ -272,13 +271,11 @@ public class ViewOnClickListenerC0558e extends ComponentCallbacksC0154j implemen
             case R.id.read_database_button /* 2131296551 */:
                 if (f3836a.mo4778p().m4914b()) {
                     C0567n.m4965p();
-                    AppMain.m4792a("Profile_dbRead", "Action");
                 }
                 break;
             case R.id.write_database_button /* 2131296666 */:
                 if (f3836a.mo4778p().m4914b()) {
                     C0567n.m4966q();
-                    AppMain.m4792a("Profile_dbWrite", "Action");
                 }
                 break;
         }

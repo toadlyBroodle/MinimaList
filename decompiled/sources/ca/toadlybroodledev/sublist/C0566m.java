@@ -209,7 +209,6 @@ public class C0566m {
     /* JADX INFO: renamed from: c */
     static void m4935c(boolean z) {
         f3937H = z;
-        AppMain.m4794b("anal_opt_out", String.valueOf(z ? 1 : 0));
         m4947l();
     }
 

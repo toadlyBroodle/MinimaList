@@ -163,7 +163,6 @@ public class ActMain extends ActivityC0348e implements View.OnClickListener, Int
     /* JADX INFO: renamed from: D */
     protected void m4757D() {
         startActivityForResult(new C0910c.a(getString(R.string.invitation_title)).m6091a(getString(R.string.invitation_message)).m6090a(Uri.parse("https://jg5ms.app.goo.gl/XktS")).m6092b(Uri.parse("http://toadlybroodle.ca/wp-content/uploads/2016/11/email-promo-square.png")).m6093b(getString(R.string.invitation_cta)).m6089a(), 10101);
-        AppMain.m4792a("Menu_invite", "Action");
     }
 
     @Override // ca.toadlybroodledev.sublist.p031b.InterfaceC0549a
@@ -308,7 +307,6 @@ public class ActMain extends ActivityC0348e implements View.OnClickListener, Int
     public void mo4766a(C1071a c1071a) {
         Log.d(this.f3712v, "onConnectionFailed:" + c1071a);
         Toast.makeText(this, R.string.play_services_error, 0).show();
-        AppMain.m4792a("Connection Failed", "play_conn_fail");
     }
 
     @Override // ca.toadlybroodledev.sublist.p031b.InterfaceC0550b
@@ -497,10 +495,8 @@ public class ActMain extends ActivityC0348e implements View.OnClickListener, Int
         if (i == 10101) {
             if (i2 != -1) {
                 Toast.makeText(this, R.string.invites_failed, 0).show();
-                AppMain.m4792a("Invite_fail", "invite_fail");
                 return;
             }
-            AppMain.m4792a("Invite_success", "invite_pass");
             ArrayList<String> arrayList = new ArrayList();
             try {
                 Collections.addAll(arrayList, C0910c.m6087a(i2, intent));
@@ -533,11 +529,9 @@ public class ActMain extends ActivityC0348e implements View.OnClickListener, Int
             return;
         }
         if (f3696w) {
-            AppMain.m4792a("Back Button Exit", "exit_back_butt");
             finish();
         } else {
             Toast.makeText(this, R.string.toast_back_exit, 0).show();
-            AppMain.m4792a("Back Button Exit Prompt", "exit_prompt");
             f3696w = true;
             new Handler().postDelayed(new Runnable() { // from class: ca.toadlybroodledev.sublist.ActMain.6
                 @Override // java.lang.Runnable
@@ -561,7 +555,6 @@ public class ActMain extends ActivityC0348e implements View.OnClickListener, Int
                 break;
         }
         if (strMo4851al != null) {
-            AppMain.m4792a(strMo4851al, "Action");
         }
         c0563jMo4787y.mo4852am();
     }
@@ -588,7 +581,6 @@ public class ActMain extends ActivityC0348e implements View.OnClickListener, Int
                 }
             }
         });
-        ((AppMain) getApplication()).m4795a();
         C0572s.m5009a(this);
         this.f3701E = new C0564k(this);
         m4754A();
@@ -678,10 +670,8 @@ public class ActMain extends ActivityC0348e implements View.OnClickListener, Int
                 }
                 if (C0912e.m6097b(interfaceC0911d.mo6095b()).equals("https://jg5ms.app.goo.gl/XktS")) {
                     string6 = ActMain.this.getString(R.string.invite_promo_text, new Object[]{ActMain.this.getString(R.string.invite_friends_format)});
-                    AppMain.m4792a("Invite_receivedFriend", "invite_received_friend");
                 } else {
                     string6 = ActMain.this.getString(R.string.invite_promo_text, new Object[]{""});
-                    AppMain.m4792a("Invite_receivedStudfinder", "invite_received_studf");
                 }
                 C0566m.f3943f = true;
                 DialogInterfaceC0347d.a aVar = new DialogInterfaceC0347d.a(ActMain.this);

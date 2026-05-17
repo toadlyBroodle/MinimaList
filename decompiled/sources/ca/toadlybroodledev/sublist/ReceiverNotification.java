@@ -22,8 +22,6 @@ public class ReceiverNotification extends BroadcastReceiver {
             ((NotificationManager) context.getSystemService("notification")).notify(charSequence.hashCode(), cVarM788b.m777a());
         } catch (Exception e) {
             e.printStackTrace();
-            AppMain.m4792a("RemindNotifSent_false", "reminder_notif_fail");
         }
-        AppMain.m4792a("RemindNotifSent_true", "reminder_notif_sent");
     }
 }

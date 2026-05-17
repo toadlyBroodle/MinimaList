@@ -184,11 +184,9 @@ public class C0567n extends C0566m {
                     outputStreamWriter.close();
                     fileOutputStream.close();
                     Toast.makeText(f3938a.mo4775m(), f3938a.mo4775m().getString(R.string.toast_external_backup_saved, file.getAbsolutePath()), 1).show();
-                    AppMain.m4792a("ExportTxt_true", "export_txt_succ");
                 } catch (IOException e) {
                     e.getMessage();
                     m4968s();
-                    AppMain.m4792a("ExportTxt_false", "export_txt_fail");
                     return;
                 }
             }
@@ -207,7 +205,6 @@ public class C0567n extends C0566m {
         if (!zEquals) {
             Toast.makeText(f3938a.mo4775m(), R.string.settings_sd_not_available, 0).show();
             m4968s();
-            AppMain.m4792a("ExternStorgWritbl_false", "ext_storg_writ_fail");
         }
         return zEquals;
     }
@@ -248,10 +245,8 @@ public class C0567n extends C0566m {
             if (z) {
                 if (z2) {
                     Toast.makeText(f3938a.mo4775m(), f3938a.mo4775m().getString(R.string.toast_external_backup_saved, fileM4964c.getAbsolutePath()), 1).show();
-                    AppMain.m4792a("BackupExternSave_true", "backup_ext_save_succ");
                 } else {
                     Toast.makeText(f3938a.mo4775m(), R.string.toast_internal_backup_saved, 0).show();
-                    AppMain.m4792a("BackupInternSave_true", "backup_int_save_succ");
                 }
             }
             return true;
@@ -260,10 +255,8 @@ public class C0567n extends C0566m {
             if (z) {
                 if (z2) {
                     m4968s();
-                    AppMain.m4792a("BackupExternLoad_false", "backup_ext_save_fail");
                 } else {
                     Toast.makeText(f3938a.mo4775m(), R.string.toast_backup_fail, 0).show();
-                    AppMain.m4792a("BackupInternSave_false", "backup_int_save_fail");
                 }
             }
             return false;
@@ -287,20 +280,16 @@ public class C0567n extends C0566m {
                 try {
                     if (z2) {
                         Toast.makeText(f3938a.mo4775m(), f3938a.mo4775m().getString(R.string.toast_external_backup_loaded, fileM4964c.getAbsolutePath()), 1).show();
-                        AppMain.m4792a("BackupExternSave_true", "backup_ext_save_succ");
                     } else {
                         Toast.makeText(f3938a.mo4775m(), R.string.toast_done, 0).show();
-                        AppMain.m4792a("BackupInternLoad_true", "backup_int_load_succ");
                     }
                     m4976a(false, false);
                 } catch (Exception e) {
                     if (z) {
                         if (z2) {
                             m4968s();
-                            AppMain.m4792a("BackupExternLoad_false", "backup_ext_save_fail");
                         } else {
                             Toast.makeText(f3938a.mo4775m(), R.string.toast_backup_none, 0).show();
-                            AppMain.m4792a("BackupInternLoad_false", "backup_int_load_fail");
                         }
                         return null;
                     }

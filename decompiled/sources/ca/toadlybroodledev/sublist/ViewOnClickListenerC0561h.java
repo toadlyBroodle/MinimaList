@@ -47,7 +47,6 @@ public class ViewOnClickListenerC0561h extends C0563j implements View.OnClickLis
         }
         this.f3866d.m4979a(arrayList);
         this.f3865c.mo4761a(view, false);
-        AppMain.m4792a("Search_doSearch", "Action");
     }
 
     @Override // ca.toadlybroodledev.sublist.C0563j, android.support.v4.p006a.ComponentCallbacksC0154j

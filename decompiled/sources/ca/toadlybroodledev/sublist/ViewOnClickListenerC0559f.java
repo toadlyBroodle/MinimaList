@@ -100,11 +100,9 @@ public class ViewOnClickListenerC0559f extends ViewOnClickListenerC0558e impleme
             public void mo4877a(AbstractC0964e<Object> abstractC0964e) {
                 Log.d(ViewOnClickListenerC0559f.this.f3857b, "signInWithCredential:onComplete:" + abstractC0964e.mo6214b());
                 if (abstractC0964e.mo6214b()) {
-                    AppMain.m4792a("GooAuthent_true", "goo_auth_succ");
                 } else {
                     Log.w(ViewOnClickListenerC0559f.this.f3857b, "signInWithCredential", abstractC0964e.mo6216d());
                     Toast.makeText(ViewOnClickListenerC0558e.f3836a.mo4775m(), R.string.goo_auth_fail, 0).show();
-                    AppMain.m4792a("GooAuthent_false", "goo_auth_fail");
                 }
                 ViewOnClickListenerC0559f.this.m4870ah();
                 ViewOnClickListenerC0558e.f3836a.mo4758E();
@@ -136,7 +134,6 @@ public class ViewOnClickListenerC0559f extends ViewOnClickListenerC0558e impleme
     /* JADX INFO: renamed from: d */
     public void mo877d() {
         super.mo877d();
-        AppMain.m4792a("ScreenView_" + this.f3857b, "ScreenView");
     }
 
     @Override // ca.toadlybroodledev.sublist.ViewOnClickListenerC0558e, android.view.View.OnClickListener
@@ -156,7 +153,6 @@ public class ViewOnClickListenerC0559f extends ViewOnClickListenerC0558e impleme
                 m4874aj();
                 break;
         }
-        AppMain.m4792a(str, "Action");
     }
 
     @Override // android.support.v4.p006a.ComponentCallbacksC0154j

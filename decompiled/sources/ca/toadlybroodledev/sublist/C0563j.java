@@ -255,7 +255,6 @@ public class C0563j extends ComponentCallbacksC0154j implements InterfaceC0552d 
             m4897b(this.f3910ak.m4988a().indexOf(c0557d), this.f3910ak.m5005i(c0557d));
             f3901c.mo4783u().setVisibility(8);
             f3901c.mo4784v().setVisibility(0);
-            AppMain.m4792a("TempRoot_set", "temp_root_set");
         }
         m4905an();
         mo4852am();
@@ -366,7 +365,6 @@ public class C0563j extends ComponentCallbacksC0154j implements InterfaceC0552d 
             }
         }
         if (strM4896b != null) {
-            AppMain.m4792a(strM4896b, "Action");
         }
         mo4852am();
         C0557d c0557dMo4788z2 = f3901c.mo4788z();
@@ -515,7 +513,6 @@ public class C0563j extends ComponentCallbacksC0154j implements InterfaceC0552d 
                 ArrayList<C0563j> arrayList = new ArrayList<>();
                 arrayList.add(C0563j.this);
                 C0563j.f3901c.mo4768a(arrayList, true);
-                AppMain.m4792a("Sub_deleteSublist", "Action");
             }
         });
         aVar.m2599b(R.string.cancel, null);
@@ -554,7 +551,6 @@ public class C0563j extends ComponentCallbacksC0154j implements InterfaceC0552d 
     public void mo877d() {
         super.mo877d();
         if (C0566m.m4946k()) {
-            AppMain.m4792a("ScreenView_" + f3900b, "ScreenView");
         }
     }
 

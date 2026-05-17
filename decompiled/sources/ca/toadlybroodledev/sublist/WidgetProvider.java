@@ -18,11 +18,9 @@ public class WidgetProvider extends AppWidgetProvider {
                 remoteViews.setOnClickPendingIntent(R.id.widget_image_view, activity);
                 remoteViews.setImageViewBitmap(R.id.widget_image_view, C0567n.m4961a(context));
                 appWidgetManager.updateAppWidget(i, remoteViews);
-                AppMain.m4792a("WidgetUpdate_succ", "widget_update_succ");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            AppMain.m4792a("WidgetUpdate_fail", "widget_update_fail");
         }
     }
 }

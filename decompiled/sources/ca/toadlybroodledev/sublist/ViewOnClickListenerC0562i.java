@@ -232,7 +232,6 @@ public class ViewOnClickListenerC0562i extends ComponentCallbacksC0154j implemen
     public void mo877d() {
         super.mo877d();
         if (C0566m.m4946k()) {
-            AppMain.m4792a("ScreenView_" + this.f3880am, "ScreenView");
         }
     }
 
@@ -290,7 +289,6 @@ public class ViewOnClickListenerC0562i extends ComponentCallbacksC0154j implemen
                 str = "Setting_sendDevEmail";
                 break;
         }
-        AppMain.m4792a(str, "Action");
     }
 
     @Override // android.widget.AdapterView.OnItemSelectedListener
@@ -316,7 +314,6 @@ public class ViewOnClickListenerC0562i extends ComponentCallbacksC0154j implemen
                     break;
             }
             adapterView.setSelection(0);
-            AppMain.m4792a(str, "Style");
         }
     }
 
