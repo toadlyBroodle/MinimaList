@@ -20,6 +20,10 @@ import static org.junit.Assert.assertTrue;
  *
  * Fix: add "if (!isAdded() || getActivity() == null) return;" at the top of each
  * main.post() success lambda in both doImportReplace and doImportMerge.
+ *
+ * Tests use occurrence-count checks (>= 2) so that removing the guard from either method
+ * alone fails the test — bare src.contains() is insufficient because a single occurrence in
+ * the other method would still return true.
  */
 public class Phase9SettingsFragmentLifecycleTest {
 
@@ -40,44 +44,37 @@ public class Phase9SettingsFragmentLifecycleTest {
         }
     }
 
+    private static int countOccurrences(String haystack, String needle) {
+        int count = 0;
+        int idx = 0;
+        while ((idx = haystack.indexOf(needle, idx)) != -1) {
+            count++;
+            idx += needle.length();
+        }
+        return count;
+    }
+
     private static final String SETTINGS_FRAGMENT =
             "app/src/main/java/ca/toadlybroodledev/sublist/SettingsFragment.java";
 
     @Test
-    public void doImportReplaceHasFragmentAttachedGuard() {
+    public void bothImportMethodsHaveIsAddedGuard() {
         String src = readSource(SETTINGS_FRAGMENT);
-        // The success main.post() lambda inside doImportReplace must guard against the fragment
-        // being detached before it runs.
         assertTrue(
-                "doImportReplace's main.post success lambda must call isAdded() to guard " +
-                "against fragment detachment (rotation during IO)",
-                src.contains("isAdded()"));
+                "Both doImportReplace and doImportMerge must call isAdded() in their " +
+                "main.post() success lambdas (expected >= 2 occurrences, one per method). " +
+                "A single occurrence means one method's guard was removed, re-opening the " +
+                "data-loss hazard on rotation during IO.",
+                countOccurrences(src, "isAdded()") >= 2);
     }
 
     @Test
-    public void doImportMergeHasFragmentAttachedGuard() {
-        String src = readSource(SETTINGS_FRAGMENT);
-        // Same guard required in doImportMerge.
-        assertTrue(
-                "doImportMerge's main.post success lambda must call isAdded() to guard " +
-                "against fragment detachment (rotation during IO)",
-                src.contains("isAdded()"));
-    }
-
-    @Test
-    public void doImportReplaceGuardChecksGetActivity() {
+    public void bothImportMethodsHaveGetActivityGuard() {
         String src = readSource(SETTINGS_FRAGMENT);
         assertTrue(
-                "doImportReplace's lifecycle guard must also check getActivity() == null " +
-                "to cover the brief window after detach before isAdded() returns false",
-                src.contains("getActivity() == null"));
-    }
-
-    @Test
-    public void doImportMergeGuardChecksGetActivity() {
-        String src = readSource(SETTINGS_FRAGMENT);
-        assertTrue(
-                "doImportMerge's lifecycle guard must also check getActivity() == null",
-                src.contains("getActivity() == null"));
+                "Both doImportReplace and doImportMerge must check getActivity() == null in " +
+                "their main.post() success lambdas (expected >= 2 occurrences, one per method). " +
+                "A single occurrence means one method's guard was removed.",
+                countOccurrences(src, "getActivity() == null") >= 2);
     }
 }
