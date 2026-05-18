@@ -87,10 +87,12 @@ File-by-file move from `decompiled/sources/ca/toadlybroodledev/sublist/` into `a
 
 Mechanical replacement of `android.support.*` → `androidx.*` across the ported source. Android Studio's "Migrate to AndroidX" tool handles 90% of this; the rest is per-call-site cleanup.
 
-- [ ] 5.1 [easy] Add `android.useAndroidX=true` + `android.enableJetifier=false` to `gradle.properties`; declare AndroidX deps in `libs.versions.toml`.
-- [ ] 5.2 [medium] Run Android Studio's "Refactor → Migrate to AndroidX" on the active tree; commit the result; manually fix any leftover `android.support.v4.p006a.*` / `android.support.v7.app.ActivityC0348e` references that the tool missed (jadx's `p006a` style breaks the mapper's regex).
-- [ ] 5.3 [easy] Replace deprecated `android.support.design.widget.*` with `com.google.android.material.*`.
-- [ ] 5.4 [easy] `./gradlew :app:assembleDebug` green; install + launch works (UI may look unchanged or subtly different).
+- [x] 5.1 [easy] Add `android.useAndroidX=true` + `android.enableJetifier=false` to `gradle.properties`; declare AndroidX deps in `libs.versions.toml`. (`android.useAndroidX=true` was already set from Phase 0; added `android.enableJetifier=false`; all AndroidX deps already declared.)
+- [x] 5.2 [medium] Run Android Studio's "Refactor → Migrate to AndroidX" on the active tree; commit the result; manually fix any leftover `android.support.v4.p006a.*` / `android.support.v7.app.ActivityC0348e` references that the tool missed (jadx's `p006a` style breaks the mapper's regex). **N/A: Phase 4 port already resolved every `android.support.*` reference to its `androidx.*` equivalent at the call site. Grep of all 28 Java source files finds zero `import android.support.*` statements (one comment reference in `RowActionListener.java` only). No migration pass needed.**
+- [x] 5.3 [easy] Replace deprecated `android.support.design.widget.*` with `com.google.android.material.*`. **N/A: no `android.support.design.widget.*` imports exist; `com.google.android.material:material` already declared in `libs.versions.toml`.**
+- [x] 5.4 [easy] `./gradlew :app:assembleDebug` green; install + launch works (UI may look unchanged or subtly different). (`assembleDebug` BUILD SUCCESSFUL with `android.enableJetifier=false`; device install deferred to Phase 7 per adb-unavailable-in-WSL precedent from 4.7.)
+
+**Phase 5 completed 2026-05-18.** The Phase 4 port already resolved all `android.support.*` references to `androidx.*` equivalents at each call site — the full Android Studio migration pass (5.2) was N/A. Only remaining task was adding `android.enableJetifier=false` to `gradle.properties` (the `android.useAndroidX=true` flag was set from Phase 0; all AndroidX deps were declared by Phase 4.4). `Phase5AndroidXTest` (2 tests) added as a regression guard: `gradlePropertiesHasBothAndroidXFlags` verifies both properties; `noAndroidSupportImportStatementsInSource` scans all 28 Java source files for `import android.support.*` statements (zero found). `./gradlew :app:assembleDebug` green. Tests 69 → 71.
 
 ### Phase 6: SDK and Gradle modernization
 
