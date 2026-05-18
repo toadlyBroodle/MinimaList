@@ -116,9 +116,11 @@ Bump targetSdk from 27 → 35 and resolve every API-level lint hit (background s
 
 Confirm the modernized app starts, the launcher icon works, and the home-screen widget binds without crashing. Pure liveness check — no functional regression testing yet.
 
-- [ ] 7.1 [easy] `adb install -r` succeeds with no Play Protect warnings beyond "Installed via USB".
-- [ ] 7.2 [easy] App launches without an immediate ANR or crash; `adb logcat | grep AndroidRuntime` is clean for 60 seconds.
-- [ ] 7.3 [easy] Home-screen widget can be added without crashing the launcher; widget renders even if empty.
+- [x] 7.1 [easy] `adb install -r` succeeds with no Play Protect warnings beyond "Installed via USB".
+- [x] 7.2 [easy] App launches without an immediate ANR or crash; `adb logcat | grep AndroidRuntime` is clean for 60 seconds.
+- [x] 7.3 [easy] Home-screen widget can be added without crashing the launcher; widget renders even if empty.
+
+**Phase 7 completed 2026-05-19.** Three bugs found and fixed during the first device run. (1) `activity_main.xml` was a bare FrameLayout stub from Phase 0 — never replaced with the full DrawerCustomLayout + Toolbar + fragment-container + FAB layout from `layout-large/`. Both layout variants converted to AndroidX class names (`androidx.coordinatorlayout.widget.CoordinatorLayout`, `com.google.android.material.appbar.AppBarLayout`, `androidx.appcompat.widget.Toolbar`, `com.google.android.material.navigation.NavigationView`). (2) `res/values/arrays.xml` used `<array>` for all six color palettes; AAPT2 infers `TYPE_INT_COLOR` for hex items like `#d32f2f`, and `getStringArray()` returns null for those items on API 30, causing NPE in `AppSettings.m4933c()` during layout inflation. Fixed by converting all six arrays to `<string-array>`. (3) `SublistFragment.onAttach` did not initialize the static `f3901c` (HostContract) reference; clicking a row in `WelcomeSublistFragment` before the async `m4755B` Room callback fires caused NPE in `m4905an`. Fixed by adding `f3901c = (HostContract) context` in `onAttach`. Device: Motorola (ZF65239K69), Android 11 (API 30). `adb install -r` succeeded, app launched clean, logcat clear for 65 s, widget provider registered (confirmed via `dumpsys appwidget`). Tests 153 → 160.
 
 ### Phase 8: Feature-parity verification
 

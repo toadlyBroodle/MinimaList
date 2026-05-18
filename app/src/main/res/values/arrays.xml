@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <array name="colors_300_array">
+    <string-array name="colors_300_array">
         <item>Highlighted Color</item>
         <item>#e57373</item>
         <item>#F06292</item>
@@ -22,8 +22,8 @@
         <item>#9e9e9e</item>
         <item>#606365</item>
         <item>#2a2a2a</item>
-    </array>
-    <array name="colors_500_array">
+    </string-array>
+    <string-array name="colors_500_array">
         <item>Background Color</item>
         <item>#f44336</item>
         <item>#E91E63</item>
@@ -45,8 +45,8 @@
         <item>#bdbdbd</item>
         <item>#495153</item>
         <item>#050505</item>
-    </array>
-    <array name="colors_700_array">
+    </string-array>
+    <string-array name="colors_700_array">
         <item>Title Bar Color</item>
         <item>#d32f2f</item>
         <item>#C2185B</item>
@@ -68,8 +68,8 @@
         <item>#757575</item>
         <item>#2B2B2B</item>
         <item>#000000</item>
-    </array>
-    <array name="colors_a400_array">
+    </string-array>
+    <string-array name="colors_a400_array">
         <item>Accent Color</item>
         <item>#ff1744</item>
         <item>#F50057</item>
@@ -91,23 +91,23 @@
         <item>#9e9e9e</item>
         <item>#606365</item>
         <item>#2a2a2a</item>
-    </array>
-    <array name="colors_text_array">
+    </string-array>
+    <string-array name="colors_text_array">
         <item>Text Color</item>
         <item>#FAFAFA</item>
         <item>#616161</item>
         <item>#101010</item>
-    </array>
-    <array name="colors_text_compl_array">
+    </string-array>
+    <string-array name="colors_text_compl_array">
         <item>Text Completed Color</item>
         <item>#BDBDBD</item>
         <item>#424242</item>
         <item>#212121</item>
-    </array>
-    <array name="size_text_array">
+    </string-array>
+    <string-array name="size_text_array">
         <item>Text Size</item>
         <item>16f</item>
         <item>20f</item>
         <item>24f</item>
-    </array>
+    </string-array>
 </resources>

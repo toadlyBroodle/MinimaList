@@ -128,6 +128,10 @@ public class SublistFragment extends Fragment implements OutlineHost {
     public void onAttach(Context context) {
         super.onAttach(context);
         setRetainInstance(true);
+        // Ensure f3901c is set before any row interaction fires, covering the window
+        // between onCreate (which adds WelcomeSublistFragment without calling m4899a)
+        // and the m4755B async callback that would eventually call m4899a.
+        f3901c = (HostContract) context;
     }
 
     @Override

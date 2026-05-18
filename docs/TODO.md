@@ -10,6 +10,7 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Append-on-close, newest first. Trim to most recent 10.
 -->
 
+- Phase 7 device smoke test: fix activity_main.xml stub layout + <array>→<string-array> AAPT color-type NPE + SublistFragment.onAttach f3901c init; tests 153 → 160 — by sst-dev-cycle at 2026-05-19T11:00Z
 - strengthen Phase9SettingsFragmentLifecycleTest: replace 4 bare src.contains() with 2 countOccurrences()>=2 checks; tests 155 → 153 — by sst-dev-cycle at 2026-05-19T08:15Z
 - add isAdded()/getActivity()==null guard to SettingsFragment.doImportReplace + doImportMerge main.post success lambdas; tests 151 → 155 — by sst-dev-cycle at 2026-05-18T07:15Z
 - 9.3 JSON export (OutlineStore.exportToUri via SAF ACTION_CREATE_DOCUMENT) + JSON import (ACTION_OPEN_DOCUMENT, replace-vs-merge AlertDialog, merge via RowActionListener.mo4767a) + close batch-sizing meta-item by batching same-phase 9.3; tests 138 → 151 — by sst-dev-cycle at 2026-05-19T06:45Z
@@ -19,7 +20,6 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
 - 9.1+9.2: Room schema (SublistEntity, OutlineRowEntity, 2 DAOs, SublistDatabase) + OutlineRepository interface + OutlineRepositoryImpl with importLegacy; tests 94 → 108 — by sst-dev-cycle at 2026-05-19T00:30Z
 - 6.1-lint-fix-c/d: fix 19 WrongConstant errors (typed constants for getSystemService/Toast/DrawerLayout/AlarmManager/TypedValue/IMM) + POST_NOTIFICATIONS guard at 2 notify() sites; tests 85 → 94 — by sst-dev-cycle at 2026-05-18T23:30Z
 - 6.6/6.7 lint errors fixed: super.onBackPressed() in MainActivity; Fab→OutlineFab in layout-large XML; tests 83 → 85 — by sst-dev-cycle at 2026-05-18T22:30Z
-- Phase 6 closed (6.1–6.5): lint punch list captured; queries block for mailto:; scoped storage path (getExternalFilesDir); FLAG_IMMUTABLE on all PendingIntents; tests 76 → 83 — by sst-dev-cycle at 2026-05-18T21:45Z
 
 ## Next up (queued for next cycle)
 
@@ -31,6 +31,7 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Order: blockers first, then highest-impact.
 -->
 
-- [easy] 7.1 `adb install -r` succeeds with no Play Protect warnings. Reason: blocked on adb + physical device in WSL build environment; skip to Phase 9 work until device is available.
-- [easy] 7.2 App launches without ANR/crash; `adb logcat | grep AndroidRuntime` clean for 60s. Reason: same hardware blocker as 7.1.
-- [easy] 7.3 Home-screen widget can be added without crashing launcher; widget renders even if empty. Reason: same hardware blocker as 7.1.
+- [hard] 8.1 CRUD: create/edit/delete outline rows; nesting indent works; collapsed-state persists across app restart. Reason: Phase 7 device test passed; Phase 9 Room wiring in place; acceptance testing can now begin.
+- [medium] 8.2 Reminders: setting a reminder fires a notification at the scheduled time; rescheduling on device boot works. Reason: depends on 8.1.
+- [medium] 8.3 Home-screen widget renders the current list and survives app data update. Reason: depends on 8.1; widget provider verified in Phase 7.
+- [medium] 8.4 Drawer / settings / appearance toggles wired to real preferences. Reason: AppSettings and SettingsFragment wiring confirmed in Phase 7 run; acceptance test remaining.
