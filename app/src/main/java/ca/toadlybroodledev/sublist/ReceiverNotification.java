@@ -21,7 +21,7 @@ public class ReceiverNotification extends BroadcastReceiver {
             stack.addNextIntent(new Intent(context, MainActivity.class));
             PendingIntent pi = stack.getPendingIntent(0, 134217728);
             NotificationCompat.Builder builder = new NotificationCompat.Builder(
-                    context, context.getPackageName())
+                    context, AppMain.CHANNEL_REMINDERS)
                     .setSmallIcon(R.drawable.minimalist_nav_drawer_logo)
                     .setContentTitle(context.getString(R.string.reminder_notification_title))
                     .setContentText(text)

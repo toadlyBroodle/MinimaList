@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity
             sb.append(DateTimeUtil.m5011b(times.get(i))).append(" - ").append(labels.get(i)).append("\n");
         }
         String str = sb.length() == 0 ? "None" : sb.toString();
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, getPackageName())
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, AppMain.CHANNEL_REMINDERS)
                 .setSmallIcon(R.drawable.minimalist_nav_drawer_logo)
                 .setContentTitle("Upcoming reminders")
                 .setContentText(str)
