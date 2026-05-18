@@ -33,6 +33,7 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Order: blockers first, then highest-impact.
 -->
 
+- [medium] [should-fix] MainActivity:82 — async Room-load callback unconditionally runs `mo4767a` → `tx.commit()`; can fire after `onSaveInstanceState` (rotation/background during first-launch migration) and throw `IllegalStateException`. Reason: review of 3022088
 - [medium] [should-fix] add Robolectric/Mockito tests for OutlineRepositoryImpl (replaceRowsForSublist atomicity, importLegacy walk, CASCADE delete, loadAllAsHashMap/saveAllAsHashMap round-trip) — Phase9*Test.java + Phase9Wiring92aTest are source-scan only. Reason: review of 909c804; 9.2a added two new methods that also need real Room exercise.
 - [easy] 7.1 `adb install -r` succeeds with no Play Protect warnings. Reason: blocked on adb + physical device in WSL build environment; skip to Phase 9 work until device is available.
 - [easy] 7.2 App launches without ANR/crash; `adb logcat | grep AndroidRuntime` clean for 60s. Reason: same hardware blocker as 7.1.
