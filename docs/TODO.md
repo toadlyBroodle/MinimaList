@@ -41,5 +41,7 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Order: blockers first, then highest-impact.
 -->
 
+- [easy] [should-fix] `MainActivity.java:533` — missing `super.onRequestPermissionsResult()` call; fragment permission results silently dropped — review of 437ea68
+- [easy] [should-fix] `OutlineFab.java:27` — `m4800a(true, true)` sets GONE instead of showing FAB; "animated show" path inverted — review of 437ea68
 - [medium] 4.6 Port the 5 ViewOnClickListenerC05NN inner-class-extracted listeners back to anonymous-class call-site form where practical; leave standalone if rebind is risky. Reason: SPEC Phase 4; all classes now ported, this closes the phase.
 - [medium] 4.7 ./gradlew :app:assembleDebug green; app installs and MainActivity opens to the real outliner UI. Reason: SPEC Phase 4 smoke-test gate; depends on 4.6.
