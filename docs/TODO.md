@@ -38,3 +38,5 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Order: blockers first, then highest-impact.
 -->
 
+- [easy] [should-fix] `Phase6NotificationChannelTest.java:appMainRegistersChannel()` — assert `Build.VERSION.SDK_INT >= Build.VERSION_CODES.O` guard exists in AppMain; current source-scan passes even if guard is removed (startup crash on API 21-25) — review of 7063238
+
