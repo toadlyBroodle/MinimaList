@@ -33,6 +33,10 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Order: blockers first, then highest-impact.
 -->
 
+- [easy] [blocker] `OutlineRepositoryImpl.java:84` replaceRowsForSublist is not atomic — missing @Transaction; insertAll-after-delete failure loses rows. Reason: review of 909c804 (group with repository-transactions)
+- [easy] [should-fix] `OutlineRepositoryImpl.java:88` importLegacy not wrapped in runInTransaction — partial first-launch migration on failure. Reason: review of 909c804 (group with repository-transactions)
+- [hard] [should-fix] 9.2a wire OutlineRepository through OutlineStore/AppSettings/SublistFragment/MainActivity + call importLegacy from AppMain; delete legacy Gson HashMap path. Reason: review of 909c804 — 9.2 [x] is premature, repository has zero callers
+- [medium] [should-fix] add Robolectric/Mockito tests for OutlineRepositoryImpl (replaceRowsForSublist atomicity, importLegacy walk, CASCADE delete) — current Phase9*Test.java are source-scan only. Reason: review of 909c804
 - [easy] 7.1 `adb install -r` succeeds with no Play Protect warnings. Reason: blocked on adb + physical device in WSL build environment; skip to Phase 9 work until device is available.
 - [easy] 7.2 App launches without ANR/crash; `adb logcat | grep AndroidRuntime` clean for 60s. Reason: same hardware blocker as 7.1.
 - [easy] 7.3 Home-screen widget can be added without crashing launcher; widget renders even if empty. Reason: same hardware blocker as 7.1.
