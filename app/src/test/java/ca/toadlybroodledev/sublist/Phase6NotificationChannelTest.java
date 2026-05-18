@@ -69,6 +69,9 @@ public class Phase6NotificationChannelTest {
         String src = readSource("app/src/main/java/ca/toadlybroodledev/sublist/AppMain.java");
         assertTrue("AppMain.java must call createNotificationChannel to register CHANNEL_REMINDERS",
                 src.contains("createNotificationChannel"));
+        // Guard is required: dropping it causes a startup crash on API 21-25 (full minSdk range).
+        assertTrue("AppMain.java must guard createNotificationChannel behind Build.VERSION.SDK_INT >= Build.VERSION_CODES.O",
+                src.contains("Build.VERSION.SDK_INT") && src.contains("Build.VERSION_CODES.O"));
     }
 
     @Test
