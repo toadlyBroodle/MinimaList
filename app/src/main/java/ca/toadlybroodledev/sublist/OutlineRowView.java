@@ -158,7 +158,7 @@ public class OutlineRowView {
         Context ctx = this.f3818a.mo4775m();
         Intent intent = new Intent(ctx, ReceiverNotification.class);
         intent.putExtra("notification", this.f3822e.getText());
-        PendingIntent pi = PendingIntent.getBroadcast(ctx, hashCode(), intent, 0);
+        PendingIntent pi = PendingIntent.getBroadcast(ctx, hashCode(), intent, PendingIntent.FLAG_IMMUTABLE);
         AlarmManager am = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
         if (DateTimeUtil.f3991a <= DateTimeUtil.m5016d()) {
             Toast.makeText(ctx, R.string.choose_future_date_time, Toast.LENGTH_LONG).show();
@@ -179,7 +179,7 @@ public class OutlineRowView {
         Intent intent = new Intent(ctx, ReceiverNotification.class);
         intent.putExtra("notification", this.f3822e.getText());
         ((AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE))
-                .cancel(PendingIntent.getBroadcast(ctx, hashCode(), intent, 0));
+                .cancel(PendingIntent.getBroadcast(ctx, hashCode(), intent, PendingIntent.FLAG_IMMUTABLE));
         this.f3825h = 0L;
         this.f3818a.mo4759F();
         Toast.makeText(ctx, R.string.reminder_canceled, Toast.LENGTH_SHORT).show();

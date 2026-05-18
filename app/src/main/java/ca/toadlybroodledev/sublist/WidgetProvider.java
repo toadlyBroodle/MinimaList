@@ -15,7 +15,8 @@ public class WidgetProvider extends AppWidgetProvider {
         try {
             for (int id : appWidgetIds) {
                 PendingIntent activity = PendingIntent.getActivity(
-                        context, 0, new Intent(context, MainActivity.class), 0);
+                        context, 0, new Intent(context, MainActivity.class),
+                        PendingIntent.FLAG_IMMUTABLE);
                 RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
                 views.setOnClickPendingIntent(R.id.widget_image_view, activity);
                 views.setImageViewBitmap(R.id.widget_image_view, OutlineStore.m4961a(context));

@@ -23,6 +23,14 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- Phase 6.3: required on API 30+ so resolveActivity() returns non-null for email apps. -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.SENDTO" />
+            <data android:scheme="mailto" />
+        </intent>
+    </queries>
+
     <application
         android:name=".AppMain"
         android:allowBackup="false"

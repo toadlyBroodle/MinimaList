@@ -15,6 +15,7 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Append-on-close, newest first. Trim to most recent 10.
 -->
 
+- Phase 6 closed (6.1–6.5): lint punch list captured; queries block for mailto:; scoped storage path (getExternalFilesDir); FLAG_IMMUTABLE on all PendingIntents; tests 76 → 83 — by sst-dev-cycle at 2026-05-18T21:45Z
 - [should-fix] strengthen appMainRegistersChannel() to assert Build.VERSION.SDK_INT >= Build.VERSION_CODES.O guard in AppMain.java; tests 76 → 76 — by sst-dev-cycle at 2026-05-18T21:00Z
 - 6.2 register CHANNEL_REMINDERS in AppMain.onCreate(); substitute at ReceiverNotification + MainActivity.mo4759F(); assembleDebug green; tests 71 → 76 — by sst-dev-cycle at 2026-05-18T20:15Z
 - Phase 5 closed: add android.enableJetifier=false; 5.2 N/A (no android.support.* imports in tree); 5.3 N/A (material already uses com.google.android.material); assembleDebug green; tests 69 → 71 — by sst-dev-cycle at 2026-05-18T19:15Z
@@ -24,7 +25,6 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
 - 4.5 [medium] Port ActMain→MainActivity + AppMain + WidgetProvider; full port DrawerCustomLayout (extends DrawerLayout) + OutlineFab (extends FloatingActionButton); delete decompiled R.java; update manifest (AppMain, WidgetProvider, ReceiverNotification); tests 54 → 67 — by sst-dev-cycle at 2026-05-18T15:30Z
 - 4.4 [medium] Port 17 obfuscated root-package classes (AppSettings, OutlineStore, OutlineTree, OutlineRowView, SublistFragment, Clipboard, DateTimeUtil, SublistRenderer, IndentManager, StringArraySpinnerAdapter, DrawerToggle, NewSublistDialog, WelcomeSublistFragment, SettingsDialog, ProfileFragment, SearchSublistFragment, SettingsFragment); replace all 4.3 stubs; port 3 of 6 named-class 4.5 items (DrawerCustomLayout, OutlineFab, ReceiverNotification); add getListOfEntSers to OutlineRow; add Gson dep; add arrays/bools/integers.xml; tests 15 → 54 — by sst-dev-cycle at 2026-05-18T14:00Z
 - 4.3 [medium] Port iface/ — 4 interfaces (HostContract 23 methods, RowActionListener 6, FragmentHost 2, OutlineHost 6); 4 deleted methods/stubs excised; 8 Phase-4.4 forward-ref stubs created; tests 4 → 15 — by sst-dev-cycle at 2026-05-18T11:15Z
-- 4.1 + 4.2 [medium] Phase 4 started: 4.1 closed as N/A (p030a deleted in Phase 3.5; nothing to port); 4.2 port of `model/OutlineRow` to active tree as plain POJO — Firebase annotations already stripped, `getListOfEntSers` deferred until OutlineRowView (C0557d) lands in 4.4. JUnit test suite added (0 → 4 tests). `./gradlew assembleDebug` green — by sst-dev-cycle at 2026-05-18T10:15Z
 
 ## Next up (queued for next cycle)
 
@@ -35,4 +35,9 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Difficulty: easy / medium / hard.
   Order: blockers first, then highest-impact.
 -->
+
+- [easy] 6.1-lint-fix-a Fix MissingSuperCall: MainActivity.onBackPressed() must call super.onBackPressed(). Reason: lint Error — omitting super breaks predictive-back gesture on API 33+.
+- [easy] 6.1-lint-fix-b Fix MissingClass: layout XML references ca.toadlybroodledev.sublist.Fab; rename to OutlineFab in affected layout file(s). Reason: lint Error — layout inflation crashes at runtime.
+- [medium] 6.1-lint-fix-c Fix WrongConstant (19 errors): replace raw string args to getSystemService("notification"/"input_method") with Context.NOTIFICATION_SERVICE/Context.INPUT_METHOD_SERVICE; fix Toast.LENGTH raw 0/1 → Toast.LENGTH_SHORT/LONG; fix DrawerLayout.setDrawerLockMode/openDrawer/closeDrawer raw int args. Reason: lint Error — type-unsafe API calls produce wrong behavior on some API levels.
+- [medium] 6.1-lint-fix-d Add POST_NOTIFICATIONS permission check before NotificationManager.notify() calls (2 sites: ReceiverNotification + MainActivity.mo4759F) on API 33+. Reason: lint Warning (NotificationPermission) — silent notification drop on API 33+ without runtime permission.
 

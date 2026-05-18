@@ -19,7 +19,8 @@ public class ReceiverNotification extends BroadcastReceiver {
             TaskStackBuilder stack = TaskStackBuilder.create(context);
             stack.addParentStack(MainActivity.class);
             stack.addNextIntent(new Intent(context, MainActivity.class));
-            PendingIntent pi = stack.getPendingIntent(0, 134217728);
+            PendingIntent pi = stack.getPendingIntent(0,
+                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
             NotificationCompat.Builder builder = new NotificationCompat.Builder(
                     context, AppMain.CHANNEL_REMINDERS)
                     .setSmallIcon(R.drawable.minimalist_nav_drawer_logo)

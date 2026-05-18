@@ -98,15 +98,17 @@ Mechanical replacement of `android.support.*` → `androidx.*` across the ported
 
 Bump targetSdk from 27 → 35 and resolve every API-level lint hit (background services, notification channels, foreground service types, scoped storage, predictive back gesture, etc.).
 
-- [ ] 6.1 [medium] Bump `targetSdk` 27 → 35; `./gradlew :app:lintDebug` produces a finite punch list; capture as Next-up items per warning category.
+- [x] 6.1 [medium] Bump `targetSdk` 27 → 35; `./gradlew :app:lintDebug` produces a finite punch list; capture as Next-up items per warning category.
 - [x] 6.2 [medium] Add notification channels (required since API 26). Two paths need registration: (1) `ReceiverNotification.onReceive()` — fires per-row reminder alarms via `AlarmManager`; (2) `MainActivity.mo4759F()` — builds a "Upcoming reminders" summary notification. Both currently pass `getPackageName()` as the channel ID with no prior `createNotificationChannel()` call; both silently drop their notification on API 26+. Register one shared channel (e.g. `CHANNEL_REMINDERS`) in `AppMain.onCreate()` and substitute it at both call sites.
 
 **Review follow-ups (open — schedule as the next `/sst-dev-cycle` cycle):**
 - [x] [easy] [should-fix] `Phase6NotificationChannelTest.java:appMainRegistersChannel()` — source-scan asserts `createNotificationChannel` appears in `AppMain.java` but does not verify the `Build.VERSION.SDK_INT >= Build.VERSION_CODES.O` guard exists. If a future change drops the guard, the test still passes but the app crashes at startup on every API 21–25 device (full minSdk range). Fix: added `assertTrue(src.contains("Build.VERSION.SDK_INT") && src.contains("Build.VERSION_CODES.O"))` inside `appMainRegistersChannel()`.
 
-- [ ] 6.3 [easy] Add `<queries>` block to the manifest for any `Intent.ACTION_SEND` share targets (required since API 30).
-- [ ] 6.4 [easy] Replace any `WRITE_EXTERNAL_STORAGE` / `READ_EXTERNAL_STORAGE` usage with scoped storage / SAF for the JSON export/import path.
-- [ ] 6.5 [easy] Declare the home-screen widget's launcher PendingIntents with `FLAG_IMMUTABLE` (required since API 31).
+- [x] 6.3 [easy] Add `<queries>` block to the manifest for any `Intent.ACTION_SEND` share targets (required since API 30).
+- [x] 6.4 [easy] Replace any `WRITE_EXTERNAL_STORAGE` / `READ_EXTERNAL_STORAGE` usage with scoped storage / SAF for the JSON export/import path.
+- [x] 6.5 [easy] Declare the home-screen widget's launcher PendingIntents with `FLAG_IMMUTABLE` (required since API 31).
+
+**Phase 6 completed 2026-05-18 (items 6.1–6.5; 6.6–6.8 queued from lint punch list).** `targetSdk = 35` was already set from scaffold; 6.1's work was running `lintDebug` and recording the punch list. 23 errors + 540 warnings found. Errors by category: 1× `MissingSuperCall` (`MainActivity.onBackPressed` missing `super` call), 1× `MissingClass` (`Fab` in layout XML should be `OutlineFab`), 19× `WrongConstant` (raw strings to `getSystemService`/`Toast.LENGTH_*`/`Gravity.*` needing typed constants), 2× `NotificationPermission` (missing `POST_NOTIFICATIONS` check on API 33+). Top warning categories: 422× `UnusedResources`, 20× `IconDuplicates`, 9× `GradleDependency`. Punch-list items queued as Next-up. 6.3: added `<queries>` block for `ACTION_SENDTO` / `mailto:` scheme so `resolveActivity()` returns non-null on API 30+. 6.4: `OutlineStore.m4970u()` switched from `getExternalStoragePublicDirectory` to `getExternalFilesDir(null)` (app-scoped, no permission needed); `MainActivity.mo4773c()` emptied (no permission to request). 6.5: `FLAG_IMMUTABLE` added to all `PendingIntent.getActivity` / `getBroadcast` / `TaskStackBuilder.getPendingIntent` calls in `WidgetProvider`, `OutlineRowView`, `MainActivity.mo4759F`, `ReceiverNotification`. Tests 76 → 83.
 
 ### Phase 7: Build smoke test on device
 

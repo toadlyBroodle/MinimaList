@@ -130,7 +130,8 @@ public class MainActivity extends AppCompatActivity
                 .setContentText(str)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(str));
         builder.setContentIntent(PendingIntent.getActivity(this, 0,
-                new Intent(this, MainActivity.class), 134217728));
+                new Intent(this, MainActivity.class),
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE));
         Notification notification = builder.build();
         notification.flags |= 34;
         ((NotificationManager) getSystemService("notification")).notify(78, notification);
@@ -350,10 +351,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void mo4773c(int i) {
-        if (i == 1) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{"android.permission.WRITE_EXTERNAL_STORAGE"}, 1);
-        }
+        // Phase 6.4: external backup now uses getExternalFilesDir; no storage permission needed.
     }
 
     @Override

@@ -162,11 +162,11 @@ public class OutlineStore extends AppSettings {
     }
 
     static File m4970u() {
-        String path = Environment.getExternalStoragePublicDirectory(
-                f3938a.mo4775m().getString(R.string.app_name)).getAbsolutePath();
-        File dir = new File(path);
-        if (!dir.mkdir()) {
-            Log.e(f3974s, "Directory not created at " + path);
+        // Phase 6.4: use app-scoped external dir (no WRITE_EXTERNAL_STORAGE permission needed).
+        File dir = f3938a.mo4775m().getExternalFilesDir(null);
+        if (dir == null) {
+            Log.e(f3974s, "getExternalFilesDir returned null; falling back to filesDir");
+            dir = new ContextWrapper(f3938a.mo4775m()).getFilesDir();
         }
         return dir;
     }
