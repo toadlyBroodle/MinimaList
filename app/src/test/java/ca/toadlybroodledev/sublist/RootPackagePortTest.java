@@ -13,6 +13,9 @@ import ca.toadlybroodledev.sublist.model.OutlineRow;
 
 import static org.junit.Assert.*;
 
+// Phase 4.5 imports (new classes being tested)
+import android.content.Context;
+
 /**
  * Structural tests for Phase 4.4 root-package port.
  * Verifies class hierarchy, key members, and rename-map correctness without requiring
@@ -296,6 +299,103 @@ public class RootPackagePortTest {
     public void settingsFragmentClassExists() {
         assertEquals("ca.toadlybroodledev.sublist.SettingsFragment",
                 SettingsFragment.class.getName());
+    }
+
+    // ---- DrawerCustomLayout (Phase 4.5 full port) --------------------------------
+
+    @Test
+    public void drawerCustomLayoutExtendsDrawerLayout() {
+        assertEquals("androidx.drawerlayout.widget.DrawerLayout",
+                DrawerCustomLayout.class.getSuperclass().getName());
+    }
+
+    @Test
+    public void drawerCustomLayoutHasNavView() throws Exception {
+        Field f = DrawerCustomLayout.class.getDeclaredField("f3729e");
+        assertNotNull(f);
+    }
+
+    @Test
+    public void drawerCustomLayoutHasAddSublistMethod() throws Exception {
+        Method m = DrawerCustomLayout.class.getDeclaredMethod("m4798a", SublistFragment.class);
+        assertNotNull(m);
+    }
+
+    // ---- OutlineFab (Phase 4.5 full port) ----------------------------------------
+
+    @Test
+    public void outlineFabExtendsFloatingActionButton() {
+        assertEquals("com.google.android.material.floatingactionbutton.FloatingActionButton",
+                OutlineFab.class.getSuperclass().getName());
+    }
+
+    @Test
+    public void outlineFabHasShowHideMethod() throws Exception {
+        Method m = OutlineFab.class.getDeclaredMethod("m4800a", boolean.class, boolean.class);
+        assertNotNull(m);
+    }
+
+    // ---- MainActivity (Phase 4.5) ------------------------------------------------
+
+    @Test
+    public void mainActivityExtendsAppCompatActivity() {
+        assertEquals("androidx.appcompat.app.AppCompatActivity",
+                MainActivity.class.getSuperclass().getName());
+    }
+
+    @Test
+    public void mainActivityImplementsHostContract() {
+        Set<String> ifaces = Arrays.stream(MainActivity.class.getInterfaces())
+                .map(Class::getName).collect(Collectors.toSet());
+        assertTrue("MainActivity must implement HostContract",
+                ifaces.contains("ca.toadlybroodledev.sublist.iface.HostContract"));
+    }
+
+    @Test
+    public void mainActivityImplementsRowActionListener() {
+        Set<String> ifaces = Arrays.stream(MainActivity.class.getInterfaces())
+                .map(Class::getName).collect(Collectors.toSet());
+        assertTrue("MainActivity must implement RowActionListener",
+                ifaces.contains("ca.toadlybroodledev.sublist.iface.RowActionListener"));
+    }
+
+    @Test
+    public void mainActivityHasStaticFabField() throws Exception {
+        Field f = MainActivity.class.getDeclaredField("f3694m");
+        assertTrue(Modifier.isStatic(f.getModifiers()));
+        assertEquals(OutlineFab.class, f.getType());
+    }
+
+    @Test
+    public void mainActivityHasDpToPxHelper() throws Exception {
+        Method m = MainActivity.class.getDeclaredMethod("m4749a", Context.class, float.class);
+        assertTrue(Modifier.isStatic(m.getModifiers()));
+        assertEquals(float.class, m.getReturnType());
+    }
+
+    // ---- AppMain (Phase 4.5) -----------------------------------------------------
+
+    @Test
+    public void appMainExtendsApplication() {
+        assertEquals("android.app.Application",
+                AppMain.class.getSuperclass().getName());
+    }
+
+    // ---- WidgetProvider (Phase 4.5) ----------------------------------------------
+
+    @Test
+    public void widgetProviderExtendsAppWidgetProvider() {
+        assertEquals("android.appwidget.AppWidgetProvider",
+                WidgetProvider.class.getSuperclass().getName());
+    }
+
+    @Test
+    public void widgetProviderHasOnUpdate() throws Exception {
+        Method m = WidgetProvider.class.getDeclaredMethod("onUpdate",
+                android.content.Context.class,
+                android.appwidget.AppWidgetManager.class,
+                int[].class);
+        assertNotNull(m);
     }
 
     // ---- helpers -------------------------------------------------------------
