@@ -165,7 +165,7 @@ public class OutlineRowView {
             return;
         }
         this.f3825h = DateTimeUtil.f3991a;
-        am.set(0, this.f3825h, pi);
+        am.set(AlarmManager.RTC_WAKEUP, this.f3825h, pi);
         this.f3819b.mo4852am();
         Toast.makeText(ctx,
                 this.f3818a.mo4770b(Integer.valueOf(R.string.reminder_set_for))

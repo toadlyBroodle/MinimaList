@@ -1,12 +1,16 @@
 package ca.toadlybroodledev.sublist;
 
+import android.Manifest;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.TaskStackBuilder;
+import androidx.core.content.ContextCompat;
 
 // Ported from decompiled ReceiverNotification. Fires a local notification for set reminders.
 public class ReceiverNotification extends BroadcastReceiver {
@@ -27,8 +31,14 @@ public class ReceiverNotification extends BroadcastReceiver {
                     .setContentTitle(context.getString(R.string.reminder_notification_title))
                     .setContentText(text)
                     .setContentIntent(pi);
-            ((NotificationManager) context.getSystemService("notification"))
-                    .notify(text.hashCode(), builder.build());
+            NotificationManager nm = (NotificationManager) context.getSystemService(
+                    Context.NOTIFICATION_SERVICE);
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
+                    || ContextCompat.checkSelfPermission(context,
+                            Manifest.permission.POST_NOTIFICATIONS)
+                            == PackageManager.PERMISSION_GRANTED) {
+                nm.notify(text.hashCode(), builder.build());
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

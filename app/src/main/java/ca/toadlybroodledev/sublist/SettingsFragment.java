@@ -182,7 +182,7 @@ public class SettingsFragment extends Fragment
                             frag.mo4849af().m4998c();
                         }
                         Toast.makeText(SettingsFragment.this.getContext(),
-                                R.string.toast_done, 0).show();
+                                R.string.toast_done, Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setNegativeButton(R.string.cancel, null)

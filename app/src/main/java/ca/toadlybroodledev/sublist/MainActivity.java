@@ -1,5 +1,6 @@
 package ca.toadlybroodledev.sublist;
 
+import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -7,8 +8,10 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -23,6 +26,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -68,7 +73,7 @@ public class MainActivity extends AppCompatActivity
     private DrawerToggle f3715z;
 
     public static float m4749a(Context context, float f) {
-        return TypedValue.applyDimension(1, f, context.getResources().getDisplayMetrics());
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, f, context.getResources().getDisplayMetrics());
     }
 
     void m4755B() {
@@ -97,7 +102,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void mo4759F() {
         if (!AppSettings.f3944g) {
-            ((NotificationManager) getSystemService("notification")).cancel(78);
+            ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).cancel(78);
             return;
         }
         ArrayList<OutlineRowView> allRows = new ArrayList<>();
@@ -134,7 +139,12 @@ public class MainActivity extends AppCompatActivity
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE));
         Notification notification = builder.build();
         notification.flags |= 34;
-        ((NotificationManager) getSystemService("notification")).notify(78, notification);
+        NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
+                || ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                        == PackageManager.PERMISSION_GRANTED) {
+            nm.notify(78, notification);
+        }
     }
 
     @Override
@@ -145,9 +155,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void mo4761a(View view, boolean z) {
         try {
-            InputMethodManager imm = (InputMethodManager) getSystemService("input_method");
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             if (z) {
-                imm.toggleSoftInput(2, 0);
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
             } else {
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
@@ -393,7 +403,7 @@ public class MainActivity extends AppCompatActivity
         if (f3696w) {
             super.onBackPressed();
         } else {
-            Toast.makeText(this, R.string.toast_back_exit, 0).show();
+            Toast.makeText(this, R.string.toast_back_exit, Toast.LENGTH_SHORT).show();
             f3696w = true;
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -448,19 +458,19 @@ public class MainActivity extends AppCompatActivity
                 R.string.drawer_open, R.string.drawer_close);
         this.f3715z.setDrawerIndicatorEnabled(false);
         this.f3713x.addDrawerListener(this.f3715z);
-        this.f3713x.setDrawerLockMode(1);
+        this.f3713x.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         this.f3697A = (TextView) findViewById(R.id.menu_fragment_title);
         this.f3698B = (ImageView) findViewById(R.id.menu_drawer_toggle);
         this.f3699C = (ImageView) findViewById(R.id.menu_back_to_root);
         this.f3698B.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (MainActivity.this.f3713x.isDrawerOpen(8388611)) {
-                    MainActivity.this.f3713x.closeDrawer(8388611);
-                    MainActivity.this.f3713x.setDrawerLockMode(1);
+                if (MainActivity.this.f3713x.isDrawerOpen(GravityCompat.START)) {
+                    MainActivity.this.f3713x.closeDrawer(GravityCompat.START);
+                    MainActivity.this.f3713x.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
                 } else {
-                    MainActivity.this.f3713x.setDrawerLockMode(0);
-                    MainActivity.this.f3713x.openDrawer(8388611);
+                    MainActivity.this.f3713x.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                    MainActivity.this.f3713x.openDrawer(GravityCompat.START);
                 }
             }
         });
@@ -532,7 +542,7 @@ public class MainActivity extends AppCompatActivity
         super.onRequestPermissionsResult(i, strArr, iArr);
         if (i == 1) {
             if (iArr.length <= 0 || iArr[0] != 0) {
-                Toast.makeText(this, R.string.toast_enable_storage_permission, 0).show();
+                Toast.makeText(this, R.string.toast_enable_storage_permission, Toast.LENGTH_SHORT).show();
             }
         }
     }

@@ -153,4 +153,110 @@ public class Phase6SdkModernizationTest {
         assertTrue("ReceiverNotification TaskStackBuilder.getPendingIntent must include FLAG_IMMUTABLE",
                 src.contains("FLAG_IMMUTABLE"));
     }
+
+    // --- 6.1-lint-fix-c: WrongConstant ---
+
+    @Test
+    public void noRawGetSystemServiceStrings() {
+        String mainSrc = readSource("app/src/main/java/ca/toadlybroodledev/sublist/MainActivity.java");
+        String rcvSrc = readSource("app/src/main/java/ca/toadlybroodledev/sublist/ReceiverNotification.java");
+        assertFalse("MainActivity must not pass \"notification\" string literal to getSystemService;"
+                + " use Context.NOTIFICATION_SERVICE",
+                mainSrc.contains("getSystemService(\"notification\")"));
+        assertFalse("MainActivity must not pass \"input_method\" string literal to getSystemService;"
+                + " use Context.INPUT_METHOD_SERVICE",
+                mainSrc.contains("getSystemService(\"input_method\")"));
+        assertFalse("ReceiverNotification must not pass \"notification\" string literal to getSystemService;"
+                + " use Context.NOTIFICATION_SERVICE",
+                rcvSrc.contains("getSystemService(\"notification\")"));
+    }
+
+    @Test
+    public void noRawToastDurationInts() {
+        for (String path : new String[]{
+                "app/src/main/java/ca/toadlybroodledev/sublist/MainActivity.java",
+                "app/src/main/java/ca/toadlybroodledev/sublist/NewSublistDialog.java",
+                "app/src/main/java/ca/toadlybroodledev/sublist/SettingsFragment.java"
+        }) {
+            String src = readSource(path);
+            assertFalse(path + " must not use raw int as Toast duration (use Toast.LENGTH_SHORT or LONG)",
+                    src.contains(", 0).show()"));
+        }
+    }
+
+    @Test
+    public void drawerLayoutUsesNamedLockModeConstants() {
+        String drawerToggleSrc = readSource(
+                "app/src/main/java/ca/toadlybroodledev/sublist/DrawerToggle.java");
+        String mainSrc = readSource(
+                "app/src/main/java/ca/toadlybroodledev/sublist/MainActivity.java");
+        assertFalse("DrawerToggle must not pass raw int 1 to setDrawerLockMode;"
+                + " use DrawerLayout.LOCK_MODE_LOCKED_CLOSED",
+                drawerToggleSrc.contains("setDrawerLockMode(1)"));
+        assertTrue("DrawerToggle must use DrawerLayout.LOCK_MODE_LOCKED_CLOSED",
+                drawerToggleSrc.contains("LOCK_MODE_LOCKED_CLOSED"));
+        assertFalse("MainActivity must not pass raw int 1 to setDrawerLockMode;"
+                + " use DrawerLayout.LOCK_MODE_LOCKED_CLOSED",
+                mainSrc.contains("setDrawerLockMode(1)"));
+        assertFalse("MainActivity must not pass raw int 0 to setDrawerLockMode;"
+                + " use DrawerLayout.LOCK_MODE_UNLOCKED",
+                mainSrc.contains("setDrawerLockMode(0)"));
+    }
+
+    @Test
+    public void mainActivityDrawerUsesGravityCompat() {
+        String src = readSource("app/src/main/java/ca/toadlybroodledev/sublist/MainActivity.java");
+        assertFalse("MainActivity must not pass raw int 8388611 to drawer methods; use GravityCompat.START",
+                src.contains("8388611"));
+        assertTrue("MainActivity drawer toggle must use GravityCompat.START",
+                src.contains("GravityCompat.START"));
+    }
+
+    @Test
+    public void outlineRowViewUsesAlarmManagerRtcWakeup() {
+        String src = readSource("app/src/main/java/ca/toadlybroodledev/sublist/OutlineRowView.java");
+        assertFalse("OutlineRowView must not pass raw int 0 to AlarmManager.set();"
+                + " use AlarmManager.RTC_WAKEUP",
+                src.contains("am.set(0,"));
+        assertTrue("OutlineRowView must use AlarmManager.RTC_WAKEUP as the alarm type",
+                src.contains("AlarmManager.RTC_WAKEUP"));
+    }
+
+    @Test
+    public void mainActivityUsesComplexUnitDip() {
+        String src = readSource("app/src/main/java/ca/toadlybroodledev/sublist/MainActivity.java");
+        assertFalse("MainActivity must not pass raw int 1 to TypedValue.applyDimension();"
+                + " use TypedValue.COMPLEX_UNIT_DIP",
+                src.contains("applyDimension(1,"));
+        assertTrue("MainActivity must use TypedValue.COMPLEX_UNIT_DIP in applyDimension()",
+                src.contains("COMPLEX_UNIT_DIP"));
+    }
+
+    @Test
+    public void mainActivityToggleSoftInputUsesNamedFlag() {
+        String src = readSource("app/src/main/java/ca/toadlybroodledev/sublist/MainActivity.java");
+        assertFalse("MainActivity.toggleSoftInput must not use raw int 2 as showFlags;"
+                + " use InputMethodManager.SHOW_FORCED",
+                src.contains("toggleSoftInput(2,"));
+        assertTrue("MainActivity.toggleSoftInput must use a named InputMethodManager show-flag constant",
+                src.contains("toggleSoftInput(InputMethodManager.SHOW_"));
+    }
+
+    // --- 6.1-lint-fix-d: NotificationPermission ---
+
+    @Test
+    public void postNotificationsPermissionGuardMainActivity() {
+        String src = readSource("app/src/main/java/ca/toadlybroodledev/sublist/MainActivity.java");
+        assertTrue("MainActivity.mo4759F() must check POST_NOTIFICATIONS permission before calling notify()"
+                + " on API 33+ (NotificationPermission lint error — silent drop otherwise)",
+                src.contains("POST_NOTIFICATIONS"));
+    }
+
+    @Test
+    public void postNotificationsPermissionGuardReceiverNotification() {
+        String src = readSource("app/src/main/java/ca/toadlybroodledev/sublist/ReceiverNotification.java");
+        assertTrue("ReceiverNotification.onReceive() must check POST_NOTIFICATIONS permission before calling notify()"
+                + " on API 33+ (NotificationPermission lint error — silent drop otherwise)",
+                src.contains("POST_NOTIFICATIONS"));
+    }
 }

@@ -88,13 +88,13 @@ public class NewSublistDialog extends DialogFragment {
 
     boolean m4803d(String str) {
         if (str.equals("")) {
-            Toast.makeText(getActivity(), R.string.toast_new_sublist_name_not_blank, 0).show();
+            Toast.makeText(getActivity(), R.string.toast_new_sublist_name_not_blank, Toast.LENGTH_SHORT).show();
             return false;
         }
         Iterator<SublistFragment> it = f3745ae.mo4786x().iterator();
         while (it.hasNext()) {
             if (it.next().mo4848ae().toLowerCase().equals(str.toLowerCase())) {
-                Toast.makeText(getActivity(), R.string.toast_choose_new_name_for_sublist, 0).show();
+                Toast.makeText(getActivity(), R.string.toast_choose_new_name_for_sublist, Toast.LENGTH_SHORT).show();
                 return false;
             }
         }

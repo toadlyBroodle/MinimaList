@@ -9,12 +9,14 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   - [<who> @ <utc-iso>] <one-line: current focus>
   Empty when nothing is active.
 -->
+
 ## Just shipped (last cycle)
 
 <!--
   Append-on-close, newest first. Trim to most recent 10.
 -->
 
+- 6.1-lint-fix-c/d: fix 19 WrongConstant errors (typed constants for getSystemService/Toast/DrawerLayout/AlarmManager/TypedValue/IMM) + POST_NOTIFICATIONS guard at 2 notify() sites; tests 85 → 94 — by sst-dev-cycle at 2026-05-18T23:30Z
 - 6.6/6.7 lint errors fixed: super.onBackPressed() in MainActivity; Fab→OutlineFab in layout-large XML; tests 83 → 85 — by sst-dev-cycle at 2026-05-18T22:30Z
 - Phase 6 closed (6.1–6.5): lint punch list captured; queries block for mailto:; scoped storage path (getExternalFilesDir); FLAG_IMMUTABLE on all PendingIntents; tests 76 → 83 — by sst-dev-cycle at 2026-05-18T21:45Z
 - [should-fix] strengthen appMainRegistersChannel() to assert Build.VERSION.SDK_INT >= Build.VERSION_CODES.O guard in AppMain.java; tests 76 → 76 — by sst-dev-cycle at 2026-05-18T21:00Z
@@ -24,8 +26,6 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
 - [should-fix] MainActivity:533 add super.onRequestPermissionsResult(); OutlineFab:27 m4800a(true,true) setVisibility(GONE)→show(); tests 67→69 — by sst-dev-cycle at 2026-05-18T17:10Z
 - 6.2 [easy] Expand SPEC 6.2 to cover both notification-channel paths (MainActivity.mo4759F() + ReceiverNotification); define shared CHANNEL_REMINDERS constant pattern; check off Phase 4.5 [should-fix] follow-up — by sst-dev-cycle at 2026-05-18T16:15Z
 - 4.5 [medium] Port ActMain→MainActivity + AppMain + WidgetProvider; full port DrawerCustomLayout (extends DrawerLayout) + OutlineFab (extends FloatingActionButton); delete decompiled R.java; update manifest (AppMain, WidgetProvider, ReceiverNotification); tests 54 → 67 — by sst-dev-cycle at 2026-05-18T15:30Z
-- 4.4 [medium] Port 17 obfuscated root-package classes (AppSettings, OutlineStore, OutlineTree, OutlineRowView, SublistFragment, Clipboard, DateTimeUtil, SublistRenderer, IndentManager, StringArraySpinnerAdapter, DrawerToggle, NewSublistDialog, WelcomeSublistFragment, SettingsDialog, ProfileFragment, SearchSublistFragment, SettingsFragment); replace all 4.3 stubs; port 3 of 6 named-class 4.5 items (DrawerCustomLayout, OutlineFab, ReceiverNotification); add getListOfEntSers to OutlineRow; add Gson dep; add arrays/bools/integers.xml; tests 15 → 54 — by sst-dev-cycle at 2026-05-18T14:00Z
-- 4.3 [medium] Port iface/ — 4 interfaces (HostContract 23 methods, RowActionListener 6, FragmentHost 2, OutlineHost 6); 4 deleted methods/stubs excised; 8 Phase-4.4 forward-ref stubs created; tests 4 → 15 — by sst-dev-cycle at 2026-05-18T11:15Z
 
 ## Next up (queued for next cycle)
 
@@ -37,6 +37,4 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Order: blockers first, then highest-impact.
 -->
 
-- [medium] 6.1-lint-fix-c Fix WrongConstant (19 errors): replace raw string args to getSystemService("notification"/"input_method") with Context.NOTIFICATION_SERVICE/Context.INPUT_METHOD_SERVICE; fix Toast.LENGTH raw 0/1 → Toast.LENGTH_SHORT/LONG; fix DrawerLayout.setDrawerLockMode/openDrawer/closeDrawer raw int args. Reason: lint Error — type-unsafe API calls produce wrong behavior on some API levels.
-- [medium] 6.1-lint-fix-d Add POST_NOTIFICATIONS permission check before NotificationManager.notify() calls (2 sites: ReceiverNotification + MainActivity.mo4759F) on API 33+. Reason: lint Warning (NotificationPermission) — silent notification drop on API 33+ without runtime permission.
 

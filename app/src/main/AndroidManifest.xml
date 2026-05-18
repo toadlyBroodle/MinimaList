@@ -23,6 +23,9 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- Phase 6.1-lint-fix-d: required on API 33+ to post notifications at runtime. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <!-- Phase 6.3: required on API 30+ so resolveActivity() returns non-null for email apps. -->
     <queries>
         <intent>
