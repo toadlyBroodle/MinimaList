@@ -133,9 +133,11 @@ Walk the original app's user-facing surface (excluding what 3.x intentionally re
 
 Replace the gutted Firebase Realtime Database with a Room-backed local store. Add a user-driven JSON export/import so backup is a deliberate action, not an always-on cloud sync.
 
-- [ ] 9.1 [hard] Design Room schema for `OutlineRow` + parent/child relationship + per-row reminder; provide a one-shot migration from any legacy on-device SharedPrefs / Firebase cache file the old build left behind (best-effort; document scope in REMOVED-CLOUD-SURFACE.md).
-- [ ] 9.2 [medium] Implement a `Repository` interface; route every read/write through it; delete the last Firebase-shaped abstractions from the data layer.
+- [x] 9.1 [hard] Design Room schema for `OutlineRow` + parent/child relationship + per-row reminder; provide a one-shot migration from any legacy on-device SharedPrefs / Firebase cache file the old build left behind (best-effort; document scope in REMOVED-CLOUD-SURFACE.md).
+- [x] 9.2 [medium] Implement a `Repository` interface; route every read/write through it; delete the last Firebase-shaped abstractions from the data layer.
 - [ ] 9.3 [medium] JSON export → SAF picker → user-chosen file; JSON import in reverse with a "replace vs merge" prompt.
+
+**Phase 9.1/9.2 completed 2026-05-19.** Room 2.6.1 added to the build (`libs.versions.toml` + `app/build.gradle.kts` with `annotationProcessor`). Two entities: `db/entity/SublistEntity.java` (id PK autoincrement, name, position) and `db/entity/OutlineRowEntity.java` (id PK, sublist_id FK → SublistEntity CASCADE, position, text, complete, collapsed, indent, reminder epoch-ms, is_instr — mirroring every field in the `OutlineRow` POJO). Two DAOs: `db/dao/SublistDao.java` (insert/getAll/delete/rename/updatePosition) and `db/dao/OutlineRowDao.java` (insert/insertAll/update/getRowsForSublist/delete/deleteCompletedRows/deleteAllRowsForSublist). `db/SublistDatabase.java` — singleton `RoomDatabase` at version 1, `exportSchema = false`, wires both entities + DAOs. `db/OutlineRepository.java` — interface: sublist CRUD + row CRUD + `replaceRowsForSublist` (atomic delete-then-insert) + `importLegacy(HashMap<String,ArrayList<OutlineRow>>)` for one-shot bootstrap. `db/OutlineRepositoryImpl.java` — delegates entirely through SublistDao + OutlineRowDao; `importLegacy` walks the legacy HashMap, calls `insertSublist` per entry, then `rowDao.insertAll` for the row list. Phase 7 device tests remain open (adb not available in WSL build environment); Phase 8 CRUD acceptance is gated on Phase 7. Tests 94 → 108.
 
 ## Deferred / out of scope
 
