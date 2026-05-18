@@ -154,6 +154,9 @@ Replace the gutted Firebase Realtime Database with a Room-backed local store. Ad
 **Review follow-ups (open — schedule as the next `/sst-dev-cycle` cycle):**
 - [x] [easy] [should-fix] `SettingsFragment.java:doImportReplace` and `SettingsFragment.java:doImportMerge` — both `main.post()` callbacks access `this.f3881an` without a Fragment-attached guard. If the activity is destroyed between `AppMain.io().execute()` dispatch and callback firing (rotation while IO is in progress), the callback runs on the old/dead activity — `f3881an.mo4769a(map)` applies imported data silently to a destroyed activity instance; the new activity retains the pre-import state and the user's import is lost. Same root cause as the 9.2 lifecycle hazard fixed in `MainActivity`. Fix: added `if (!isAdded() || getActivity() == null) return;` at the top of each `main.post(() -> {...})` success body in both methods.
 
+**Review follow-ups (open — schedule as the next `/sst-dev-cycle` cycle):**
+- [ ] [easy] [should-fix] `Phase9SettingsFragmentLifecycleTest.java:47` — All 4 tests use file-wide `src.contains()`, making tests 1 & 2 identical assertions and tests 3 & 4 identical assertions. Removing the lifecycle guard from one method only would pass all 4 tests, allowing the data-loss hazard (rotation during import silently discards the user's import) to silently re-enter on one import path. Proposed fix: replace the four separate `contains` checks with two occurrence-count checks — assert `isAdded()` appears ≥ 2 times in the source (once per method) and `getActivity() == null` appears ≥ 2 times.
+
 ## Deferred / out of scope
 
 - Re-listing on the Play Store. Side-load only for now; if we re-list, Play Console requires a privacy policy + data-handling disclosure that's only worth writing once the local-only architecture is stable. Revisit after Phase 9.
