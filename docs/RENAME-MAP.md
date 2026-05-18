@@ -1,4 +1,4 @@
-# sublist deobfuscation rename map
+# MinimaList deobfuscation rename map
 
 Maps jadx-assigned names (in `decompiled/sources/ca/toadlybroodledev/sublist/`) to meaningful identifiers used in the active `app/src/main/java/` tree. Phase 4 ports apply these renames as the files cross over.
 

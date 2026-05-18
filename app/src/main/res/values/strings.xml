@@ -73,7 +73,7 @@
     <string name="info_nested_structure">Nesting/Inheritance Structure</string>
     <string name="info_regular_updated_improved">MinimaList is regularly updated and improved in an effort to create the simplest and best note-taking app available for Android devices.</string>
     <string name="info_reminder_notifs">Reminder Notifications</string>
-    <string name="info_save_loc">save location: /sdcard/MinimaList/sublist_collection_backup</string>
+    <string name="info_save_loc">save location: /sdcard/MinimaList/MinimaList_collection_backup</string>
     <string name="info_saveload_extern">save/load backups to external storage [Settings]</string>
     <string name="info_saveload_local">save/load to local device [Settings]</string>
     <string name="info_search_ents_keywords">Search all entries for tags/keywords [Menu]</string>
