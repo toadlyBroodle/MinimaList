@@ -40,5 +40,6 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Order: blockers first, then highest-impact.
 -->
 
+- [easy] [should-fix] `MainActivity.java:127` `mo4759F()` notification uses unregistered channel ID, silently fails API 26+; expand SPEC 6.2 to cover this path alongside ReceiverNotification — review of 437ea68
 - [medium] 4.6 Port the 5 ViewOnClickListenerC05NN inner-class-extracted listeners back to anonymous-class call-site form where practical; leave standalone if rebind is risky. Reason: SPEC Phase 4; all classes now ported, this closes the phase.
 - [medium] 4.7 ./gradlew :app:assembleDebug green; app installs and MainActivity opens to the real outliner UI. Reason: SPEC Phase 4 smoke-test gate; depends on 4.6.
