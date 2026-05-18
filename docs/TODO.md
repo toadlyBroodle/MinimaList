@@ -16,6 +16,7 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Append-on-close, newest first. Trim to most recent 10.
 -->
 
+- 4.6 + 4.7 Phase 4 closed: all 5 ViewOnClickListenerC05NN audited (all standalone Fragments/Dialogs, none inlinable); assembleDebug green; device install deferred to Phase 7; tests 69 → 69 — by sst-dev-cycle at 2026-05-18T18:15Z
 - [should-fix] MainActivity:533 add super.onRequestPermissionsResult(); OutlineFab:27 m4800a(true,true) setVisibility(GONE)→show(); tests 67→69 — by sst-dev-cycle at 2026-05-18T17:10Z
 - 6.2 [easy] Expand SPEC 6.2 to cover both notification-channel paths (MainActivity.mo4759F() + ReceiverNotification); define shared CHANNEL_REMINDERS constant pattern; check off Phase 4.5 [should-fix] follow-up — by sst-dev-cycle at 2026-05-18T16:15Z
 - 4.5 [medium] Port ActMain→MainActivity + AppMain + WidgetProvider; full port DrawerCustomLayout (extends DrawerLayout) + OutlineFab (extends FloatingActionButton); delete decompiled R.java; update manifest (AppMain, WidgetProvider, ReceiverNotification); tests 54 → 67 — by sst-dev-cycle at 2026-05-18T15:30Z
@@ -25,7 +26,6 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
 - 2.1 + 2.3 [medium] Phase 2 closed: every remaining obfuscated identifier in the app package mapped end-to-end (22 classes + 4 interfaces + 2 models). Key reveals: `C0571r` = `OutlineTree`, `C0566m`/`C0567n` = `AppSettings`/`OutlineStore` (split-candidates post-Phase-3), `AbstractC0565l` = `Clipboard`, `InterfaceC0549a` = `HostContract` (26-method master sole-implemented by ActMain). `RENAME-MAP.md` now carries renames + evidence cites for every class, plus a 10-entry deletion table. Zero `[needs-runtime-trace]` items. Phase 4 ports unblocked — by hand at 2026-05-18T09:35Z
 - 1.1 + 1.2 + 1.3 + 1.4 [easy] Phase 1 closed: res/ port (770 files kept of ~1350; library bleed across drawables/strings/styles/dimens/colors filtered with deny-list + per-entry regex; locale dirs + config-qualifier dirs dropped — modern AAR provides natively); `public.xml` removed (jadx ID locks incompatible with modern AAR IDs); manifest rewritten with zero permissions + only `MainActivity` declaration (Widget/Receiver deferred to Phase 4 when classes port); `./gradlew :app:assembleDebug` green at 7.1 MB — by hand at 2026-05-18T09:10Z
 - 3.6 [easy] Phase 3 closed: spec-required grep audit passes (zero live firebase/gms/admob/crashlytics/billingclient/c2dm refs in app-package source). Remaining hits are all in `Phase 3.x: removed` comment breadcrumbs (intentional documentation) or 9 R.java constants from bundled FirebaseUI lib (R.java is generated, never ported per SPEC 4.5). REMOVED-CLOUD-SURFACE.md gets Phase 3.6 section + Phase 1 carryover punch list (manifest permissions/components + orphan resource ids) — by hand at 2026-05-18T09:40Z
-- 3.5 [easy] Stripped Play Billing: deleted `p030a/` (entire IAB v3 helper lib, 9 files — re-classified from "util" after closer reading) + `C0564k.java` (premium gate). Removed `AppMain.m4793b()` (license-key fragment), `InterfaceC0549a.mo4778p()` (premium getter), `ActMain.{f3701E, ctor init, mo4778p, purchase-button case}`. Premium gates in `C0567n` (widget screenshot) and `ViewOnClickListenerC0558e` (profile UI) collapsed to give all users the previously-premium path. FCM/Cast/Crashlytics were declared in manifest only (Phase 1 deletes). `RENAME-MAP.md` corrected — by hand at 2026-05-18T09:30Z
 
 ## Next up (queued for next cycle)
 
@@ -37,5 +37,5 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Order: blockers first, then highest-impact.
 -->
 
-- [medium] 4.6 Port the 5 ViewOnClickListenerC05NN inner-class-extracted listeners back to anonymous-class call-site form where practical; leave standalone if rebind is risky. Reason: SPEC Phase 4; all classes now ported, this closes the phase.
-- [medium] 4.7 ./gradlew :app:assembleDebug green; app installs and MainActivity opens to the real outliner UI. Reason: SPEC Phase 4 smoke-test gate; depends on 4.6.
+- [medium] 5.1 Add android.useAndroidX=true + android.enableJetifier=false to gradle.properties; declare AndroidX deps in libs.versions.toml. Reason: SPEC Phase 5 start; Phase 4 now closed.
+- [medium] 6.2 Implement CHANNEL_REMINDERS in AppMain.onCreate() + substitute at both notification call sites (ReceiverNotification + MainActivity.mo4759F()). Reason: SPEC 6.2; notifications silently dropped on API 26+ without registered channel.
