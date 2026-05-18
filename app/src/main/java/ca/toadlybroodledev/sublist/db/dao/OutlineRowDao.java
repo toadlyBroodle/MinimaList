@@ -3,6 +3,7 @@ package ca.toadlybroodledev.sublist.db.dao;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Transaction;
 import androidx.room.Update;
 
 import java.util.List;
@@ -32,4 +33,10 @@ public interface OutlineRowDao {
 
     @Query("DELETE FROM outline_rows WHERE sublist_id = :sublistId")
     void deleteAllRowsForSublist(long sublistId);
+
+    @Transaction
+    default void replaceForSublist(long sublistId, List<OutlineRowEntity> rows) {
+        deleteAllRowsForSublist(sublistId);
+        insertAll(rows);
+    }
 }

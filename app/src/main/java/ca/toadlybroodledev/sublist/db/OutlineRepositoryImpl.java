@@ -13,12 +13,14 @@ import ca.toadlybroodledev.sublist.model.OutlineRow;
 
 public class OutlineRepositoryImpl implements OutlineRepository {
 
+    private final SublistDatabase db;
     private final SublistDao sublistDao;
     private final OutlineRowDao rowDao;
 
-    public OutlineRepositoryImpl(SublistDao sublistDao, OutlineRowDao rowDao) {
-        this.sublistDao = sublistDao;
-        this.rowDao = rowDao;
+    public OutlineRepositoryImpl(SublistDatabase db) {
+        this.db = db;
+        this.sublistDao = db.sublistDao();
+        this.rowDao = db.outlineRowDao();
     }
 
     @Override
@@ -76,30 +78,31 @@ public class OutlineRepositoryImpl implements OutlineRepository {
 
     @Override
     public void replaceRowsForSublist(long sublistId, List<OutlineRowEntity> rows) {
-        rowDao.deleteAllRowsForSublist(sublistId);
-        rowDao.insertAll(rows);
+        rowDao.replaceForSublist(sublistId, rows);
     }
 
     @Override
     public void importLegacy(HashMap<String, ArrayList<OutlineRow>> data) {
-        int position = 0;
-        for (Map.Entry<String, ArrayList<OutlineRow>> entry : data.entrySet()) {
-            long sublistId = insertSublist(entry.getKey(), position++);
-            ArrayList<OutlineRowEntity> rows = new ArrayList<>();
-            int rowPos = 0;
-            for (OutlineRow row : entry.getValue()) {
-                OutlineRowEntity entity = new OutlineRowEntity();
-                entity.sublistId = sublistId;
-                entity.position = rowPos++;
-                entity.text = row.text != null ? row.text : "";
-                entity.complete = row.complete;
-                entity.collapsed = row.collapsed;
-                entity.indent = row.indent;
-                entity.reminder = row.reminder;
-                entity.isInstr = row.isInstr;
-                rows.add(entity);
+        db.runInTransaction(() -> {
+            int position = 0;
+            for (Map.Entry<String, ArrayList<OutlineRow>> entry : data.entrySet()) {
+                long sublistId = insertSublist(entry.getKey(), position++);
+                ArrayList<OutlineRowEntity> rows = new ArrayList<>();
+                int rowPos = 0;
+                for (OutlineRow row : entry.getValue()) {
+                    OutlineRowEntity entity = new OutlineRowEntity();
+                    entity.sublistId = sublistId;
+                    entity.position = rowPos++;
+                    entity.text = row.text != null ? row.text : "";
+                    entity.complete = row.complete;
+                    entity.collapsed = row.collapsed;
+                    entity.indent = row.indent;
+                    entity.reminder = row.reminder;
+                    entity.isInstr = row.isInstr;
+                    rows.add(entity);
+                }
+                rowDao.insertAll(rows);
             }
-            rowDao.insertAll(rows);
-        }
+        });
     }
 }
