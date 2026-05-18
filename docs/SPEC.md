@@ -152,7 +152,7 @@ Replace the gutted Firebase Realtime Database with a Room-backed local store. Ad
 [batch-sizing] direction=undersized difficulty=medium actual=68k band=200-300k
 
 **Review follow-ups (open — schedule as the next `/sst-dev-cycle` cycle):**
-- [ ] [easy] [should-fix] `SettingsFragment.java:doImportReplace` and `SettingsFragment.java:doImportMerge` — both `main.post()` callbacks access `this.f3881an` without a Fragment-attached guard. If the activity is destroyed between `AppMain.io().execute()` dispatch and callback firing (rotation while IO is in progress), the callback runs on the old/dead activity — `f3881an.mo4769a(map)` applies imported data silently to a destroyed activity instance; the new activity retains the pre-import state and the user's import is lost. Same root cause as the 9.2 lifecycle hazard fixed in `MainActivity`. Proposed fix: add `if (!isAdded() || getActivity() == null) return;` at the top of each `main.post(() -> {...})` body in both methods.
+- [x] [easy] [should-fix] `SettingsFragment.java:doImportReplace` and `SettingsFragment.java:doImportMerge` — both `main.post()` callbacks access `this.f3881an` without a Fragment-attached guard. If the activity is destroyed between `AppMain.io().execute()` dispatch and callback firing (rotation while IO is in progress), the callback runs on the old/dead activity — `f3881an.mo4769a(map)` applies imported data silently to a destroyed activity instance; the new activity retains the pre-import state and the user's import is lost. Same root cause as the 9.2 lifecycle hazard fixed in `MainActivity`. Fix: added `if (!isAdded() || getActivity() == null) return;` at the top of each `main.post(() -> {...})` success body in both methods.
 
 ## Deferred / out of scope
 

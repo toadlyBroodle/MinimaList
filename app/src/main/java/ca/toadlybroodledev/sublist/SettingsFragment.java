@@ -260,6 +260,7 @@ public class SettingsFragment extends Fragment
                 return;
             }
             main.post(() -> {
+                if (!isAdded() || getActivity() == null) return;
                 this.f3881an.mo4769a(map);
                 this.f3881an.mo4779q().saveAllToRepo();
                 Toast.makeText(ctx, R.string.toast_json_imported, Toast.LENGTH_SHORT).show();
@@ -277,6 +278,7 @@ public class SettingsFragment extends Fragment
                 return;
             }
             main.post(() -> {
+                if (!isAdded() || getActivity() == null) return;
                 HashSet<String> existingNames = new HashSet<>();
                 for (SublistFragment sf : this.f3881an.mo4786x()) {
                     existingNames.add(sf.mo4848ae());
