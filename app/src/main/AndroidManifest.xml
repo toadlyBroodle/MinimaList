@@ -1,11 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Phase 1.2 manifest rewrite.
+
+    Original (decompiled) manifest declared these permissions; all are deliberately
+    omitted in this rewrite per Phase 3 strip + SPEC 1.3:
+
+      - INTERNET, ACCESS_NETWORK_STATE          (no remaining network code)
+      - WRITE/READ_EXTERNAL_STORAGE             (txt-export path will use SAF — Phase 6.4 / Phase 9.3)
+      - com.android.vending.BILLING             (Phase 3.5 — Play Billing gone)
+      - com.google.android.c2dm.permission.RECEIVE,
+        ca.toadlybroodledev.sublist.permission.C2D_MESSAGE  (FCM — never used in source, only manifest)
+      - RECEIVE_BOOT_COMPLETED, WAKE_LOCK       (boot-time reminder reschedule — Phase 4/6.2
+                                                 will re-add when ReceiverNotification ports if needed)
+
+    Components omitted vs. decompiled manifest:
+      - WidgetProvider, ReceiverNotification — re-declared during Phase 4 once the classes port
+      - com.google.android.gms.cast.framework.* MediaIntentReceiver/MediaNotificationService/
+        ReconnectionService (Cast never used in source)
+      - com.google.android.gms.ads.AdActivity (Phase 3.4)
+      - Sign-In / App-Invites / FirebaseUI activities (Phase 3.3)
+      - Firebase Iid / messaging services (FCM)
+-->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application
         android:allowBackup="false"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.DayNight">
+        android:icon="@mipmap/ic_launcher"
+        android:theme="@style/AppTheme.NoActionBar">
 
         <activity
             android:name=".MainActivity"
