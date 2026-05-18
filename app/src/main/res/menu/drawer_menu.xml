@@ -1,19 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/drawer_menu">
     <item
-        android:icon="@drawable/ic_person_white_24dp"
-        android:id="@+id/menu_profile"
-        android:title="@string/menu_profile"
-        app:showAsAction="never"/>
-    <item
         android:icon="@drawable/ic_settings_white_24dp"
         android:id="@+id/menu_settings"
         android:title="@string/menu_settings"
-        app:showAsAction="never"/>
-    <item
-        android:icon="@drawable/ic_share_white_24dp"
-        android:id="@+id/menu_invite"
-        android:title="@string/menu_invite_friends"
         app:showAsAction="never"/>
     <item
         android:id="@+id/minimalist_submenu_item"

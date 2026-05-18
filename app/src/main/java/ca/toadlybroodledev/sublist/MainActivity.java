@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity
 
     FragmentManager f3706p;
 
-    public ProfileFragment f3707q;
     public SettingsFragment f3709s;
     public SearchSublistFragment f3710t;
     public WelcomeSublistFragment f3711u;
@@ -396,11 +395,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public ProfileFragment mo4776n() {
-        return this.f3707q;
-    }
-
-    @Override
     public void onActivityResult(int i, int i2, Intent intent) {
         super.onActivityResult(i, i2, intent);
         // Phase 3.3: removed App-Invites send-result handler (request code 10101).
@@ -503,20 +497,15 @@ public class MainActivity extends AppCompatActivity
         });
         f3694m = (OutlineFab) findViewById(R.id.fab);
         f3694m.setOnClickListener(this);
-        String profileTag = getString(R.string.menu_profile);
+        // Phase 10.4: profile fragment retired (menu_profile dropped from drawer).
         String settingsTag = getString(R.string.menu_settings);
         String searchTag = getString(R.string.menu_search);
         String infoTag = getString(R.string.menu_information);
         this.f3706p = getSupportFragmentManager();
         FragmentTransaction tx = this.f3706p.beginTransaction();
-        this.f3707q = (ProfileFragment) this.f3706p.findFragmentByTag(profileTag);
         this.f3709s = (SettingsFragment) this.f3706p.findFragmentByTag(settingsTag);
         this.f3710t = (SearchSublistFragment) this.f3706p.findFragmentByTag(searchTag);
         this.f3711u = (WelcomeSublistFragment) this.f3706p.findFragmentByTag(infoTag);
-        if (this.f3707q == null) {
-            this.f3707q = new ProfileFragment();
-            tx.add(R.id.placeholder_for_fragments, this.f3707q, profileTag);
-        }
         if (this.f3709s == null) {
             this.f3709s = new SettingsFragment();
             tx.add(R.id.placeholder_for_fragments, this.f3709s, settingsTag);

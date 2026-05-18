@@ -27,10 +27,16 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <!-- Phase 6.3: required on API 30+ so resolveActivity() returns non-null for email apps. -->
+    <!-- Phase 10.5: https scheme added so resolveActivity() finds browsers for the
+         "Contribute on GitHub" link in SettingsFragment. -->
     <queries>
         <intent>
             <action android:name="android.intent.action.SENDTO" />
             <data android:scheme="mailto" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https" />
         </intent>
     </queries>
 

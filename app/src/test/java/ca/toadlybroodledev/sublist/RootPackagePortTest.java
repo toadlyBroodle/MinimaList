@@ -269,13 +269,7 @@ public class RootPackagePortTest {
                 SettingsDialog.class.getName());
     }
 
-    // ---- ProfileFragment -----------------------------------------------------
-
-    @Test
-    public void profileFragmentClassExists() {
-        assertEquals("ca.toadlybroodledev.sublist.ProfileFragment",
-                ProfileFragment.class.getName());
-    }
+    // ---- ProfileFragment: removed in Phase 10.4 (cloud profile retired) -----
 
     // ---- SearchSublistFragment -----------------------------------------------
 

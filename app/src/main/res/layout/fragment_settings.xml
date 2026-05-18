@@ -154,6 +154,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/settings_help_poor_dev_header"/>
+        <Button
+            android:id="@+id/settings_contribute_github"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="4dp"
+            android:text="@string/settings_contribute_github"/>
         <Switch
             android:theme="@style/ThemeOverlay.Switch"
             android:id="@+id/settings_send_anon_data"

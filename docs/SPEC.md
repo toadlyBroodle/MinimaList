@@ -159,6 +159,42 @@ Replace the gutted Firebase Realtime Database with a Room-backed local store. Ad
 **Review follow-ups (open — schedule as the next `/sst-dev-cycle` cycle):**
 - [x] [easy] [should-fix] `Phase9SettingsFragmentLifecycleTest.java:47` — All 4 tests used file-wide `src.contains()`, making tests 1 & 2 identical assertions and tests 3 & 4 identical assertions. Removing the lifecycle guard from one method only would pass all 4 tests. Fixed: replaced the four `contains` checks with two `countOccurrences() >= 2` checks — `isAdded()` must appear ≥ 2 times and `getActivity() == null` ≥ 2 times, one per method. Tests 155 → 153 (4 weak replaced with 2 strong).
 
+### Phase 10: UI / branding refresh
+
+Rebrand `sublist` → `MinimaList`, modernize the color palette, and prune obsolete UI surfaces (profile, invite, in-app contribution / donate items). Cosmetic + string-level + dead-menu-item removal; no functional changes to the outline / Room / widget paths. GitHub repo is renamed in parallel: https://github.com/toadlyBroodle/MinimaList.
+
+- [ ] 10.1 [medium] Display rename: every user-visible "sublist" → "MinimaList" in `res/values/strings.xml` (`app_name` + every string body that mentions the product), `AndroidManifest.xml` `android:label`, launcher icon round/adaptive label, widget label in `res/xml/widget_info.xml`, and prose in `docs/SPEC.md` / `docs/TODO.md` / `docs/RENAME-MAP.md` / `docs/REMOVED-CLOUD-SURFACE.md`. Java package + `applicationId` deferred to 10.2.
+- [ ] 10.2 [hard] Code rename: move `app/src/main/java/ca/toadlybroodledev/sublist/` → `ca/toadlybroodledev/minimalist/`; rewrite every `package` + `import` statement; rename `Sublist*` class identifiers where the symbol refers to the app itself (`SublistDatabase`, `SublistFragment`, `WelcomeSublistFragment`, `SearchSublistFragment`, etc.) — keep `Sublist*` where it refers to the domain object (a "sublist" is still a named outline within MinimaList: `SublistEntity`, `SublistDao`, `SublistRenderer` stay). Bump `applicationId` in `app/build.gradle.kts` to `ca.toadlybroodledev.minimalist` (debug suffix `.dev` per scaffold rule preserved). Note: this changes install identity — the existing prod `ca.toadlybroodledev.sublist` install on the Moto G becomes orphaned. Provide a one-shot data-migration path that reads the legacy Room DB file from the old package's `filesDir` (if present at install time) and reseeds the new package's DB, mirroring the Phase-9 legacy-Gson import pattern. Document in `docs/REMOVED-CLOUD-SURFACE.md`.
+- [ ] 10.3 [easy] Modernize `res/values/colors.xml`: replace the surviving high-saturation palette (the 66 entries that survived Phase 1's filter) with a muted modern scheme — low-saturation neutrals + a single restrained accent, in the Material 3 neutral-surface direction. Reuse the existing color-resource names so `AppTheme` / `AppTheme.NoActionBar` and the five `ThemeOverlay.My*` overlays pick up the new values without theme-attribute changes.
+- [x] 10.4 [easy] Drop "Profile" and "Invite friends" entries from `res/menu/` (drawer / nav menu) plus any `ProfileFragment` navigation wiring in `MainActivity` / `DrawerCustomLayout`. Delete `ProfileFragment.java` and its layout (`profile_layout.xml` if still present) — Phase 4.4 already flagged it as a deletion candidate. Invite menu entry may already be gone per Phase 3.3; verify and remove if any reference resurfaced. Drop the related strings from `res/values/strings.xml`.
+- [x] 10.5 [easy] Replace contribution / donate / premium-upgrade items in `SettingsFragment` with a single "Contribute on GitHub" item that fires `Intent.ACTION_VIEW` against https://github.com/toadlyBroodle/MinimaList. Copy reads "Open source — contribute via PRs on GitHub." Remove the now-orphaned strings (donation tiers, premium-upgrade copy) from `res/values/strings.xml`. Add the `https` URL to the `<queries>` block in `AndroidManifest.xml` if `resolveActivity` is used for safety (mirrors the Phase-6.3 mailto: pattern).
+
+**Phase 10.4 + 10.5 completed 2026-05-19.** Pruned obsolete UI surface in one batch.
+10.4: dropped `@+id/menu_profile` + `@+id/menu_invite` from `res/menu/drawer_menu.xml`;
+deleted `ProfileFragment.java`; removed `HostContract.mo4776n()` (interface method count
+23 → 22); removed `MainActivity.f3707q` field + `mo4776n()` getter + init block + 8 lines
+of fragment-add wiring; removed `DrawerCustomLayout` `menu_profile` case; removed
+`OutlineTree.m4996b` call to `mo4776n().m4865ac()` (was no-op since Phase 3.3); deleted
+`profile_*` (18 strings), `invitation_*` (4), `invite_*` (4), `info_10_days_per_invite`,
+`menu_invite_friends`, `menu_profile`. Pruned matching rows from
+`WelcomeSublistFragment.m4880b()` (Personal Stats + Premium Features + Data-Sync sections);
+rewrote `info_data_bkup_sync` to "Data Backup" + dropped firebase-cloud sync row.
+Also cleaned up `RootPackagePortTest.profileFragmentClassExists`. 10.5: added
+`@+id/settings_contribute_github` button to `fragment_settings.xml` + `layout-large/`
+variant; wired `SettingsFragment.openGithubContribute()` to fire `Intent.ACTION_VIEW`
+against `https://github.com/toadlyBroodle/MinimaList` with a `resolveActivity()` guard;
+added `<data android:scheme="https" />` to `AndroidManifest.xml` `<queries>`; rewrote
+`settings_help_poor_dev_header` to "Open source — contribute via PRs on GitHub.";
+deleted `billing_please_sign_in`, `dialog_premium_feature_purchase`,
+`dialog_purchase_premium`, `info_prem_features`, `info_remove_ads`,
+`info_unlock_prem_features_forever`, `info_try_prem_invites`,
+`info_signed_in_enable_prem_features`, `info_sync_lists_btw_devices_fb`,
+`info_track_personal_stats`, `info_personal_stats`, `play_services_error`,
+`toast_purchase_premium_thanks`. Tests 160 → 172 (+13 new in `Phase10MenuSurfacePruneTest`
+covering menu/fragment/strings/manifest surfaces; -1 retired `profileFragmentClassExists`;
++1 method-count adjustment in `IfacePackageTest.hostContractExcludesDeletedTypeReturners`
+for `mo4776n` absence).
+
 ## Deferred / out of scope
 
 - Re-listing on the Play Store. Side-load only for now; if we re-list, Play Console requires a privacy policy + data-handling disclosure that's only worth writing once the local-only architecture is stable. Revisit after Phase 9.

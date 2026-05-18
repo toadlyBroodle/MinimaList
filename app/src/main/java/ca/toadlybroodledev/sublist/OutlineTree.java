@@ -149,7 +149,8 @@ public class OutlineTree {
 
     void m4996b(OutlineRowView row, boolean z) {
         row.f3823f = z;
-        this.hostContract.mo4776n().m4865ac();
+        // Phase 10.4: removed ProfileFragment completion-counter call (was a no-op since
+        // Phase 3.3 cloud-profile strip).
         if (AppSettings.f3951n) {
             Iterator<OutlineRowView> it = m5004h(row).iterator();
             while (it.hasNext()) {

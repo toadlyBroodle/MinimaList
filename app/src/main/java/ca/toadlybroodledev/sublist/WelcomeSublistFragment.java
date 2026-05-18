@@ -65,14 +65,8 @@ public class WelcomeSublistFragment extends SublistFragment {
         rows.add(new OutlineRow(2, getString(R.string.info_search_ents_keywords), false, false, 0L, true));
         rows.add(new OutlineRow(2, getString(R.string.info_backup), false, true, 0L, true));
         rows.add(new OutlineRow(3, getString(R.string.info_saveload_local), false, false, 0L, true));
-        rows.add(new OutlineRow(2, getString(R.string.info_personal_stats), false, true, 0L, true));
-        rows.add(new OutlineRow(3, getString(R.string.info_track_personal_stats), false, false, 0L, true));
-        rows.add(new OutlineRow(0, getString(R.string.info_prem_features), false, true, 0L, true));
-        rows.add(new OutlineRow(1, getString(R.string.info_unlock_prem_features_forever), false, true, 0L, true));
-        rows.add(new OutlineRow(2, getString(R.string.info_signed_in_enable_prem_features), false, false, 0L, true));
-        rows.add(new OutlineRow(1, getString(R.string.info_remove_ads), false, false, 0L, true));
-        rows.add(new OutlineRow(1, getString(R.string.info_try_prem_invites), false, true, 0L, true));
-        rows.add(new OutlineRow(2, getString(R.string.info_10_days_per_invite), false, false, 0L, true));
+        // Phase 10.4/10.5: dropped Personal Stats, Premium Features, and invite-promo
+        // rows (cloud profile + premium-upgrade UX retired).
         rows.add(new OutlineRow(1, getString(R.string.info_live_widget), false, true, 0L, true));
         rows.add(new OutlineRow(2, getString(R.string.info_widget_homescreen_displays), false, false, 0L, true));
         rows.add(new OutlineRow(2, getString(R.string.info_longpress_widget_resize), false, false, 0L, true));
@@ -81,7 +75,7 @@ public class WelcomeSublistFragment extends SublistFragment {
         rows.add(new OutlineRow(2, getString(R.string.info_view_upcoming_rem_persist_notif), false, false, 0L, true));
         rows.add(new OutlineRow(1, getString(R.string.info_copypaste_btw_lists), false, false, 0L, true));
         rows.add(new OutlineRow(1, getString(R.string.info_data_bkup_sync), false, true, 0L, true));
-        rows.add(new OutlineRow(2, getString(R.string.info_sync_lists_btw_devices_fb), false, false, 0L, true));
+        // Phase 10.4: dropped firebase-cloud sync row.
         rows.add(new OutlineRow(2, getString(R.string.info_saveload_extern), false, true, 0L, true));
         rows.add(new OutlineRow(3, getString(R.string.info_save_loc), false, false, 0L, true));
         rows.add(new OutlineRow(2, getString(R.string.info_export_to), false, true, 0L, true));

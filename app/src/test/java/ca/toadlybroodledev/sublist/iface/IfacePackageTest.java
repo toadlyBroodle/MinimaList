@@ -20,10 +20,11 @@ public class IfacePackageTest {
 
     @Test
     public void hostContractHasCorrectMethodCount() {
-        // 23 methods: 27 original minus mo4756C, mo4758E (ad hooks),
-        // mo4762a (C0556c profile — type deleted), mo4777o (deleted sign-in return type).
+        // 22 methods: 27 original minus mo4756C, mo4758E (ad hooks),
+        // mo4762a (C0556c profile — type deleted), mo4777o (deleted sign-in return type),
+        // and mo4776n (Phase 10.4: ProfileFragment retired).
         // mo4778p was already stripped in Phase 3.5, so never in the decompiled file.
-        assertEquals(23, HostContract.class.getDeclaredMethods().length);
+        assertEquals(22, HostContract.class.getDeclaredMethods().length);
     }
 
     @Test
@@ -46,6 +47,8 @@ public class IfacePackageTest {
         assertFalse("cloud profile setter mo4762a must be absent", names.contains("mo4762a"));
         // mo4777o returned ViewOnClickListenerC0559f (deleted sign-in fragment)
         assertFalse("sign-in fragment getter mo4777o must be absent", names.contains("mo4777o"));
+        // mo4776n returned ProfileFragment (Phase 10.4 retired)
+        assertFalse("profile getter mo4776n must be absent", names.contains("mo4776n"));
     }
 
     // ---- RowActionListener ---------------------------------------------------

@@ -8,7 +8,6 @@ import ca.toadlybroodledev.sublist.DrawerCustomLayout;
 import ca.toadlybroodledev.sublist.OutlineFab;
 import ca.toadlybroodledev.sublist.OutlineRowView;
 import ca.toadlybroodledev.sublist.OutlineStore;
-import ca.toadlybroodledev.sublist.ProfileFragment;
 import ca.toadlybroodledev.sublist.SettingsFragment;
 import ca.toadlybroodledev.sublist.SublistFragment;
 import ca.toadlybroodledev.sublist.model.OutlineRow;
@@ -21,6 +20,8 @@ import java.util.HashMap;
 //   mo4762a(C0556c)  — cloud user-profile setter; C0556c deleted (Phase 3.3/4)
 //   mo4777o()        — returned ViewOnClickListenerC0559f (Sign-In fragment, Phase 3.3 deleted)
 //   mo4778p()        — premium getter; already stripped in Phase 3.5
+// Dropped in Phase 10.4:
+//   profile getter (originally 'n()') — returned ProfileFragment, retired with the cloud-profile UI
 public interface HostContract {
 
     // Fragment-input callback (originally 'F')
@@ -55,9 +56,6 @@ public interface HostContract {
 
     // Returns the host Context (originally 'm()')
     Context mo4775m();
-
-    // Returns the ProfileFragment (originally 'n()')
-    ProfileFragment mo4776n();
 
     // Fragment input callback (named method — kept as-is)
     void onFragmentInput(View view);

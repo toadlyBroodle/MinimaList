@@ -11,6 +11,7 @@ import ca.toadlybroodledev.sublist.iface.RowActionListener;
 
 // Ported from decompiled DrawerCustomLayout. Extends DrawerLayout; manages nav-drawer sublist entries.
 // Phase 3.3: removed menu_invite case (App-Invites / m4757D deleted).
+// Phase 10.4: removed menu_profile case (ProfileFragment retired).
 public class DrawerCustomLayout extends DrawerLayout {
 
     MainActivity f3727c;
@@ -64,10 +65,9 @@ public class DrawerCustomLayout extends DrawerLayout {
             public boolean onNavigationItemSelected(MenuItem item) {
                 int id = item.getItemId();
                 // Phase 3.3: removed menu_invite case (App-Invites / m4757D deleted).
+                // Phase 10.4: removed menu_profile case (ProfileFragment retired).
                 if (id == R.id.menu_instructions) {
                     DrawerCustomLayout.this.f3728d.mo4771b(DrawerCustomLayout.this.f3727c.f3711u);
-                } else if (id == R.id.menu_profile) {
-                    DrawerCustomLayout.this.f3728d.mo4771b(DrawerCustomLayout.this.f3727c.f3707q);
                 } else if (id == R.id.menu_settings) {
                     DrawerCustomLayout.this.f3728d.mo4771b(DrawerCustomLayout.this.f3727c.f3709s);
                 } else if (id == R.id.submenu_add_new_list) {

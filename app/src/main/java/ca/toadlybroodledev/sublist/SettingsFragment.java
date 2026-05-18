@@ -37,6 +37,9 @@ public class SettingsFragment extends Fragment
     static final int REQUEST_EXPORT_JSON = 1001;
     static final int REQUEST_IMPORT_JSON = 1002;
 
+    // Phase 10.5: replace donate/premium-upgrade items with a single "Contribute on GitHub" link.
+    static final String GITHUB_CONTRIBUTE_URL = "https://github.com/toadlyBroodle/MinimaList";
+
     LinearLayout f3871a;
     Button f3872ae;
     Button f3873af;
@@ -48,6 +51,7 @@ public class SettingsFragment extends Fragment
     Button f3879al;
     Button f3880am; // Export JSON (SAF)
     Button f3880ao; // Import JSON (SAF)
+    Button f3880ap; // Contribute on GitHub (Phase 10.5)
     private HostContract f3881an;
     Switch f3883c;
     Switch f3884d;
@@ -93,6 +97,8 @@ public class SettingsFragment extends Fragment
         this.f3876ai = (Button) this.f3881an.mo4760a(Integer.valueOf(R.id.settings_export_txt));
         this.f3880am = (Button) this.f3881an.mo4760a(Integer.valueOf(R.id.settings_export_json));
         this.f3880ao = (Button) this.f3881an.mo4760a(Integer.valueOf(R.id.settings_import_json));
+        this.f3880ap = (Button) this.f3881an.mo4760a(
+                Integer.valueOf(R.id.settings_contribute_github));
         this.f3885e = (Spinner) this.f3881an.mo4760a(Integer.valueOf(R.id.settings_bg_color));
         this.f3886f = (Spinner) this.f3881an.mo4760a(Integer.valueOf(R.id.settings_text_color));
         this.f3887g = (Spinner) this.f3881an.mo4760a(Integer.valueOf(R.id.settings_accent_color));
@@ -110,6 +116,7 @@ public class SettingsFragment extends Fragment
         this.f3876ai.setOnClickListener(this);
         this.f3880am.setOnClickListener(this);
         this.f3880ao.setOnClickListener(this);
+        this.f3880ap.setOnClickListener(this);
         this.f3885e.setOnItemSelectedListener(this);
         this.f3886f.setOnItemSelectedListener(this);
         this.f3887g.setOnItemSelectedListener(this);
@@ -208,6 +215,16 @@ public class SettingsFragment extends Fragment
     public void m4890b() {
         startActivity(new Intent(Intent.ACTION_VIEW,
                 Uri.parse("http://toadlybroodle.ca/portfolio/apps/apps-privacy-policy/")));
+    }
+
+    // Phase 10.5: open the MinimaList GitHub repo so users can contribute via PRs.
+    // resolveActivity() check mirrors the m4885a email pattern (Phase 6.3) so missing
+    // browsers don't crash; manifest <queries> now declares the https scheme.
+    void openGithubContribute() {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(GITHUB_CONTRIBUTE_URL));
+        if (intent.resolveActivity(this.f3881an.mo4775m().getPackageManager()) != null) {
+            startActivity(intent);
+        }
     }
 
     // Phase 9.3: launch SAF file-creation picker; result handled in onActivityResult.
@@ -315,6 +332,8 @@ public class SettingsFragment extends Fragment
             OutlineStore.m4967r();
         } else if (id == R.id.settings_import_json) {
             m4892ah();
+        } else if (id == R.id.settings_contribute_github) {
+            openGithubContribute();
         } else if (id == R.id.settings_load_backup) {
             m4887ad();
         } else if (id == R.id.settings_privacy_policy) {
