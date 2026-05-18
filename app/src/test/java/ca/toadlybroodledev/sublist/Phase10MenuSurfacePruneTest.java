@@ -223,4 +223,100 @@ public class Phase10MenuSurfacePruneTest {
         assertTrue("AndroidManifest <queries> must declare an https <data> scheme (Phase 10.5)",
                 queries.contains("android:scheme=\"https\""));
     }
+
+    // ---- 10.6 (follow-up): cloud-era SettingsFragment UI vestiges removed ---
+    // The pre-2018 build shipped four cloud-era controls in fragment_settings:
+    //   - "Rate :)"           → Google Play store intent (Phase 3 strip target,
+    //                            but UI surface lingered)
+    //   - "Email Lonely Dev"  → mailto: support contact (cloud-era support
+    //                            channel; Phase 3 stripped Firebase Analytics
+    //                            but the support button survived)
+    //   - "Privacy Policy"    → ACTION_VIEW against toadlybroodle.ca portfolio
+    //                            URL (replaced by GitHub source-link contract
+    //                            since the local-only build has no data
+    //                            handling to disclose)
+    //   - "anonymous analytics" Switch → AppSettings flag toggled Firebase
+    //                            Analytics gathering (Phase 3.2 deleted the
+    //                            collection path; flag was an orphaned setter)
+    // All four UI surfaces and their backing strings/handlers are removed.
+    // AppSettings.m4946k() / m4935c() retained (still referenced by source-scan
+    // tests in earlier phases via grep; non-load-bearing — flagged for Phase
+    // 10.2 deletion alongside the package rename).
+
+    @Test
+    public void fragmentSettingsDropsRateSupportPrivacyAnonControls() {
+        String xml = read("app/src/main/res/layout/fragment_settings.xml");
+        assertFalse("fragment_settings.xml must not declare @+id/settings_rate",
+                xml.contains("@+id/settings_rate"));
+        assertFalse("fragment_settings.xml must not declare @+id/settings_support",
+                xml.contains("@+id/settings_support"));
+        assertFalse("fragment_settings.xml must not declare @+id/settings_privacy_policy",
+                xml.contains("@+id/settings_privacy_policy"));
+        assertFalse("fragment_settings.xml must not declare @+id/settings_send_anon_data",
+                xml.contains("@+id/settings_send_anon_data"));
+    }
+
+    @Test
+    public void fragmentSettingsLargeDropsRateSupportPrivacyAnonControls() {
+        String xml = read("app/src/main/res/layout-large/fragment_settings.xml");
+        assertFalse("layout-large fragment_settings.xml must not declare @+id/settings_rate",
+                xml.contains("@+id/settings_rate"));
+        assertFalse("layout-large fragment_settings.xml must not declare @+id/settings_support",
+                xml.contains("@+id/settings_support"));
+        assertFalse("layout-large fragment_settings.xml must not declare @+id/settings_privacy_policy",
+                xml.contains("@+id/settings_privacy_policy"));
+        assertFalse("layout-large fragment_settings.xml must not declare @+id/settings_send_anon_data",
+                xml.contains("@+id/settings_send_anon_data"));
+    }
+
+    @Test
+    public void orphanedSettingsButtonStringsRemoved() {
+        String xml = read("app/src/main/res/values/strings.xml");
+        String[] dead = {
+                "name=\"settings_rate\"",
+                "name=\"settings_support\"",
+                "name=\"settings_privacy_policy\"",
+                "name=\"settings_send_anon_data\"",
+                "name=\"email_support_subject\"",
+        };
+        for (String key : dead) {
+            assertFalse("strings.xml must not contain orphaned key " + key + " (10.6)",
+                    xml.contains(key));
+        }
+    }
+
+    @Test
+    public void settingsFragmentDropsClickHandlersForRemovedControls() {
+        String src = read(
+                "app/src/main/java/ca/toadlybroodledev/sublist/SettingsFragment.java");
+        assertFalse("SettingsFragment must not reference R.id.settings_rate (10.6)",
+                src.contains("R.id.settings_rate"));
+        assertFalse("SettingsFragment must not reference R.id.settings_support (10.6)",
+                src.contains("R.id.settings_support"));
+        assertFalse("SettingsFragment must not reference R.id.settings_privacy_policy (10.6)",
+                src.contains("R.id.settings_privacy_policy"));
+        assertFalse("SettingsFragment must not reference R.id.settings_send_anon_data (10.6)",
+                src.contains("R.id.settings_send_anon_data"));
+        assertFalse("SettingsFragment must not retain market: rate-intent handler (10.6)",
+                src.contains("market://details"));
+        assertFalse("SettingsFragment must not retain mailto: support handler (10.6)",
+                src.contains("Intent.ACTION_SENDTO"));
+        assertFalse("SettingsFragment must not retain privacy-policy URL handler (10.6)",
+                src.contains("apps-privacy-policy"));
+    }
+
+    @Test
+    public void mainActivityDropsBackgroundColorWiringForRemovedButtons() {
+        String src = read("app/src/main/java/ca/toadlybroodledev/sublist/MainActivity.java");
+        assertFalse("MainActivity must not setBackgroundColor f3877aj (rate button, 10.6)",
+                src.contains("f3877aj"));
+        assertFalse("MainActivity must not setBackgroundColor f3878ak (support button, 10.6)",
+                src.contains("f3878ak"));
+        assertFalse("MainActivity must not setBackgroundColor f3879al (privacy button, 10.6)",
+                src.contains("f3879al"));
+        // The new Contribute on GitHub button (f3880ap) must receive the accent
+        // background color sweep like the rest of the Settings buttons.
+        assertTrue("MainActivity must setBackgroundColor for f3880ap (Contribute on GitHub button, 10.6)",
+                src.contains("f3880ap.setBackgroundColor"));
+    }
 }

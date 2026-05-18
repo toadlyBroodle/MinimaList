@@ -353,14 +353,12 @@ public class MainActivity extends AppCompatActivity
             this.f3709s.f3871a.setBackgroundColor(secondary);
             this.f3709s.f3872ae.setBackgroundColor(accent);
             this.f3709s.f3873af.setBackgroundColor(accent);
-            this.f3709s.f3877aj.setBackgroundColor(accent);
-            this.f3709s.f3878ak.setBackgroundColor(accent);
-            this.f3709s.f3879al.setBackgroundColor(accent);
             this.f3709s.f3874ag.setBackgroundColor(accent);
             this.f3709s.f3875ah.setBackgroundColor(accent);
             this.f3709s.f3876ai.setBackgroundColor(accent);
             this.f3709s.f3880am.setBackgroundColor(accent);
             this.f3709s.f3880ao.setBackgroundColor(accent);
+            this.f3709s.f3880ap.setBackgroundColor(accent);
         } catch (Exception e5) {
             Log.d(this.f3712v, e5.getMessage());
         }

@@ -38,26 +38,27 @@ public class Phase10ColorsTest {
     }
 
     @Test
-    public void appAccentColorIsMutedTeal() {
+    public void appAccentColorIsMutedSage() {
         String xml = readColors();
-        assertTrue("colorAccent must be #80CBC4 (muted teal accent, Phase 10.3)",
-                xml.contains("name=\"colorAccent\">#80CBC4</color>")
-                        || xml.contains("name=\"colorAccent\">#80cbc4</color>"));
+        assertTrue("colorAccent must be #7A8471 (muted sage accent, Phase 10.3 sage-neutral palette)",
+                xml.contains("name=\"colorAccent\">#7A8471</color>")
+                        || xml.contains("name=\"colorAccent\">#7a8471</color>"));
     }
 
     @Test
-    public void appPrimaryColorIsMutedBlueGrey() {
+    public void appPrimaryColorIsCharcoal() {
         String xml = readColors();
-        assertTrue("colorPrimary must be #455A64 (Blue Grey 700, Phase 10.3)",
-                xml.contains("name=\"colorPrimary\">#455A64</color>")
-                        || xml.contains("name=\"colorPrimary\">#455a64</color>"));
+        assertTrue("colorPrimary must be #4B5358 (charcoal, Phase 10.3 sage-neutral palette)",
+                xml.contains("name=\"colorPrimary\">#4B5358</color>")
+                        || xml.contains("name=\"colorPrimary\">#4b5358</color>"));
     }
 
     @Test
-    public void appPrimaryDarkColorIsMutedDark() {
+    public void appPrimaryDarkColorIsDeepCharcoal() {
         String xml = readColors();
-        assertTrue("colorPrimaryDark must be #263238 (Blue Grey 900, Phase 10.3)",
-                xml.contains("name=\"colorPrimaryDark\">#263238</color>"));
+        assertTrue("colorPrimaryDark must be #2F3438 (deep charcoal, Phase 10.3 sage-neutral palette)",
+                xml.contains("name=\"colorPrimaryDark\">#2F3438</color>")
+                        || xml.contains("name=\"colorPrimaryDark\">#2f3438</color>"));
     }
 
     @Test

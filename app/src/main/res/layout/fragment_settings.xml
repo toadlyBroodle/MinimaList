@@ -163,48 +163,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginBottom="4dp"
+            android:layout_marginBottom="10dp"
             android:text="@string/settings_contribute_github"/>
-        <Switch
-            android:theme="@style/ThemeOverlay.Switch"
-            android:id="@+id/settings_send_anon_data"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/settings_send_anon_data"/>
-        <Button
-            android:id="@+id/settings_rate"
-            android:paddingLeft="4dp"
-            android:paddingRight="4dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:text="@string/settings_rate"/>
-        <Button
-            android:id="@+id/settings_support"
-            android:paddingLeft="4dp"
-            android:paddingRight="4dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
-            android:text="@string/settings_support"/>
-        <View
-            android:background="@color/colorAccent"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"/>
-        <Button
-            android:id="@+id/settings_privacy_policy"
-            android:paddingLeft="4dp"
-            android:paddingRight="4dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
-            android:text="@string/settings_privacy_policy"/>
     </LinearLayout>
 </ScrollView>

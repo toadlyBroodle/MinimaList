@@ -1,7 +1,6 @@
 package ca.toadlybroodledev.sublist;
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -46,14 +45,10 @@ public class SettingsFragment extends Fragment
     Button f3874ag;
     Button f3875ah;
     Button f3876ai;
-    Button f3877aj;
-    Button f3878ak;
-    Button f3879al;
     Button f3880am; // Export JSON (SAF)
     Button f3880ao; // Import JSON (SAF)
     Button f3880ap; // Contribute on GitHub (Phase 10.5)
     private HostContract f3881an;
-    Switch f3883c;
     Switch f3884d;
     Spinner f3885e;
     Spinner f3886f;
@@ -81,17 +76,12 @@ public class SettingsFragment extends Fragment
         super.onViewCreated(view, savedState);
         this.f3871a = (LinearLayout) this.f3881an.mo4760a(
                 Integer.valueOf(R.id.fragment_settings_linear_layout));
-        this.f3883c = (Switch) this.f3881an.mo4760a(Integer.valueOf(R.id.settings_send_anon_data));
         this.f3884d = (Switch) this.f3881an.mo4760a(Integer.valueOf(R.id.settings_show_completed));
         this.f3889i = (Switch) this.f3881an.mo4760a(
                 Integer.valueOf(R.id.settings_backup_location_switch));
         this.f3872ae = (Button) this.f3881an.mo4760a(
                 Integer.valueOf(R.id.settings_delete_completed));
         this.f3873af = (Button) this.f3881an.mo4760a(Integer.valueOf(R.id.settings_default_menu));
-        this.f3877aj = (Button) this.f3881an.mo4760a(Integer.valueOf(R.id.settings_rate));
-        this.f3878ak = (Button) this.f3881an.mo4760a(Integer.valueOf(R.id.settings_support));
-        this.f3879al = (Button) this.f3881an.mo4760a(
-                Integer.valueOf(R.id.settings_privacy_policy));
         this.f3874ag = (Button) this.f3881an.mo4760a(Integer.valueOf(R.id.settings_backup_data));
         this.f3875ah = (Button) this.f3881an.mo4760a(Integer.valueOf(R.id.settings_load_backup));
         this.f3876ai = (Button) this.f3881an.mo4760a(Integer.valueOf(R.id.settings_export_txt));
@@ -103,14 +93,10 @@ public class SettingsFragment extends Fragment
         this.f3886f = (Spinner) this.f3881an.mo4760a(Integer.valueOf(R.id.settings_text_color));
         this.f3887g = (Spinner) this.f3881an.mo4760a(Integer.valueOf(R.id.settings_accent_color));
         this.f3888h = (Spinner) this.f3881an.mo4760a(Integer.valueOf(R.id.settings_text_size));
-        this.f3883c.setOnClickListener(this);
         this.f3884d.setOnClickListener(this);
         this.f3889i.setOnClickListener(this);
         this.f3872ae.setOnClickListener(this);
         this.f3873af.setOnClickListener(this);
-        this.f3877aj.setOnClickListener(this);
-        this.f3878ak.setOnClickListener(this);
-        this.f3879al.setOnClickListener(this);
         this.f3874ag.setOnClickListener(this);
         this.f3875ah.setOnClickListener(this);
         this.f3876ai.setOnClickListener(this);
@@ -121,7 +107,6 @@ public class SettingsFragment extends Fragment
         this.f3886f.setOnItemSelectedListener(this);
         this.f3887g.setOnItemSelectedListener(this);
         this.f3888h.setOnItemSelectedListener(this);
-        this.f3883c.setChecked(AppSettings.m4946k());
         this.f3884d.setChecked(AppSettings.m4929a());
         this.f3889i.setChecked(AppSettings.m4932b());
         this.f3885e.setAdapter((SpinnerAdapter) new StringArraySpinnerAdapter(
@@ -133,16 +118,6 @@ public class SettingsFragment extends Fragment
         this.f3888h.setAdapter((SpinnerAdapter) new StringArraySpinnerAdapter(
                 this.f3881an.mo4775m(), R.array.size_text_array));
         this.f3881an.mo4772b(false);
-    }
-
-    public void m4885a(String[] addresses, String subject) {
-        Intent intent = new Intent(Intent.ACTION_SENDTO);
-        intent.setData(Uri.parse("mailto:"));
-        intent.putExtra(Intent.EXTRA_EMAIL, addresses);
-        intent.putExtra(Intent.EXTRA_SUBJECT, subject);
-        if (intent.resolveActivity(this.f3881an.mo4775m().getPackageManager()) != null) {
-            startActivity(intent);
-        }
     }
 
     void m4886ac() {
@@ -179,21 +154,6 @@ public class SettingsFragment extends Fragment
                 .show();
     }
 
-    void m4888ae() {
-        Intent intent = new Intent(Intent.ACTION_VIEW,
-                Uri.parse("market://details?id=" + this.f3881an.mo4775m().getPackageName()));
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY
-                | Intent.FLAG_ACTIVITY_NEW_DOCUMENT
-                | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-        try {
-            startActivity(intent);
-        } catch (ActivityNotFoundException e) {
-            startActivity(new Intent(Intent.ACTION_VIEW,
-                    Uri.parse("http://play.google.com/store/apps/details?id="
-                            + this.f3881an.mo4775m().getPackageName())));
-        }
-    }
-
     void m4889af() {
         new AlertDialog.Builder(this.f3881an.mo4775m())
                 .setTitle(R.string.settings_delete_completed)
@@ -212,13 +172,8 @@ public class SettingsFragment extends Fragment
                 .show();
     }
 
-    public void m4890b() {
-        startActivity(new Intent(Intent.ACTION_VIEW,
-                Uri.parse("http://toadlybroodle.ca/portfolio/apps/apps-privacy-policy/")));
-    }
-
     // Phase 10.5: open the MinimaList GitHub repo so users can contribute via PRs.
-    // resolveActivity() check mirrors the m4885a email pattern (Phase 6.3) so missing
+    // resolveActivity() check mirrors the ACTION_VIEW pattern (Phase 6.3) so missing
     // browsers don't crash; manifest <queries> now declares the https scheme.
     void openGithubContribute() {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(GITHUB_CONTRIBUTE_URL));
@@ -336,17 +291,8 @@ public class SettingsFragment extends Fragment
             openGithubContribute();
         } else if (id == R.id.settings_load_backup) {
             m4887ad();
-        } else if (id == R.id.settings_privacy_policy) {
-            m4890b();
-        } else if (id == R.id.settings_rate) {
-            m4888ae();
-        } else if (id == R.id.settings_send_anon_data) {
-            AppSettings.m4935c(((Switch) view).isChecked());
         } else if (id == R.id.settings_show_completed) {
             AppSettings.m4928a(((Switch) view).isChecked());
-        } else if (id == R.id.settings_support) {
-            m4885a(new String[]{"toadlybroodledev@gmail.com"},
-                    getString(R.string.email_support_subject));
         }
     }
 

@@ -198,6 +198,32 @@ for `mo4776n` absence).
 **Review follow-ups (open — schedule as the next `/sst-dev-cycle` cycle):**
 - [x] [easy] [should-fix] `MainActivity.java` — The Phase 7 Moto G install has `ProfileFragment` in its `FragmentManager` saved state (it was unconditionally `tx.add()`-ed every launch in HEAD~1). After `adb install -r` (app data preserved), Android restores that saved state on first launch and calls `FragmentFactory.instantiate("...ProfileFragment")` → class not found → `Fragment.InstantiationException` crash before `onCreate` completes. Proposed fix: add a one-cycle stub `app/src/main/java/ca/toadlybroodledev/sublist/ProfileFragment.java` (`public class ProfileFragment extends Fragment {}`) so saved-state restore succeeds; drop the stub in Phase 10.2 during the package rename.
 
+**Phase 10 follow-up cycle completed 2026-05-19.** Two sub-passes batched in one commit.
+(a) `colors.xml` palette refined from the first-pass Material-3 muted-teal/blue-grey
+(#80CBC4 / #455A64 / #263238) to a sage-neutral scheme (#7A8471 muted sage accent /
+#4B5358 charcoal primary / #2F3438 deep-charcoal primary-dark) plus matched
+`firebaseColor*` vestigials and softened `colorTextWhite` (#F4F4F2) / `colorTextWhiteCompleted`
+(#A8AAA5). Still preserves all 66 color names — `Phase10ColorsTest` updated to the new
+hexes; `allColorNamesPreserved` and the `firebaseColor*` / `material_deep_teal_500`
+negative-presence assertions unchanged. (b) Pruned four cloud-era SettingsFragment
+UI surfaces missed in 10.4/10.5: the "Rate :)" (Play Store intent), "Email Lonely Dev"
+(mailto: support), "Privacy Policy" (toadlybroodle.ca portfolio URL), and "Enable
+anonymous analytics" Switch. The first three were Play-Store/portfolio-era reflexes
+not in scope for a local-only side-loaded build; the analytics Switch toggled a
+Firebase Analytics flag whose collection path was deleted in Phase 3.2. Removed from
+`fragment_settings.xml` (both layout/ and layout-large/), `SettingsFragment.java`
+(field decls, click bindings, `m4885a`/`m4888ae`/`m4890b` handlers, `R.id`
+`onClick` cases, dead `ActivityNotFoundException` import), `MainActivity.java`
+(f3877aj/f3878ak/f3879al accent-color sweep) and `strings.xml` (5 keys). Also added
+`f3880ap.setBackgroundColor(accent)` for the Phase 10.5 Contribute on GitHub button
+that the 10.4/10.5 cycle missed. `SublistFragment.onResume` empty `if (AppSettings.m4946k()) {}`
+block dropped (Phase 3 collection-path removal left it a no-op). `AppSettings.m4935c` /
+`m4946k` retained (still called from a Phase 2 source-scan test) — flagged for
+Phase 10.2 deletion alongside the package rename. Tests 182 → 187 (+5 new in
+`Phase10MenuSurfacePruneTest` covering layout, layout-large, strings, SettingsFragment
+handlers, MainActivity wiring). `./gradlew :app:testDebugUnitTest` green;
+`./gradlew :app:assembleDebug` green.
+
 ## Deferred / out of scope
 
 - Re-listing on the Play Store. Side-load only for now; if we re-list, Play Console requires a privacy policy + data-handling disclosure that's only worth writing once the local-only architecture is stable. Revisit after Phase 9.

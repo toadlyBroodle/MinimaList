@@ -23,7 +23,6 @@
     <string name="drawer_close">Close Drawer</string>
     <string name="drawer_open">Open Drawer</string>
     <string name="email_fmt">Email: %s</string>
-    <string name="email_support_subject">MinimaList Support</string>
     <string name="emailpassword_status_fmt">Email User: %s</string>
     <string name="emailpassword_title_text">Email and Password</string>
     <string name="enter_keywords">Enter keywords...</string>
@@ -183,15 +182,11 @@
     <string name="toast_json_import_fail">Import failed. Not a valid JSON export file.</string>
     <string name="settings_help_poor_dev_header">Open source — contribute via PRs on GitHub.</string>
     <string name="settings_load_backup">Load Backup</string>
-    <string name="settings_privacy_policy">Privacy Policy</string>
-    <string name="settings_rate">Rate :)</string>
     <string name="settings_save_as_txt_file">Save as .txt file</string>
     <string name="settings_sd_not_available">External sd card currently not available.</string>
-    <string name="settings_send_anon_data">Enable anonymous analytics data</string>
     <string name="settings_show_completed">Show Completed</string>
     <string name="settings_size_text">Text Size</string>
     <string name="settings_style_header">Personalize MinimaList</string>
-    <string name="settings_support">Email Lonely Dev</string>
     <string name="settings_to_from_external_sd">To/From External SD</string>
     <string name="sign_in">Sign In</string>
     <string name="sign_in_with_email_address">Sign in with email address</string>

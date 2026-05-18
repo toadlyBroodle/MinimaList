@@ -455,8 +455,6 @@ public class SublistFragment extends Fragment implements OutlineHost {
     @Override
     public void onResume() {
         super.onResume();
-        if (AppSettings.m4946k()) {
-        }
     }
 
     @Override
