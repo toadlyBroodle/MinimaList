@@ -531,6 +531,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onRequestPermissionsResult(int i, String[] strArr, int[] iArr) {
+        super.onRequestPermissionsResult(i, strArr, iArr);
         if (i == 1) {
             if (iArr.length <= 0 || iArr[0] != 0) {
                 Toast.makeText(this, R.string.toast_enable_storage_permission, 0).show();

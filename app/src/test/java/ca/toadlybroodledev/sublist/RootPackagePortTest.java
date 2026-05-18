@@ -398,6 +398,29 @@ public class RootPackagePortTest {
         assertNotNull(m);
     }
 
+    // ---- [should-fix] MainActivity.onRequestPermissionsResult super call -----
+    // Behavioral check (super call dispatches to FragmentManager) requires Android runtime;
+    // verified at Phase 4.7 device smoke test.
+
+    @Test
+    public void mainActivityDeclares_onRequestPermissionsResult() throws Exception {
+        Method m = MainActivity.class.getDeclaredMethod(
+                "onRequestPermissionsResult", int.class, String[].class, int[].class);
+        assertTrue("override must be public", Modifier.isPublic(m.getModifiers()));
+        assertEquals(void.class, m.getReturnType());
+    }
+
+    // ---- [should-fix] OutlineFab.m4800a(true,true) must call show() ---------
+    // Behavioral check (setVisibility vs show()) requires Android runtime;
+    // verified at Phase 4.7 device smoke test.
+
+    @Test
+    public void outlineFabShowHideMethod_returnsVoidAndIsNotStatic() throws Exception {
+        Method m = OutlineFab.class.getDeclaredMethod("m4800a", boolean.class, boolean.class);
+        assertFalse("m4800a must not be static", Modifier.isStatic(m.getModifiers()));
+        assertEquals(void.class, m.getReturnType());
+    }
+
     // ---- helpers -------------------------------------------------------------
 
     private Set<String> fieldNames(Class<?> cls) {

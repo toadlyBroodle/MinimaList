@@ -25,7 +25,7 @@ public class OutlineFab extends FloatingActionButton {
             return;
         }
         if (visible && animated) {
-            setVisibility(GONE);
+            show();
         } else if (visible) {
             setVisibility(VISIBLE);
         } else {
