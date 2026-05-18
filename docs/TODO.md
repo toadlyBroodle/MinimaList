@@ -11,6 +11,7 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Append-on-close, newest first. Trim to most recent 10.
 -->
 
+- 9.2a: wire OutlineRepository through MainActivity (async load callback) + OutlineRowView autosave; AppMain owns SublistDatabase/repo + io() executor + first-launch importLegacy gated on repo_migrated_v1 SharedPrefs flag; delete AppSettings m4937d/m4948m legacy Gson fallback loaders; tests 112 → 121 — by sst-dev-cycle at 2026-05-19T03:00Z
 - fix replaceRowsForSublist atomicity (@Transaction default on OutlineRowDao) + importLegacy runInTransaction wrap; tests 108 → 112 — by sst-dev-cycle at 2026-05-19T02:00Z
 - 9.1+9.2: Room schema (SublistEntity, OutlineRowEntity, 2 DAOs, SublistDatabase) + OutlineRepository interface + OutlineRepositoryImpl with importLegacy; tests 94 → 108 — by sst-dev-cycle at 2026-05-19T00:30Z
 - 6.1-lint-fix-c/d: fix 19 WrongConstant errors (typed constants for getSystemService/Toast/DrawerLayout/AlarmManager/TypedValue/IMM) + POST_NOTIFICATIONS guard at 2 notify() sites; tests 85 → 94 — by sst-dev-cycle at 2026-05-18T23:30Z
@@ -32,8 +33,7 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Order: blockers first, then highest-impact.
 -->
 
-- [hard] [should-fix] 9.2a wire OutlineRepository through OutlineStore/AppSettings/SublistFragment/MainActivity + call importLegacy from AppMain; delete legacy Gson HashMap path. Reason: review of 909c804 — 9.2 [x] is premature, repository has zero callers
-- [medium] [should-fix] add Robolectric/Mockito tests for OutlineRepositoryImpl (replaceRowsForSublist atomicity, importLegacy walk, CASCADE delete) — current Phase9*Test.java are source-scan only. Reason: review of 909c804
+- [medium] [should-fix] add Robolectric/Mockito tests for OutlineRepositoryImpl (replaceRowsForSublist atomicity, importLegacy walk, CASCADE delete, loadAllAsHashMap/saveAllAsHashMap round-trip) — Phase9*Test.java + Phase9Wiring92aTest are source-scan only. Reason: review of 909c804; 9.2a added two new methods that also need real Room exercise.
 - [easy] 7.1 `adb install -r` succeeds with no Play Protect warnings. Reason: blocked on adb + physical device in WSL build environment; skip to Phase 9 work until device is available.
 - [easy] 7.2 App launches without ANR/crash; `adb logcat | grep AndroidRuntime` clean for 60s. Reason: same hardware blocker as 7.1.
 - [easy] 7.3 Home-screen widget can be added without crashing launcher; widget renders even if empty. Reason: same hardware blocker as 7.1.

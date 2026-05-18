@@ -5,9 +5,12 @@ import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+import ca.toadlybroodledev.sublist.db.OutlineRepository;
 import ca.toadlybroodledev.sublist.iface.HostContract;
 import ca.toadlybroodledev.sublist.model.OutlineRow;
 import com.google.gson.Gson;
@@ -26,12 +29,49 @@ import java.util.HashMap;
 // Ported from decompiled C0567n. Extends AppSettings; provides local backup/export helpers.
 // Cloud fields (FirebaseAuth, RTDB reference, AuthStateListener) removed in Phase 3.1/3.3.
 // Methods m4963b, m4965p, m4966q, m4971v, m4972w, m4975z removed in Phase 3.1–3.3.
+// Phase 9.2a: autosave now goes through OutlineRepository (Room); m4976a / m4977b retained
+// only for the manual-backup user feature (backup=true), to be replaced by 9.3 SAF JSON.
 public class OutlineStore extends AppSettings {
 
     private static final String f3974s = "fuckn" + OutlineStore.class.getSimpleName();
 
+    public interface LoadCallback {
+        void onLoaded(HashMap<String, ArrayList<OutlineRow>> data);
+    }
+
     OutlineStore(HostContract host) {
         super(host);
+    }
+
+    // Captures the current in-memory outline on the calling thread (TextView access is
+    // main-thread-only) and hands the snapshot off to the background executor for the
+    // actual Room write. Replaces the autosave half of m4976a(false, false).
+    void saveAllToRepo() {
+        OutlineRepository repo = AppMain.repository();
+        if (repo == null) {
+            Log.w(f3974s, "saveAllToRepo: repository not initialised yet");
+            return;
+        }
+        HashMap<String, ArrayList<OutlineRow>> snapshot =
+                SublistFragment.m4892a(f3938a.mo4786x());
+        AppMain.io().execute(() -> repo.saveAllAsHashMap(snapshot));
+    }
+
+    // Loads the full outline from Room on the background executor and delivers the resulting
+    // HashMap to `callback` on the main thread. Replaces the autosave-read half of
+    // m4977b(false, false).
+    void loadAllFromRepo(LoadCallback callback) {
+        OutlineRepository repo = AppMain.repository();
+        if (repo == null) {
+            Log.w(f3974s, "loadAllFromRepo: repository not initialised yet");
+            callback.onLoaded(null);
+            return;
+        }
+        Handler main = new Handler(Looper.getMainLooper());
+        AppMain.io().execute(() -> {
+            HashMap<String, ArrayList<OutlineRow>> data = repo.loadAllAsHashMap();
+            main.post(() -> callback.onLoaded(data));
+        });
     }
 
     static Bitmap m4961a(Context context) {
@@ -229,7 +269,7 @@ public class OutlineStore extends AppSettings {
                         Toast.makeText(f3938a.mo4775m(), R.string.toast_done,
                                 Toast.LENGTH_SHORT).show();
                     }
-                    m4976a(false, false);
+                    saveAllToRepo();
                 } catch (Exception e) {
                     if (backup) {
                         if (external) {
@@ -245,22 +285,13 @@ public class OutlineStore extends AppSettings {
         } catch (Exception e2) {
             map = map2;
         }
-        String appName = f3938a.mo4770b(Integer.valueOf(R.string.app_name));
+        // Phase 9.2a: removed legacy ObjectInputStream "backupFile" / "jsonListEntries" /
+        // "backup.sub" fallback (pre-2018 single-list format). The autosave read path no
+        // longer goes through this method at all — it uses loadAllFromRepo. Manual restore
+        // (backup=true) returns whatever the Gson HashMap decode produced, or null on miss.
         if (map != null && !map.isEmpty()) {
             return map;
         }
-        HashMap<String, ArrayList<OutlineRow>> fallback = new HashMap<>();
-        ArrayList<OutlineRow> rows = backup ? (external ? m4937d(true) : m4948m())
-                : (external ? m4948m() : m4937d(false));
-        if (rows == null || rows.isEmpty()) {
-            return null;
-        }
-        fallback.put(appName, rows);
-        if (!backup) {
-            return fallback;
-        }
-        Toast.makeText(f3938a.mo4775m(),
-                f3938a.mo4770b(Integer.valueOf(R.string.toast_done)), Toast.LENGTH_SHORT).show();
-        return fallback;
+        return null;
     }
 }

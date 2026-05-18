@@ -82,6 +82,67 @@ public class OutlineRepositoryImpl implements OutlineRepository {
     }
 
     @Override
+    public HashMap<String, ArrayList<OutlineRow>> loadAllAsHashMap() {
+        HashMap<String, ArrayList<OutlineRow>> result = new HashMap<>();
+        for (SublistEntity sub : sublistDao.getAll()) {
+            ArrayList<OutlineRow> rows = new ArrayList<>();
+            for (OutlineRowEntity e : rowDao.getRowsForSublist(sub.id)) {
+                OutlineRow row = new OutlineRow();
+                row.text = e.text != null ? e.text : "";
+                row.complete = e.complete;
+                row.collapsed = e.collapsed;
+                row.indent = e.indent;
+                row.reminder = e.reminder;
+                row.isInstr = e.isInstr;
+                rows.add(row);
+            }
+            result.put(sub.name, rows);
+        }
+        return result;
+    }
+
+    @Override
+    public void saveAllAsHashMap(HashMap<String, ArrayList<OutlineRow>> data) {
+        db.runInTransaction(() -> {
+            HashMap<String, Long> existing = new HashMap<>();
+            List<SublistEntity> currentSublists = sublistDao.getAll();
+            for (SublistEntity s : currentSublists) {
+                existing.put(s.name, s.id);
+            }
+            for (SublistEntity s : currentSublists) {
+                if (!data.containsKey(s.name)) {
+                    sublistDao.delete(s.id);
+                }
+            }
+            int position = 0;
+            for (Map.Entry<String, ArrayList<OutlineRow>> entry : data.entrySet()) {
+                Long sublistId = existing.get(entry.getKey());
+                if (sublistId == null) {
+                    sublistId = insertSublist(entry.getKey(), position);
+                } else {
+                    sublistDao.updatePosition(sublistId, position);
+                }
+                ArrayList<OutlineRowEntity> rows = new ArrayList<>();
+                int rowPos = 0;
+                for (OutlineRow row : entry.getValue()) {
+                    OutlineRowEntity entity = new OutlineRowEntity();
+                    entity.sublistId = sublistId;
+                    entity.position = rowPos++;
+                    entity.text = row.text != null ? row.text : "";
+                    entity.complete = row.complete;
+                    entity.collapsed = row.collapsed;
+                    entity.indent = row.indent;
+                    entity.reminder = row.reminder;
+                    entity.isInstr = row.isInstr;
+                    rows.add(entity);
+                }
+                rowDao.replaceForSublist(sublistId, rows);
+                position++;
+            }
+        });
+    }
+
+    @Override
     public void importLegacy(HashMap<String, ArrayList<OutlineRow>> data) {
         db.runInTransaction(() -> {
             int position = 0;

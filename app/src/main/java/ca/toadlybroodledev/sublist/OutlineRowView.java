@@ -90,7 +90,7 @@ public class OutlineRowView {
                             .delete(OutlineRowView.this.f3822e.getText().length() - 1,
                                     OutlineRowView.this.f3822e.getText().length());
                 }
-                OutlineRowView.this.f3818a.mo4779q().m4976a(false, false);
+                OutlineRowView.this.f3818a.mo4779q().saveAllToRepo();
             }
 
             @Override

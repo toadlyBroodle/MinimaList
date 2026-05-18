@@ -30,4 +30,12 @@ public interface OutlineRepository {
     // One-shot legacy migration: imports the HashMap produced by OutlineStore / AppSettings
     // into Room. Called once on first launch after Room is available.
     void importLegacy(HashMap<String, ArrayList<OutlineRow>> data);
+
+    // Reconstructs the in-memory HashMap<sublist-name, row-list> shape from Room. Used by
+    // the active read path that previously deserialized a Gson HashMap from disk.
+    HashMap<String, ArrayList<OutlineRow>> loadAllAsHashMap();
+
+    // Persists the current in-memory state. Walks the HashMap, ensuring each sublist exists
+    // (by name) and atomically replacing its rows.
+    void saveAllAsHashMap(HashMap<String, ArrayList<OutlineRow>> data);
 }

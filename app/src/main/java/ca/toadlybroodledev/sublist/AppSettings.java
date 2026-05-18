@@ -5,11 +5,6 @@ import android.graphics.Color;
 import android.util.Log;
 import ca.toadlybroodledev.sublist.iface.HostContract;
 import ca.toadlybroodledev.sublist.model.OutlineRow;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
 // Ported from decompiled C0566m. Theme/color/typeface settings + outline-list in-memory cache.
@@ -131,19 +126,9 @@ public class AppSettings {
         return Color.parseColor(m4952q());
     }
 
-    protected static ArrayList<OutlineRow> m4937d(boolean z) {
-        try {
-            FileInputStream fis = f3938a.mo4775m().openFileInput(z ? "backupFile" : "jsonListEntries");
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            String str = (String) ois.readObject();
-            ois.close();
-            fis.close();
-            f3954q = new Gson().fromJson(str, new TypeToken<ArrayList<OutlineRow>>() {}.getType());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return f3954q;
-    }
+    // Phase 9.2a: the legacy Gson fallback loader for "jsonListEntries" / "backupFile"
+    // was deleted. Only call site was OutlineStore's recovery branch; the active read path
+    // now goes through OutlineRepository.
 
     static void m4938d(int i) {
         f3936G = i;
@@ -210,20 +195,8 @@ public class AppSettings {
         return true;
     }
 
-    protected static ArrayList<OutlineRow> m4948m() {
-        try {
-            FileInputStream fis = new FileInputStream(
-                    new File(OutlineStore.m4970u(), "backup.sub"));
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            String str = (String) ois.readObject();
-            ois.close();
-            fis.close();
-            f3954q = new Gson().fromJson(str, new TypeToken<ArrayList<OutlineRow>>() {}.getType());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return f3954q;
-    }
+    // Phase 9.2a: the legacy Gson fallback loader for external backup.sub was deleted —
+    // see note above for the same rationale.
 
     // Phase 3.1: removed m4949n() — legacy Firebase RTDB pull.
 

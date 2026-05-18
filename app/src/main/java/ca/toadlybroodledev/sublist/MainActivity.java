@@ -76,27 +76,41 @@ public class MainActivity extends AppCompatActivity
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, f, context.getResources().getDisplayMetrics());
     }
 
+    // Phase 9.2a: load is now async (Room queries must run off the main thread). On callback,
+    // selects the previously-visible fragment (mirroring onStart's old logic) since onStart may
+    // have run first against an empty f3702F.
     void m4755B() {
-        HashMap<String, ArrayList<OutlineRow>> saved = this.f3700D.m4977b(false, false);
-        if (saved != null) {
-            mo4767a(SublistFragment.m4891a(this, saved));
-            return;
-        }
-        SublistFragment frag = new SublistFragment().m4899a(this, (String) null,
-                (ArrayList<OutlineRow>) null);
-        OutlineRowView r1 = new OutlineRowView(this, frag,
-                new OutlineRow(0, getString(R.string.welcome_push_me), false, true, 0L, false));
-        OutlineRowView r2 = new OutlineRowView(this, frag,
-                new OutlineRow(1, getString(R.string.welcome_new_minimalist), false, false, 0L, false));
-        OutlineRowView r3 = new OutlineRowView(this, frag,
-                new OutlineRow(2, getString(R.string.welcome_make_self_home), false, false, 0L, false));
-        frag.mo4849af().m4988a().add(r1);
-        frag.mo4849af().m4988a().get(0).f3824g = true;
-        frag.mo4849af().m4988a().add(r2);
-        frag.mo4849af().m4988a().add(r3);
-        ArrayList<SublistFragment> list = new ArrayList<>();
-        list.add(frag);
-        mo4767a(list);
+        this.f3700D.loadAllFromRepo(saved -> {
+            if (saved != null && !saved.isEmpty()) {
+                mo4767a(SublistFragment.m4891a(this, saved));
+            } else {
+                SublistFragment frag = new SublistFragment().m4899a(this, (String) null,
+                        (ArrayList<OutlineRow>) null);
+                OutlineRowView r1 = new OutlineRowView(this, frag,
+                        new OutlineRow(0, getString(R.string.welcome_push_me), false, true, 0L, false));
+                OutlineRowView r2 = new OutlineRowView(this, frag,
+                        new OutlineRow(1, getString(R.string.welcome_new_minimalist), false, false, 0L, false));
+                OutlineRowView r3 = new OutlineRowView(this, frag,
+                        new OutlineRow(2, getString(R.string.welcome_make_self_home), false, false, 0L, false));
+                frag.mo4849af().m4988a().add(r1);
+                frag.mo4849af().m4988a().get(0).f3824g = true;
+                frag.mo4849af().m4988a().add(r2);
+                frag.mo4849af().m4988a().add(r3);
+                ArrayList<SublistFragment> list = new ArrayList<>();
+                list.add(frag);
+                mo4767a(list);
+            }
+            int idx = AppSettings.f3941d;
+            if (this.f3702F.isEmpty()) {
+                return;
+            }
+            if (idx == -1 || idx >= this.f3702F.size()) {
+                mo4764a(this.f3702F.get(0));
+            } else {
+                mo4764a(this.f3702F.get(idx));
+            }
+            mo4759F();
+        });
     }
 
     @Override
@@ -212,7 +226,7 @@ public class MainActivity extends AppCompatActivity
             this.f3713x.m4798a(f);
         }
         this.f3703G = this.f3702F.indexOf(fragment);
-        this.f3700D.m4976a(false, false);
+        this.f3700D.saveAllToRepo();
     }
 
     @Override
@@ -523,7 +537,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onPause() {
         super.onPause();
-        this.f3700D.m4976a(false, false);
+        this.f3700D.saveAllToRepo();
         try {
             mo4761a(findViewById(R.id.placeholder_for_fragments), false);
         } catch (Error e) {
@@ -551,6 +565,11 @@ public class MainActivity extends AppCompatActivity
     public void onStart() {
         super.onStart();
         // Phase 3.1/3.3: removed Firebase RTDB listener registration.
+        // Phase 9.2a: f3702F may still be empty here if the async Room load hasn't completed;
+        //             the load callback in m4755B re-runs this selection on completion.
+        if (this.f3702F.isEmpty()) {
+            return;
+        }
         int idx = AppSettings.f3941d;
         if (idx == -1 || idx >= this.f3702F.size()) {
             mo4764a(this.f3702F.get(0));
