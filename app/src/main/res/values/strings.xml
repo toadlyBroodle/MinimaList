@@ -209,7 +209,17 @@
     <string name="settings_customize_behaviors">Customize Behaviors</string>
     <string name="settings_del_comp_confirm">Are you sure you want to delete all completed entries?</string>
     <string name="settings_delete_completed">Delete All Completed</string>
+    <string name="settings_export_json">Export JSON</string>
     <string name="settings_export_txt">Export to .txt</string>
+    <string name="settings_import_json">Import JSON</string>
+    <string name="dialog_title_import_json">Import JSON Data</string>
+    <string name="dialog_message_import_json">Choose how to import:\n\nReplace — removes all current lists and loads from file.\nMerge — adds lists from file that do not already exist by name.</string>
+    <string name="dialog_import_replace">Replace</string>
+    <string name="dialog_import_merge">Merge</string>
+    <string name="toast_json_exported">JSON exported.</string>
+    <string name="toast_json_export_fail">Export failed.</string>
+    <string name="toast_json_imported">JSON imported.</string>
+    <string name="toast_json_import_fail">Import failed. Not a valid JSON export file.</string>
     <string name="settings_help_poor_dev_header">Contribute to MinimaList development</string>
     <string name="settings_load_backup">Load Backup</string>
     <string name="settings_privacy_policy">Privacy Policy</string>

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
@@ -15,13 +16,16 @@ import ca.toadlybroodledev.sublist.iface.HostContract;
 import ca.toadlybroodledev.sublist.model.OutlineRow;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -72,6 +76,51 @@ public class OutlineStore extends AppSettings {
             HashMap<String, ArrayList<OutlineRow>> data = repo.loadAllAsHashMap();
             main.post(() -> callback.onLoaded(data));
         });
+    }
+
+    // Phase 9.3: capture the current in-memory outline on the calling (main) thread, then
+    // write it as plain Gson JSON to a user-chosen SAF URI on the IO executor.
+    void exportToUri(Uri uri) {
+        String json = new Gson().toJson(SublistFragment.m4892a(f3938a.mo4786x()));
+        Context ctx = f3938a.mo4775m();
+        Handler main = new Handler(Looper.getMainLooper());
+        AppMain.io().execute(() -> {
+            try (OutputStream os = ctx.getContentResolver().openOutputStream(uri, "wt")) {
+                if (os == null) throw new IOException("null OutputStream for URI");
+                os.write(json.getBytes("UTF-8"));
+                main.post(() -> Toast.makeText(ctx, R.string.toast_json_exported,
+                        Toast.LENGTH_SHORT).show());
+            } catch (Exception e) {
+                Log.e(f3974s, "exportToUri failed: " + e.getMessage());
+                main.post(() -> Toast.makeText(ctx, R.string.toast_json_export_fail,
+                        Toast.LENGTH_SHORT).show());
+            }
+        });
+    }
+
+    // Phase 9.3: read a JSON outline from a SAF URI and return the parsed HashMap.
+    // Must be called on a background thread (IO). Returns null on any parse/IO failure.
+    static HashMap<String, ArrayList<OutlineRow>> importFromUri(Context ctx, Uri uri) {
+        try (InputStream is = ctx.getContentResolver().openInputStream(uri)) {
+            if (is == null) return null;
+            byte[] bytes = readAllBytes(is);
+            String json = new String(bytes, "UTF-8");
+            return new Gson().fromJson(json,
+                    new TypeToken<HashMap<String, ArrayList<OutlineRow>>>() {}.getType());
+        } catch (Exception e) {
+            Log.e("fucknOutlineStore", "importFromUri failed: " + e.getMessage());
+            return null;
+        }
+    }
+
+    private static byte[] readAllBytes(InputStream is) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        byte[] buf = new byte[4096];
+        int n;
+        while ((n = is.read(buf)) != -1) {
+            baos.write(buf, 0, n);
+        }
+        return baos.toByteArray();
     }
 
     static Bitmap m4961a(Context context) {

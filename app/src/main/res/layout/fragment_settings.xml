@@ -123,6 +123,28 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
             android:text="@string/settings_export_txt"/>
+        <Button
+            android:id="@+id/settings_export_json"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="4dp"
+            android:text="@string/settings_export_json"/>
+        <Button
+            android:id="@+id/settings_import_json"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/settings_import_json"/>
         <View
             android:background="@color/colorAccent"
             android:layout_width="match_parent"

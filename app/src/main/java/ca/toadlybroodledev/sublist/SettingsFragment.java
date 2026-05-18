@@ -1,10 +1,13 @@
 package ca.toadlybroodledev.sublist;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,14 +21,21 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import ca.toadlybroodledev.sublist.iface.HostContract;
+import ca.toadlybroodledev.sublist.iface.RowActionListener;
 import ca.toadlybroodledev.sublist.model.OutlineRow;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 // Ported from decompiled ViewOnClickListenerC0562i. Settings page with spinners, switches, buttons.
 // Premium gate on export-txt removed (Phase 3.5). Cloud sync methods removed (Phase 3.1/3.3).
+// Phase 9.3: JSON export (SAF ACTION_CREATE_DOCUMENT) + JSON import (ACTION_OPEN_DOCUMENT)
+//            with replace-vs-merge dialog.
 public class SettingsFragment extends Fragment
         implements View.OnClickListener, AdapterView.OnItemSelectedListener {
+
+    static final int REQUEST_EXPORT_JSON = 1001;
+    static final int REQUEST_IMPORT_JSON = 1002;
 
     LinearLayout f3871a;
     Button f3872ae;
@@ -36,6 +46,8 @@ public class SettingsFragment extends Fragment
     Button f3877aj;
     Button f3878ak;
     Button f3879al;
+    Button f3880am; // Export JSON (SAF)
+    Button f3880ao; // Import JSON (SAF)
     private HostContract f3881an;
     Switch f3883c;
     Switch f3884d;
@@ -79,6 +91,8 @@ public class SettingsFragment extends Fragment
         this.f3874ag = (Button) this.f3881an.mo4760a(Integer.valueOf(R.id.settings_backup_data));
         this.f3875ah = (Button) this.f3881an.mo4760a(Integer.valueOf(R.id.settings_load_backup));
         this.f3876ai = (Button) this.f3881an.mo4760a(Integer.valueOf(R.id.settings_export_txt));
+        this.f3880am = (Button) this.f3881an.mo4760a(Integer.valueOf(R.id.settings_export_json));
+        this.f3880ao = (Button) this.f3881an.mo4760a(Integer.valueOf(R.id.settings_import_json));
         this.f3885e = (Spinner) this.f3881an.mo4760a(Integer.valueOf(R.id.settings_bg_color));
         this.f3886f = (Spinner) this.f3881an.mo4760a(Integer.valueOf(R.id.settings_text_color));
         this.f3887g = (Spinner) this.f3881an.mo4760a(Integer.valueOf(R.id.settings_accent_color));
@@ -94,6 +108,8 @@ public class SettingsFragment extends Fragment
         this.f3874ag.setOnClickListener(this);
         this.f3875ah.setOnClickListener(this);
         this.f3876ai.setOnClickListener(this);
+        this.f3880am.setOnClickListener(this);
+        this.f3880ao.setOnClickListener(this);
         this.f3885e.setOnItemSelectedListener(this);
         this.f3886f.setOnItemSelectedListener(this);
         this.f3887g.setOnItemSelectedListener(this);
@@ -194,6 +210,91 @@ public class SettingsFragment extends Fragment
                 Uri.parse("http://toadlybroodle.ca/portfolio/apps/apps-privacy-policy/")));
     }
 
+    // Phase 9.3: launch SAF file-creation picker; result handled in onActivityResult.
+    void m4891ag() {
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("application/json");
+        intent.putExtra(Intent.EXTRA_TITLE, "sublist_export.json");
+        startActivityForResult(intent, REQUEST_EXPORT_JSON);
+    }
+
+    // Phase 9.3: launch SAF file-open picker; result handled in onActivityResult.
+    void m4892ah() {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("*/*");
+        startActivityForResult(intent, REQUEST_IMPORT_JSON);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != Activity.RESULT_OK || data == null) return;
+        Uri uri = data.getData();
+        if (uri == null) return;
+
+        if (requestCode == REQUEST_EXPORT_JSON) {
+            this.f3881an.mo4779q().exportToUri(uri);
+        } else if (requestCode == REQUEST_IMPORT_JSON) {
+            android.content.Context ctx = this.f3881an.mo4775m();
+            new AlertDialog.Builder(ctx)
+                    .setTitle(R.string.dialog_title_import_json)
+                    .setMessage(R.string.dialog_message_import_json)
+                    .setPositiveButton(R.string.dialog_import_replace,
+                            (dialog, which) -> doImportReplace(ctx, uri))
+                    .setNeutralButton(R.string.dialog_import_merge,
+                            (dialog, which) -> doImportMerge(ctx, uri))
+                    .setNegativeButton(R.string.cancel, null)
+                    .show();
+        }
+    }
+
+    private void doImportReplace(android.content.Context ctx, Uri uri) {
+        Handler main = new Handler(Looper.getMainLooper());
+        AppMain.io().execute(() -> {
+            HashMap<String, ArrayList<OutlineRow>> map = OutlineStore.importFromUri(ctx, uri);
+            if (map == null) {
+                main.post(() -> Toast.makeText(ctx, R.string.toast_json_import_fail,
+                        Toast.LENGTH_SHORT).show());
+                return;
+            }
+            main.post(() -> {
+                this.f3881an.mo4769a(map);
+                this.f3881an.mo4779q().saveAllToRepo();
+                Toast.makeText(ctx, R.string.toast_json_imported, Toast.LENGTH_SHORT).show();
+            });
+        });
+    }
+
+    private void doImportMerge(android.content.Context ctx, Uri uri) {
+        Handler main = new Handler(Looper.getMainLooper());
+        AppMain.io().execute(() -> {
+            HashMap<String, ArrayList<OutlineRow>> map = OutlineStore.importFromUri(ctx, uri);
+            if (map == null) {
+                main.post(() -> Toast.makeText(ctx, R.string.toast_json_import_fail,
+                        Toast.LENGTH_SHORT).show());
+                return;
+            }
+            main.post(() -> {
+                HashSet<String> existingNames = new HashSet<>();
+                for (SublistFragment sf : this.f3881an.mo4786x()) {
+                    existingNames.add(sf.mo4848ae());
+                }
+                HashMap<String, ArrayList<OutlineRow>> toAdd = new HashMap<>();
+                for (String key : map.keySet()) {
+                    if (!existingNames.contains(key)) toAdd.put(key, map.get(key));
+                }
+                if (!toAdd.isEmpty()) {
+                    ((RowActionListener) this.f3881an).mo4767a(
+                            SublistFragment.m4891a(this.f3881an, toAdd));
+                    this.f3881an.mo4779q().saveAllToRepo();
+                }
+                Toast.makeText(ctx, R.string.toast_json_imported, Toast.LENGTH_SHORT).show();
+            });
+        });
+    }
+
     @Override
     public void onClick(View view) {
         int id = view.getId();
@@ -205,9 +306,13 @@ public class SettingsFragment extends Fragment
             this.f3882b.show(this.f3881an.mo4785w(), "dialog_prefs");
         } else if (id == R.id.settings_delete_completed) {
             m4889af();
+        } else if (id == R.id.settings_export_json) {
+            m4891ag();
         } else if (id == R.id.settings_export_txt) {
             // Premium gate removed: export always allowed.
             OutlineStore.m4967r();
+        } else if (id == R.id.settings_import_json) {
+            m4892ah();
         } else if (id == R.id.settings_load_backup) {
             m4887ad();
         } else if (id == R.id.settings_privacy_policy) {

@@ -11,6 +11,7 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Append-on-close, newest first. Trim to most recent 10.
 -->
 
+- 9.3 JSON export (OutlineStore.exportToUri via SAF ACTION_CREATE_DOCUMENT) + JSON import (ACTION_OPEN_DOCUMENT, replace-vs-merge AlertDialog, merge via RowActionListener.mo4767a) + close batch-sizing meta-item by batching same-phase 9.3; tests 138 → 151 — by sst-dev-cycle at 2026-05-19T06:45Z
 - fix MainActivity:82 async-callback guard (isFinishing/isDestroyed/isStateSaved) + Mockito behavioral tests for OutlineRepositoryImpl (16 tests: replaceRowsForSublist delegation, importLegacy transaction+field mapping, loadAllAsHashMap, saveAllAsHashMap); tests 121 → 138 — by sst-dev-cycle at 2026-05-19T05:30Z
 - 9.2a: wire OutlineRepository through MainActivity (async load callback) + OutlineRowView autosave; AppMain owns SublistDatabase/repo + io() executor + first-launch importLegacy gated on repo_migrated_v1 SharedPrefs flag; delete AppSettings m4937d/m4948m legacy Gson fallback loaders; tests 112 → 121 — by sst-dev-cycle at 2026-05-19T03:00Z
 - fix replaceRowsForSublist atomicity (@Transaction default on OutlineRowDao) + importLegacy runInTransaction wrap; tests 108 → 112 — by sst-dev-cycle at 2026-05-19T02:00Z
@@ -32,8 +33,6 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Order: blockers first, then highest-impact.
 -->
 
-- [easy] [should-fix] [batch-sizing] direction=undersized difficulty=medium actual=68k band=200-300k; [medium] 9.3 (JSON export) was available in queue — review of 5ab0853
 - [easy] 7.1 `adb install -r` succeeds with no Play Protect warnings. Reason: blocked on adb + physical device in WSL build environment; skip to Phase 9 work until device is available.
 - [easy] 7.2 App launches without ANR/crash; `adb logcat | grep AndroidRuntime` clean for 60s. Reason: same hardware blocker as 7.1.
 - [easy] 7.3 Home-screen widget can be added without crashing launcher; widget renders even if empty. Reason: same hardware blocker as 7.1.
-- [medium] 9.3 JSON export → SAF picker → user-chosen file; JSON import with replace-vs-merge prompt. Reason: next item in Phase 9 queue.
