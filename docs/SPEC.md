@@ -64,8 +64,8 @@ Excise every Firebase, GMS, AdMob, Sign-In, App-Invite, Cast, FCM, Crashlytics a
 
 File-by-file move from `decompiled/sources/ca/toadlybroodledev/sublist/` into `app/src/main/java/ca/toadlybroodledev/sublist/`, applying the Phase 2 rename map. Each file gets compiled in isolation as it lands (`./gradlew :app:compileDebugJavaWithJavac`). Stay in Java for the port; defer Kotlin conversion to a later phase.
 
-- [ ] 4.1 [medium] Port `util/` (formerly `p030a`) — 9 helper classes, smallest surface, no UI deps, easiest to verify in isolation.
-- [ ] 4.2 [medium] Port `model/` (formerly `p032c`) — 3 data classes; confirm Firebase annotations are gone and `OutlineRow` is plain POJO.
+- [x] 4.1 [medium] Port `util/` (formerly `p030a`) — 9 helper classes, smallest surface, no UI deps, easiest to verify in isolation. **N/A: `p030a` was re-classified as the IAB v3 billing helper library and deleted entirely in Phase 3.5. Nothing to port.**
+- [x] 4.2 [medium] Port `model/` (formerly `p032c`) — 3 data classes; confirm Firebase annotations are gone and `OutlineRow` is plain POJO.
 - [ ] 4.3 [medium] Port `iface/` (formerly `p031b`) — 4 callback interfaces; trivial once `model/` exists.
 - [ ] 4.4 [medium] Port the 16 obfuscated root-package classes (`C0538a` … `C0572s`) under their Phase-2 names; expect ~half are fragments / dialogs / adapters and half are utility helpers.
 - [ ] 4.5 [medium] Port the 6 already-named classes (`ActMain`, `AppMain`, `WidgetProvider`, `ReceiverNotification`, `Fab`, `DrawerCustomLayout`, `R`); `R.java` is generated, not copied — delete the decompiled one.
