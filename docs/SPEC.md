@@ -195,6 +195,9 @@ covering menu/fragment/strings/manifest surfaces; -1 retired `profileFragmentCla
 +1 method-count adjustment in `IfacePackageTest.hostContractExcludesDeletedTypeReturners`
 for `mo4776n` absence).
 
+**Review follow-ups (open — schedule as the next `/sst-dev-cycle` cycle):**
+- [ ] [easy] [should-fix] `MainActivity.java` — The Phase 7 Moto G install has `ProfileFragment` in its `FragmentManager` saved state (it was unconditionally `tx.add()`-ed every launch in HEAD~1). After `adb install -r` (app data preserved), Android restores that saved state on first launch and calls `FragmentFactory.instantiate("...ProfileFragment")` → class not found → `Fragment.InstantiationException` crash before `onCreate` completes. Proposed fix: add a one-cycle stub `app/src/main/java/ca/toadlybroodledev/sublist/ProfileFragment.java` (`public class ProfileFragment extends Fragment {}`) so saved-state restore succeeds; drop the stub in Phase 10.2 during the package rename.
+
 ## Deferred / out of scope
 
 - Re-listing on the Play Store. Side-load only for now; if we re-list, Play Console requires a privacy policy + data-handling disclosure that's only worth writing once the local-only architecture is stable. Revisit after Phase 9.
