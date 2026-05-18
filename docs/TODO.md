@@ -10,6 +10,7 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Append-on-close, newest first. Trim to most recent 10.
 -->
 
+- ProfileFragment FM-crash stub + 10.3 colors.xml muted M3 neutral palette (colorAccent/Primary/PrimaryDark + firebase* vestigials); tests 172 → 178 — by sst-dev-cycle at 2026-05-19T14:15Z
 - Phase 10.4+10.5: drop Profile/Invite drawer menu entries; delete ProfileFragment + HostContract.mo4776n; wire SettingsFragment "Contribute on GitHub" button to github.com/toadlyBroodle/MinimaList with https <queries>; remove 30+ orphaned cloud/premium/invite strings; tests 160 → 172 — by sst-dev-cycle at 2026-05-19T12:30Z
 - Phase 7 device smoke test: fix activity_main.xml stub layout + <array>→<string-array> AAPT color-type NPE + SublistFragment.onAttach f3901c init; tests 153 → 160 — by sst-dev-cycle at 2026-05-19T11:00Z
 - strengthen Phase9SettingsFragmentLifecycleTest: replace 4 bare src.contains() with 2 countOccurrences()>=2 checks; tests 155 → 153 — by sst-dev-cycle at 2026-05-19T08:15Z
@@ -31,8 +32,6 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Order: blockers first, then highest-impact.
 -->
 
-- [easy] [should-fix] MainActivity.java — add stub ProfileFragment.java to survive FragmentManager saved-state restore after Phase 10.4 upgrade (crashes on Moto G device: class no longer exists but is named in saved FM state) — review of dba1573
-- [easy] 10.3 Modernize res/values/colors.xml with a muted Material 3 neutral palette under the existing color-resource names. Reason: Phase 10 UI/branding refresh; cosmetic-only, no theme-attribute churn.
 - [medium] 10.1 Display rename residuals: rename `sublist_collection_backup` filename pattern in `info_save_loc` to `MinimaList_collection_backup`; sweep prose in `docs/SPEC.md` Goal section + `docs/RENAME-MAP.md` / `docs/REMOVED-CLOUD-SURFACE.md` for forward-looking "sublist" → "MinimaList" references (preserve historical phase descriptions). Reason: most of 10.1 was already done before Phase 10 was queued; what remains is a residual backup-filename pattern + prose sweep.
 - [hard] 10.2 Code rename: package + applicationId `ca.toadlybroodledev.sublist` → `ca.toadlybroodledev.minimalist`; rename Sublist* classes that refer to the app itself (SublistDatabase, SublistFragment, WelcomeSublistFragment, SearchSublistFragment) while preserving domain-object types (SublistEntity, SublistDao, SublistRenderer). Provide a one-shot legacy-DB migration path from the old package's filesDir. Reason: Phase 10 closeout; should be its own cycle due to broad mechanical scope and install-identity change.
 - [hard] 8.1 CRUD: create/edit/delete outline rows; nesting indent works; collapsed-state persists across app restart. Reason: Phase 7 device test passed; Phase 9 Room wiring in place; acceptance testing can now begin.

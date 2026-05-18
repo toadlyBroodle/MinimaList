@@ -64,12 +64,23 @@ public class Phase10MenuSurfacePruneTest {
                 xml.contains("@+id/menu_invite"));
     }
 
-    // ---- 10.4: ProfileFragment deletion ------------------------------------
+    // ---- 10.4: ProfileFragment forward-compat stub -------------------------
+    // Phase 10.4 deleted the real ProfileFragment; a minimal stub must remain
+    // so FragmentManager saved-state restore on Moto G upgrade doesn't crash
+    // with InstantiationException. Stub is dropped in Phase 10.2 rename.
 
     @Test
-    public void profileFragmentFileDeleted() {
-        assertFalse("ProfileFragment.java must be deleted (Phase 10.4)",
+    public void profileFragmentIsMinimalStub() {
+        assertTrue("ProfileFragment.java stub must exist (Phase 10.4 FM crash fix)",
                 exists("app/src/main/java/ca/toadlybroodledev/sublist/ProfileFragment.java"));
+        String src = read(
+                "app/src/main/java/ca/toadlybroodledev/sublist/ProfileFragment.java");
+        assertTrue("ProfileFragment stub must extend Fragment",
+                src.contains("extends Fragment"));
+        assertFalse("ProfileFragment stub must not contain cloud-profile code",
+                src.contains("mo4865ac"));
+        assertFalse("ProfileFragment stub must not import Firebase",
+                src.contains("import com.google.firebase"));
     }
 
     @Test
