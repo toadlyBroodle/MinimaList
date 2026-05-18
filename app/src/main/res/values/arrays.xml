@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="colors_300_array">
+        <item>Highlighted Color</item>
+        <item>#e57373</item>
+        <item>#F06292</item>
+        <item>#BA68C8</item>
+        <item>#9575CD</item>
+        <item>#7986CB</item>
+        <item>#64B5F6</item>
+        <item>#4FC3F7</item>
+        <item>#4DD0E1</item>
+        <item>#4DB6AC</item>
+        <item>#81C784</item>
+        <item>#AED581</item>
+        <item>#DCE775</item>
+        <item>#FFF176</item>
+        <item>#FFD54F</item>
+        <item>#FFB74D</item>
+        <item>#FF8A65</item>
+        <item>#A1887F</item>
+        <item>#9e9e9e</item>
+        <item>#606365</item>
+        <item>#2a2a2a</item>
+    </array>
+    <array name="colors_500_array">
+        <item>Background Color</item>
+        <item>#f44336</item>
+        <item>#E91E63</item>
+        <item>#9C27B0</item>
+        <item>#673AB7</item>
+        <item>#3F51B5</item>
+        <item>#2196F3</item>
+        <item>#03A9F4</item>
+        <item>#00BCD4</item>
+        <item>#009688</item>
+        <item>#4CAF50</item>
+        <item>#8BC34A</item>
+        <item>#CDDC39</item>
+        <item>#FFEB3B</item>
+        <item>#FFC107</item>
+        <item>#FF9800</item>
+        <item>#FF5722</item>
+        <item>#795548</item>
+        <item>#bdbdbd</item>
+        <item>#495153</item>
+        <item>#050505</item>
+    </array>
+    <array name="colors_700_array">
+        <item>Title Bar Color</item>
+        <item>#d32f2f</item>
+        <item>#C2185B</item>
+        <item>#7B1FA2</item>
+        <item>#512DA8</item>
+        <item>#303F9F</item>
+        <item>#1976D2</item>
+        <item>#0288D1</item>
+        <item>#0097A7</item>
+        <item>#00796B</item>
+        <item>#388E3C</item>
+        <item>#689F38</item>
+        <item>#AFB42B</item>
+        <item>#FBC02D</item>
+        <item>#FFA000</item>
+        <item>#F57C00</item>
+        <item>#E64A19</item>
+        <item>#5D4037</item>
+        <item>#757575</item>
+        <item>#2B2B2B</item>
+        <item>#000000</item>
+    </array>
+    <array name="colors_a400_array">
+        <item>Accent Color</item>
+        <item>#ff1744</item>
+        <item>#F50057</item>
+        <item>#D500F9</item>
+        <item>#651FFF</item>
+        <item>#3D5AFE</item>
+        <item>#2979FF</item>
+        <item>#00B0FF</item>
+        <item>#00E5FF</item>
+        <item>#1DE9B6</item>
+        <item>#00E676</item>
+        <item>#76FF03</item>
+        <item>#C6FF00</item>
+        <item>#FFEA00</item>
+        <item>#FFC400</item>
+        <item>#FF9100</item>
+        <item>#FF3D00</item>
+        <item>#A1887F</item>
+        <item>#9e9e9e</item>
+        <item>#606365</item>
+        <item>#2a2a2a</item>
+    </array>
+    <array name="colors_text_array">
+        <item>Text Color</item>
+        <item>#FAFAFA</item>
+        <item>#616161</item>
+        <item>#101010</item>
+    </array>
+    <array name="colors_text_compl_array">
+        <item>Text Completed Color</item>
+        <item>#BDBDBD</item>
+        <item>#424242</item>
+        <item>#212121</item>
+    </array>
+    <array name="size_text_array">
+        <item>Text Size</item>
+        <item>16f</item>
+        <item>20f</item>
+        <item>24f</item>
+    </array>
+</resources>

@@ -1,10 +1,9 @@
 package ca.toadlybroodledev.sublist.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 // Ported from decompiled p032c/C0554a. Plain POJO — Firebase annotations stripped in Phase 3.1.
-// getListOfEntSers(ArrayList<OutlineRowView>) omitted here; restored in Phase 4.4 when
-// OutlineRowView (C0557d) is ported into the active tree.
 public class OutlineRow implements Serializable {
     public int indent;
     public String text;
@@ -24,5 +23,16 @@ public class OutlineRow implements Serializable {
         this.collapsed = collapsed;
         this.reminder = reminder;
         this.isInstr = isInstr;
+    }
+
+    // Deferred from 4.2 (needed OutlineRowView to exist). Serializes the visible row
+    // view list to plain data objects for JSON backup.
+    public static ArrayList<OutlineRow> getListOfEntSers(ArrayList<ca.toadlybroodledev.sublist.OutlineRowView> rows) {
+        ArrayList<OutlineRow> result = new ArrayList<>();
+        for (ca.toadlybroodledev.sublist.OutlineRowView rv : rows) {
+            result.add(new OutlineRow(rv.m4859a(), rv.f3822e.getText().toString(),
+                    rv.f3823f, rv.f3824g, rv.f3825h, rv.f3826i));
+        }
+        return result;
     }
 }

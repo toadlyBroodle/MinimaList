@@ -16,6 +16,7 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Append-on-close, newest first. Trim to most recent 10.
 -->
 
+- 4.4 [medium] Port 17 obfuscated root-package classes (AppSettings, OutlineStore, OutlineTree, OutlineRowView, SublistFragment, Clipboard, DateTimeUtil, SublistRenderer, IndentManager, StringArraySpinnerAdapter, DrawerToggle, NewSublistDialog, WelcomeSublistFragment, SettingsDialog, ProfileFragment, SearchSublistFragment, SettingsFragment); replace all 4.3 stubs; port 3 of 6 named-class 4.5 items (DrawerCustomLayout, OutlineFab, ReceiverNotification); add getListOfEntSers to OutlineRow; add Gson dep; add arrays/bools/integers.xml; tests 15 → 54 — by sst-dev-cycle at 2026-05-18T14:00Z
 - 4.3 [medium] Port iface/ — 4 interfaces (HostContract 23 methods, RowActionListener 6, FragmentHost 2, OutlineHost 6); 4 deleted methods/stubs excised; 8 Phase-4.4 forward-ref stubs created; tests 4 → 15 — by sst-dev-cycle at 2026-05-18T11:15Z
 - 4.1 + 4.2 [medium] Phase 4 started: 4.1 closed as N/A (p030a deleted in Phase 3.5; nothing to port); 4.2 port of `model/OutlineRow` to active tree as plain POJO — Firebase annotations already stripped, `getListOfEntSers` deferred until OutlineRowView (C0557d) lands in 4.4. JUnit test suite added (0 → 4 tests). `./gradlew assembleDebug` green — by sst-dev-cycle at 2026-05-18T10:15Z
 - 2.1 + 2.3 [medium] Phase 2 closed: every remaining obfuscated identifier in the app package mapped end-to-end (22 classes + 4 interfaces + 2 models). Key reveals: `C0571r` = `OutlineTree`, `C0566m`/`C0567n` = `AppSettings`/`OutlineStore` (split-candidates post-Phase-3), `AbstractC0565l` = `Clipboard`, `InterfaceC0549a` = `HostContract` (26-method master sole-implemented by ActMain). `RENAME-MAP.md` now carries renames + evidence cites for every class, plus a 10-entry deletion table. Zero `[needs-runtime-trace]` items. Phase 4 ports unblocked — by hand at 2026-05-18T09:35Z
@@ -38,4 +39,4 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Order: blockers first, then highest-impact.
 -->
 
-- [medium] 4.4 Port the 16 renamed root-package classes (`AppSettings`, `OutlineStore`, `OutlineTree`, `OutlineRowView`, `SublistFragment`, `Clipboard`, `DateTimeUtil`, `SublistRenderer`, `IndentManager`, `StringArraySpinnerAdapter`, `DrawerToggle`, `NewSublistDialog`, `WelcomeSublistFragment`, etc.) — replace Phase 4.3 stubs with full ports. Reason: SPEC Phase 4; unblocks 4.5 and build green check (4.7).
+- [medium] 4.5 Port the 3 remaining already-named root-package classes (`ActMain`, `AppMain`, `WidgetProvider`); delete decompiled `R.java` (generated, not copied). Reason: SPEC Phase 4; 3 of 6 named classes already done in 4.4; completes the class-port surface.
