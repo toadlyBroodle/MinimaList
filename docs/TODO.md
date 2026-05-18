@@ -15,6 +15,7 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Append-on-close, newest first. Trim to most recent 10.
 -->
 
+- 6.6/6.7 lint errors fixed: super.onBackPressed() in MainActivity; Fab→OutlineFab in layout-large XML; tests 83 → 85 — by sst-dev-cycle at 2026-05-18T22:30Z
 - Phase 6 closed (6.1–6.5): lint punch list captured; queries block for mailto:; scoped storage path (getExternalFilesDir); FLAG_IMMUTABLE on all PendingIntents; tests 76 → 83 — by sst-dev-cycle at 2026-05-18T21:45Z
 - [should-fix] strengthen appMainRegistersChannel() to assert Build.VERSION.SDK_INT >= Build.VERSION_CODES.O guard in AppMain.java; tests 76 → 76 — by sst-dev-cycle at 2026-05-18T21:00Z
 - 6.2 register CHANNEL_REMINDERS in AppMain.onCreate(); substitute at ReceiverNotification + MainActivity.mo4759F(); assembleDebug green; tests 71 → 76 — by sst-dev-cycle at 2026-05-18T20:15Z
@@ -36,8 +37,6 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Order: blockers first, then highest-impact.
 -->
 
-- [easy] 6.1-lint-fix-a Fix MissingSuperCall: MainActivity.onBackPressed() must call super.onBackPressed(). Reason: lint Error — omitting super breaks predictive-back gesture on API 33+.
-- [easy] 6.1-lint-fix-b Fix MissingClass: layout XML references ca.toadlybroodledev.sublist.Fab; rename to OutlineFab in affected layout file(s). Reason: lint Error — layout inflation crashes at runtime.
 - [medium] 6.1-lint-fix-c Fix WrongConstant (19 errors): replace raw string args to getSystemService("notification"/"input_method") with Context.NOTIFICATION_SERVICE/Context.INPUT_METHOD_SERVICE; fix Toast.LENGTH raw 0/1 → Toast.LENGTH_SHORT/LONG; fix DrawerLayout.setDrawerLockMode/openDrawer/closeDrawer raw int args. Reason: lint Error — type-unsafe API calls produce wrong behavior on some API levels.
 - [medium] 6.1-lint-fix-d Add POST_NOTIFICATIONS permission check before NotificationManager.notify() calls (2 sites: ReceiverNotification + MainActivity.mo4759F) on API 33+. Reason: lint Warning (NotificationPermission) — silent notification drop on API 33+ without runtime permission.
 

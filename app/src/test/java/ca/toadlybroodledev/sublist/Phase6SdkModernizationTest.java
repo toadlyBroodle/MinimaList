@@ -49,6 +49,49 @@ public class Phase6SdkModernizationTest {
         }
     }
 
+    private String readXml(String relativePath) {
+        try {
+            File f = new File(projectRoot(), relativePath);
+            return new String(Files.readAllBytes(f.toPath()));
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    private List<String> allLayoutXmls() {
+        List<String> paths = new ArrayList<>();
+        for (String dir : new String[]{"app/src/main/res/layout", "app/src/main/res/layout-large"}) {
+            File d = new File(projectRoot(), dir);
+            if (!d.isDirectory()) continue;
+            for (File f : d.listFiles()) {
+                if (f.getName().endsWith(".xml")) paths.add(dir + "/" + f.getName());
+            }
+        }
+        return paths;
+    }
+
+    // --- 6.1-lint-fix-a ---
+
+    @Test
+    public void mainActivityOnBackPressedCallsSuper() {
+        String src = readSource("app/src/main/java/ca/toadlybroodledev/sublist/MainActivity.java");
+        assertTrue("MainActivity.onBackPressed() must call super.onBackPressed() (MissingSuperCall lint error;"
+                + " omitting super breaks predictive-back gesture on API 33+)",
+                src.contains("super.onBackPressed()"));
+    }
+
+    // --- 6.1-lint-fix-b ---
+
+    @Test
+    public void noFabClassReferenceInLayouts() {
+        for (String path : allLayoutXmls()) {
+            String xml = readXml(path);
+            assertFalse("Layout " + path + " must not reference ca.toadlybroodledev.sublist.Fab"
+                    + " (class does not exist; use OutlineFab — MissingClass lint error causes runtime crash)",
+                    xml.contains("ca.toadlybroodledev.sublist.Fab"));
+        }
+    }
+
     // --- 6.3 ---
 
     @Test

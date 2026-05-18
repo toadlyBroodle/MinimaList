@@ -68,7 +68,7 @@
             app:itemTextColor="@drawable/drawer_item_color"
             app:menu="@menu/drawer_menu"/>
     </ca.toadlybroodledev.sublist.DrawerCustomLayout>
-    <ca.toadlybroodledev.sublist.Fab
+    <ca.toadlybroodledev.sublist.OutlineFab
         android:id="@+id/fab"
         android:clickable="true"
         android:layout_width="wrap_content"

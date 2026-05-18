@@ -391,7 +391,7 @@ public class MainActivity extends AppCompatActivity
             return;
         }
         if (f3696w) {
-            finish();
+            super.onBackPressed();
         } else {
             Toast.makeText(this, R.string.toast_back_exit, 0).show();
             f3696w = true;
