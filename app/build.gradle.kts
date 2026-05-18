@@ -47,4 +47,5 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     annotationProcessor(libs.androidx.room.compiler)
     testImplementation(libs.junit)
+    testImplementation(libs.mockito.core)
 }

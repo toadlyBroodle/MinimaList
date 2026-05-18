@@ -81,6 +81,11 @@ public class MainActivity extends AppCompatActivity
     // have run first against an empty f3702F.
     void m4755B() {
         this.f3700D.loadAllFromRepo(saved -> {
+            // Guard: the activity may have reached onSaveInstanceState (or been destroyed)
+            // by the time the Room background query posts its result back to the main thread
+            // (rotation, user backgrounds during first-launch importLegacy). FragmentManager
+            // forbids commit() after state save; isStateSaved() catches that window precisely.
+            if (isFinishing() || isDestroyed() || this.f3706p.isStateSaved()) return;
             if (saved != null && !saved.isEmpty()) {
                 mo4767a(SublistFragment.m4891a(this, saved));
             } else {
