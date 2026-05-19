@@ -578,10 +578,12 @@ public class MainActivity extends AppCompatActivity
         super.onStop();
         // Phase 3.1/3.3: removed Firebase RTDB listener deregistration.
         mo4764a((OutlineFragment) null);
-        try {
-            OutlineStore.m4962a(this.f3702F.get(AppSettings.f3941d).m4903ag());
-        } catch (Throwable t) {
-            t.printStackTrace();
+        if (!this.f3702F.isEmpty() && AppSettings.f3941d >= 0 && AppSettings.f3941d < this.f3702F.size()) {
+            try {
+                OutlineStore.m4962a(this.f3702F.get(AppSettings.f3941d).m4903ag());
+            } catch (Throwable t) {
+                t.printStackTrace();
+            }
         }
         Intent intent = new Intent(this, WidgetProvider.class);
         intent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
