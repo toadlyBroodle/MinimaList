@@ -141,6 +141,13 @@ public class OutlineTree {
     }
 
     void m4995b() {
+        // Search-mode add-new: f3898ao != -1 but visible rows can still be empty when the
+        // search has filtered everything out. Fall back to the root-level add path so the
+        // user gets a row appended instead of a crash. Same IOOBE shape as bd4b8ac.
+        if (this.f3987b.isEmpty()) {
+            m4991a((OutlineRow) null);
+            return;
+        }
         OutlineRowView rv = new OutlineRowView(this.hostContract, this.f3986a,
                 new OutlineRow(this.f3987b.get(0).m4859a(), "", false, false, 0L, false));
         m4989a(this.f3990e.indexOf(this.f3987b.get(this.f3987b.size() - 1)) + 1, rv);

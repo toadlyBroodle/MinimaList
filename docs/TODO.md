@@ -10,6 +10,7 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Append-on-close, newest first. Trim to most recent 10.
 -->
 
+- Phase 8.1 CRUD-audit prep: guard OutlineTree.m4995b against empty f3987b — search-mode add-new (mo4851al when no row focused + f3898ao != -1) called f3987b.get(0)/get(size-1) without an isEmpty() check, IOOBE when search filter narrows to zero rows; fall back to m4991a((OutlineRow) null) (the non-search root-add path); same shape as bd4b8ac MainActivity.onStop AIOOBE fix; device smoke (Moto G API 30) launches clean, no fatal exceptions; tests 206 → 208 — by sst-dev-cycle at 2026-05-19T03:45Z
 - MainActivity.onStop:582 guard: wrap OutlineStore.m4962a call with isEmpty()/f3941d>=0/f3941d<size() check to prevent AIOOBE on first-launch / no-sublists; tests 203 → 206 — by sst-dev-cycle at 2026-05-19T22:00Z
 - Phase 10.2 closeout: delete ProfileFragment stub + AppSettings.m4935c/m4946k orphaned analytics methods + f3937H field/prefs; Phase 7 re-smoke ca.toadlybroodledev.minimalist.dev on Moto G (install OK, launcher/widget/MainActivity bind clean, no fatal exceptions); tests 202 → 203 — by sst-dev-cycle at 2026-05-19T21:15Z
 - Phase 10.2 code rename: relocate `ca.toadlybroodledev.sublist` → `ca.toadlybroodledev.minimalist` across 53 Java files + build.gradle.kts namespace/applicationId + 2 activity_main.xml layouts + AndroidManifest comment scrub; rename 4 app-referring classes (SublistDatabase→MinimaListDatabase, SublistFragment→OutlineFragment, WelcomeSublistFragment→WelcomeFragment, SearchSublistFragment→SearchFragment), preserve Sublist* domain types (Entity/Dao/Renderer/NewSublistDialog); DateTimeUtil.m5007a switched to ctx.getPackageName(); AppMain gets LEGACY_PACKAGE + migrateLegacyPackage stub; RENAME-MAP.md gets Phase 10.2 supersession table; Phase10PackageRenameTest (15 tests) self-skips + concatenates the legacy literal to avoid sed-rewrite self-corruption; tests 187 → 202 — by sst-dev-cycle at 2026-05-19T19:00Z
@@ -21,7 +22,6 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
 - strengthen Phase9SettingsFragmentLifecycleTest: replace 4 bare src.contains() with 2 countOccurrences()>=2 checks; tests 155 → 153 — by sst-dev-cycle at 2026-05-19T08:15Z
 - add isAdded()/getActivity()==null guard to SettingsFragment.doImportReplace + doImportMerge main.post success lambdas; tests 151 → 155 — by sst-dev-cycle at 2026-05-18T07:15Z
 - 9.3 JSON export (OutlineStore.exportToUri via SAF ACTION_CREATE_DOCUMENT) + JSON import (ACTION_OPEN_DOCUMENT, replace-vs-merge AlertDialog, merge via RowActionListener.mo4767a) + close batch-sizing meta-item by batching same-phase 9.3; tests 138 → 151 — by sst-dev-cycle at 2026-05-19T06:45Z
-- fix MainActivity:82 async-callback guard (isFinishing/isDestroyed/isStateSaved) + Mockito behavioral tests for OutlineRepositoryImpl (16 tests: replaceRowsForSublist delegation, importLegacy transaction+field mapping, loadAllAsHashMap, saveAllAsHashMap); tests 121 → 138 — by sst-dev-cycle at 2026-05-19T05:30Z
 
 ## Next up (queued for next cycle)
 
