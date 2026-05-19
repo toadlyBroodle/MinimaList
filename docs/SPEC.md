@@ -126,10 +126,37 @@ Confirm the modernized app starts, the launcher icon works, and the home-screen 
 
 Walk the original app's user-facing surface (excluding what 3.x intentionally removed) against the modernized build. This is acceptance, not new development — any gap goes to `Next up` as a bug.
 
-- [ ] 8.1 [hard] CRUD: create / edit / delete outline rows; nesting indent works; collapsed-state persists across app restart (Room migration story is part of this — Phase 9 ships the actual Room schema).
+- [x] 8.1 [hard] CRUD: create / edit / delete outline rows; nesting indent works; collapsed-state persists across app restart (Room migration story is part of this — Phase 9 ships the actual Room schema).
 - [ ] 8.2 [medium] Reminders: setting a reminder on a row fires a notification at the scheduled time; rescheduling on device boot still works after dropping `RECEIVE_BOOT_COMPLETED` (if we re-add the permission, this is the gate that justifies it).
 - [ ] 8.3 [medium] Home-screen widget renders the current list and survives app data update.
-- [ ] 8.4 [medium] Drawer / settings / appearance toggles wired to real preferences.
+- [x] 8.4 [medium] Drawer / settings / appearance toggles wired to real preferences.
+
+**Phase 8.1 + 8.4 completed 2026-05-20.** Added Robolectric 4.14.1 as a unit-test
+dependency (`gradle/libs.versions.toml` + `app/build.gradle.kts`; `testOptions
+{ unitTests { isIncludeAndroidResources = true } }` so per-row view inflation
+runs off-device) — the first behavioral test harness for the View-coupled
+parts of the port. Until now the `OutlineTree` CRUD engine and the
+`AppSettings` preference layer had only source-scan / port-presence coverage.
+8.1: `Phase8CrudTest` (21 tests) drives the real `OutlineTree` against real
+`OutlineRowView` instances — create (append, blank-via-null, insertion order),
+delete (single row, auto-delete-children subtree, auto-delete-off keeps
+children, not-in-tree no-op, delete-completed), indent / outdent (row +
+descendants, leaf leaves siblings untouched), children query (`m5004h`
+contiguous-deeper, leaf, null), collapse (`m4994a` sets flag only when the row
+has children), complete (`m4996b` with and without the auto-complete-children
+cascade), and a round-trip through `OutlineRow.getListOfEntSers` proving
+indent / text / complete / collapsed all reach the persisted model that Phase 9
+writes to Room (the "collapsed-state persists across app restart" path).
+8.4: `Phase8SettingsPrefsTest` (13 tests) constructs the real `AppSettings`
+against a Robolectric Context and verifies every settings / appearance toggle
+is wired to real `SharedPreferences` — fresh-install defaults, show-completed,
+backup location / format spinners, the three colour-picker indexes, text size,
+keyboard-enter behaviour, and the def_* booleans all round-trip through the
+`SublistPrefsFile` store; one test asserts a persist pass writes the full key
+set. No production code changed — both items are acceptance verification of
+existing Phase-4 / Phase-9 code. Tests 224 → 258. `./gradlew :app:assembleDebug`
+green. Phase 8.2 (reminders) and 8.3 (widget) remain open; the Robolectric
+harness added here unblocks behavioral tests for both.
 
 ### Phase 9: Local persistence layer
 

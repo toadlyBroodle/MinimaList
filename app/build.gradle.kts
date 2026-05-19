@@ -58,6 +58,14 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
+
+    testOptions {
+        unitTests {
+            // Robolectric needs merged Android resources + the manifest available
+            // to the JVM test classpath so view inflation works off-device.
+            isIncludeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
@@ -69,4 +77,5 @@ dependencies {
     annotationProcessor(libs.androidx.room.compiler)
     testImplementation(libs.junit)
     testImplementation(libs.mockito.core)
+    testImplementation(libs.robolectric)
 }
