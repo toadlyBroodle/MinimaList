@@ -88,3 +88,26 @@ These names were removed wholesale in Phase 3 and never appear in the active tre
 | `p032c/C0555b` | App-Invites tracker POJO — Phase 3.3. |
 | `p032c/C0556c` (slated) | Cloud user profile — Phase 4 deletion (annotations stripped 3.1; class itself has no local meaning). |
 | `iface.InterfaceC0549a.mo4778p` + `mo4756C` + `mo4758E` | Premium getter + ad hooks (no-op post Phase 3) — Phase 4 interface trim. |
+
+## Phase 10.2 — package + app-referring class renames
+
+Phase 10.2 supersedes the Phase-2 jadx-name → real-name table for four
+app-referring identifiers. The package itself moves with the rebrand; the
+domain types listed in the spec carve-out (`SublistEntity`, `SublistDao`,
+`SublistRenderer`, `NewSublistDialog`) keep their `Sublist*` names because a
+"sublist" is still a named outline within MinimaList.
+
+| Phase-2 name | Phase 10.2 name | scope |
+|---|---|---|
+| package `ca.toadlybroodledev.sublist` | package `ca.toadlybroodledev.minimalist` | active tree only — decompiled/ paths unchanged |
+| `applicationId = "ca.toadlybroodledev.sublist"` | `applicationId = "ca.toadlybroodledev.minimalist"` | `app/build.gradle.kts`; debug `.dev` suffix preserved |
+| `SublistDatabase` | `MinimaListDatabase` | RoomDatabase singleton (db/) — names the app, not the domain object |
+| `SublistFragment` | `OutlineFragment` | core outline-editor fragment (C0563j ancestor) |
+| `WelcomeSublistFragment` | `WelcomeFragment` | first-launch welcome fragment, extends OutlineFragment |
+| `SearchSublistFragment` | `SearchFragment` | in-app search fragment, extends OutlineFragment |
+
+`AppMain.LEGACY_PACKAGE = "ca.toadlybroodledev.sublist"` + the
+`migrateLegacyPackage(Context)` stub document the old applicationId so a future
+shared-UID or `adb pull` workflow has a single named call site to wire
+cross-package data recovery through. Standard Android sandboxing blocks direct
+cross-package filesDir reads, so on a stock install the stub is a logged no-op.

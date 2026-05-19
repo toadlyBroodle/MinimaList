@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "ca.toadlybroodledev.sublist"
+    namespace = "ca.toadlybroodledev.minimalist"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "ca.toadlybroodledev.sublist"
+        applicationId = "ca.toadlybroodledev.minimalist"
         minSdk = 21
         targetSdk = 35
         versionCode = 107

@@ -9,7 +9,7 @@
       - WRITE/READ_EXTERNAL_STORAGE             (txt-export path will use SAF — Phase 6.4 / Phase 9.3)
       - com.android.vending.BILLING             (Phase 3.5 — Play Billing gone)
       - com.google.android.c2dm.permission.RECEIVE,
-        ca.toadlybroodledev.sublist.permission.C2D_MESSAGE  (FCM — never used in source, only manifest)
+        the per-app C2D_MESSAGE custom permission (FCM — never used in source, only manifest)
       - RECEIVE_BOOT_COMPLETED, WAKE_LOCK       (boot-time reminder reschedule — Phase 4/6.2
                                                  will re-add when ReceiverNotification ports if needed)
 
