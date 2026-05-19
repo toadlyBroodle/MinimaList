@@ -10,6 +10,7 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Append-on-close, newest first. Trim to most recent 10.
 -->
 
+- Phase 8.1 CRUD-audit prep: fix two `catch (Error e)` sites inherited from jadx-decompiled source — `OutlineFragment.onCreateOptionsMenu` (try/catch around `m4988a().get(f3898ao)` for stale persisted index after outline shrinkage in a prior session) and `MainActivity.onPause` (try/catch around the IME-hide call). java.lang.Error does not catch RuntimeException, so IndexOutOfBoundsException at menu-inflate would crash the activity instead of being swallowed; same root-cause shape as a8e34de + bd4b8ac. New CatchErrorAuditTest (2 source-scan assertions per site, gated on method-body slice between onCreateOptionsMenu↔onViewCreated and onPause↔onPostCreate so a future regression elsewhere in the file would not silently pass); tests 208 → 210 — by sst-dev-cycle at 2026-05-19T05:00Z
 - Phase 8.1 CRUD-audit prep: guard OutlineTree.m4995b against empty f3987b — search-mode add-new (mo4851al when no row focused + f3898ao != -1) called f3987b.get(0)/get(size-1) without an isEmpty() check, IOOBE when search filter narrows to zero rows; fall back to m4991a((OutlineRow) null) (the non-search root-add path); same shape as bd4b8ac MainActivity.onStop AIOOBE fix; device smoke (Moto G API 30) launches clean, no fatal exceptions; tests 206 → 208 — by sst-dev-cycle at 2026-05-19T03:45Z
 - MainActivity.onStop:582 guard: wrap OutlineStore.m4962a call with isEmpty()/f3941d>=0/f3941d<size() check to prevent AIOOBE on first-launch / no-sublists; tests 203 → 206 — by sst-dev-cycle at 2026-05-19T22:00Z
 - Phase 10.2 closeout: delete ProfileFragment stub + AppSettings.m4935c/m4946k orphaned analytics methods + f3937H field/prefs; Phase 7 re-smoke ca.toadlybroodledev.minimalist.dev on Moto G (install OK, launcher/widget/MainActivity bind clean, no fatal exceptions); tests 202 → 203 — by sst-dev-cycle at 2026-05-19T21:15Z
@@ -19,9 +20,6 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
 - ProfileFragment FM-crash stub + 10.3 colors.xml muted M3 neutral palette (colorAccent/Primary/PrimaryDark + firebase* vestigials); tests 172 → 178 — by sst-dev-cycle at 2026-05-19T14:15Z
 - Phase 10.4+10.5: drop Profile/Invite drawer menu entries; delete ProfileFragment + HostContract.mo4776n; wire SettingsFragment "Contribute on GitHub" button to github.com/toadlyBroodle/MinimaList with https <queries>; remove 30+ orphaned cloud/premium/invite strings; tests 160 → 172 — by sst-dev-cycle at 2026-05-19T12:30Z
 - Phase 7 device smoke test: fix activity_main.xml stub layout + <array>→<string-array> AAPT color-type NPE + SublistFragment.onAttach f3901c init; tests 153 → 160 — by sst-dev-cycle at 2026-05-19T11:00Z
-- strengthen Phase9SettingsFragmentLifecycleTest: replace 4 bare src.contains() with 2 countOccurrences()>=2 checks; tests 155 → 153 — by sst-dev-cycle at 2026-05-19T08:15Z
-- add isAdded()/getActivity()==null guard to SettingsFragment.doImportReplace + doImportMerge main.post success lambdas; tests 151 → 155 — by sst-dev-cycle at 2026-05-18T07:15Z
-- 9.3 JSON export (OutlineStore.exportToUri via SAF ACTION_CREATE_DOCUMENT) + JSON import (ACTION_OPEN_DOCUMENT, replace-vs-merge AlertDialog, merge via RowActionListener.mo4767a) + close batch-sizing meta-item by batching same-phase 9.3; tests 138 → 151 — by sst-dev-cycle at 2026-05-19T06:45Z
 
 ## Next up (queued for next cycle)
 

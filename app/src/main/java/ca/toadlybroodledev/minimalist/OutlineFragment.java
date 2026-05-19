@@ -156,7 +156,10 @@ public class OutlineFragment extends Fragment implements OutlineHost {
         } else {
             try {
                 m4901a(this.f3910ak.m4988a().get(f3898ao));
-            } catch (Error e) {
+            } catch (Exception e) {
+                // Stale persisted f3898ao after the outline was shrunk in a prior session
+                // throws IndexOutOfBoundsException; the jadx-emitted Error-only catch was
+                // dead code for that hazard.
                 Log.e(f3900b, "Index out of bounds: " + e.getMessage());
                 m4901a((OutlineRowView) null);
             }

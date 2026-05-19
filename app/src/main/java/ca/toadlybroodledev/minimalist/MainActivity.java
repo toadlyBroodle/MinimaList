@@ -534,7 +534,7 @@ public class MainActivity extends AppCompatActivity
         this.f3700D.saveAllToRepo();
         try {
             mo4761a(findViewById(R.id.placeholder_for_fragments), false);
-        } catch (Error e) {
+        } catch (Exception e) {
         }
         mo4759F();
     }
