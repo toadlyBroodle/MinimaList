@@ -18,7 +18,7 @@
     <color name="colorPrimary">#4B5358</color>
     <color name="colorPrimaryDark">#2F3438</color>
     <color name="colorTextWhite">#F4F4F2</color>
-    <color name="colorTextWhiteCompleted">#A8AAA5</color>
+    <color name="colorTextWhiteCompleted">#C8CAC4</color>
     <color name="dim_foreground_disabled_material_dark">#80bebebe</color>
     <color name="dim_foreground_disabled_material_light">#80323232</color>
     <color name="dim_foreground_material_dark">#ffbebebe</color>

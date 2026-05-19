@@ -89,32 +89,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/settings_backup_data_header"/>
-        <Button
-            android:id="@+id/settings_load_backup"
-            android:paddingLeft="4dp"
-            android:paddingRight="4dp"
+        <Spinner
+            android:id="@+id/settings_backup_location"
+            android:padding="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:text="@string/settings_load_backup"/>
-        <Switch
-            android:theme="@style/ThemeOverlay.Switch"
-            android:id="@+id/settings_backup_location_switch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/settings_to_from_external_sd"/>
-        <Button
-            android:id="@+id/settings_backup_data"
-            android:paddingLeft="4dp"
-            android:paddingRight="4dp"
+            android:layout_margin="4dp"/>
+        <Spinner
+            android:id="@+id/settings_backup_format"
+            android:padding="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:text="@string/settings_backup_data"/>
+            android:layout_margin="4dp"/>
         <Button
-            android:id="@+id/settings_export_txt"
+            android:id="@+id/settings_export"
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
             android:layout_width="wrap_content"
@@ -122,8 +110,19 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
+            android:layout_marginBottom="4dp"
+            android:text="@string/settings_export"/>
+        <Button
+            android:id="@+id/settings_import"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
-            android:text="@string/settings_export_txt"/>
+            android:text="@string/settings_import"/>
         <View
             android:background="@color/colorAccent"
             android:layout_width="match_parent"

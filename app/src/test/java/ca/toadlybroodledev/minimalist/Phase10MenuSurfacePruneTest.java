@@ -323,7 +323,11 @@ public class Phase10MenuSurfacePruneTest {
                 src.contains("f3879al"));
         // The new Contribute on GitHub button (f3880ap) must receive the accent
         // background color sweep like the rest of the Settings buttons.
-        assertTrue("MainActivity must setBackgroundColor for f3880ap (Contribute on GitHub button, 10.6)",
-                src.contains("f3880ap.setBackgroundColor"));
+        // 10.3 follow-up: tinting now goes through tintButton(btn, bg, text) so
+        // bg + contrasting text are applied together. Match the f3880ap argument
+        // in either pattern.
+        assertTrue("MainActivity must tint f3880ap (Contribute on GitHub button, 10.6)",
+                src.contains("f3880ap.setBackgroundColor")
+                        || src.contains("f3880ap, accent"));
     }
 }

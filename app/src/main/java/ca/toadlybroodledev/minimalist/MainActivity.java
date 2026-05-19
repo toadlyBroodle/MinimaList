@@ -19,6 +19,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -350,31 +351,29 @@ public class MainActivity extends AppCompatActivity
             Log.d(this.f3712v, e4.getMessage());
         }
         try {
+            int btnText = StringArraySpinnerAdapter.contrastingTextColor(accent);
             this.f3709s.f3871a.setBackgroundColor(secondary);
-            this.f3709s.f3872ae.setBackgroundColor(accent);
-            this.f3709s.f3873af.setBackgroundColor(accent);
-            this.f3709s.f3874ag.setBackgroundColor(accent);
-            this.f3709s.f3875ah.setBackgroundColor(accent);
-            this.f3709s.f3876ai.setBackgroundColor(accent);
-            this.f3709s.f3880am.setBackgroundColor(accent);
-            this.f3709s.f3880ao.setBackgroundColor(accent);
-            this.f3709s.f3880ap.setBackgroundColor(accent);
+            tintButton(this.f3709s.f3872ae, accent, btnText);
+            tintButton(this.f3709s.f3873af, accent, btnText);
+            tintButton(this.f3709s.btnExport, accent, btnText);
+            tintButton(this.f3709s.btnImport, accent, btnText);
+            tintButton(this.f3709s.f3880ap, accent, btnText);
         } catch (Exception e5) {
             Log.d(this.f3712v, e5.getMessage());
         }
-        if (this.f3709s == null || !z) {
-            return;
-        }
-        try {
-            FragmentTransaction tx = this.f3706p.beginTransaction();
-            tx.remove(this.f3709s);
-            this.f3709s = new SettingsFragment();
-            tx.add(R.id.placeholder_for_fragments, this.f3709s, getString(R.string.menu_settings));
-            tx.attach(this.f3709s);
-            tx.commit();
-        } catch (Exception e6) {
-            e6.printStackTrace();
-        }
+        // Phase 10.3: the legacy fragment-recreate branch (z=true on prefs change)
+        // tore down the SettingsFragment and rebuilt it just to refresh spinner item
+        // colors. That left a window where the just-tapped Spinner was detached when
+        // SettingsFragment.onItemSelected called setSelection(0), and the new fragment
+        // came up with spinners that read as "down arrow only". The in-place re-tinting
+        // above already covers every visible view; setSelection(0) on the live spinner
+        // re-runs getView(0) and picks up the new highlight color.
+    }
+
+    private static void tintButton(Button btn, int bg, int text) {
+        if (btn == null) return;
+        btn.setBackgroundColor(bg);
+        btn.setTextColor(text);
     }
 
     @Override

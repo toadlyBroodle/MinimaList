@@ -47,6 +47,10 @@ public class AppSettings {
     private static String[] f3961x;
     private static boolean f3962y;
     private static boolean f3963z;
+    // Phase 10.8: backup location / format spinners. backupLocationIndex
+    // re-uses the legacy f3963z boolean (0 = local / false, 1 = SD / true);
+    // backupFormatIndex is a new pref (0 = JSON, 1 = TXT).
+    private static int f3964K; // backup_format_index
 
     public enum KeyboardAction {
         NEW_LINE(0), NEW_ENTRY(1), NEXT_ENTRY(2), CLOSE_KEYS(3);
@@ -99,6 +103,26 @@ public class AppSettings {
     static void m4931b(boolean z) {
         f3963z = z;
         m4947l();
+    }
+
+    // Phase 10.8: backup Location spinner — 0 = local app filesDir, 1 = SD (external app dir).
+    static void setBackupLocationIndex(int i) {
+        f3963z = (i == 1);
+        m4947l();
+    }
+
+    static int getBackupLocationIndex() {
+        return f3963z ? 1 : 0;
+    }
+
+    // Phase 10.8: backup Format spinner — 0 = JSON, 1 = TXT.
+    static void setBackupFormatIndex(int i) {
+        f3964K = i;
+        m4947l();
+    }
+
+    static int getBackupFormatIndex() {
+        return f3964K;
     }
 
     static boolean m4932b() {
@@ -171,6 +195,7 @@ public class AppSettings {
         editor.putBoolean("def_add_new_location", f3948k);
         editor.putBoolean("def_sing_line_ents", f3949l);
         editor.putBoolean("backup_location_sd", f3963z);
+        editor.putInt("backup_format_index", f3964K);
         editor.putInt("def_enter_key", f3950m);
         editor.putInt("color_bg", f3931B);
         editor.putInt("color_text", f3934E);
@@ -216,6 +241,7 @@ public class AppSettings {
             f3949l = prefs.getBoolean("def_sing_line_ents", false);
             f3950m = prefs.getInt("def_enter_key", KeyboardAction.NEW_LINE.m4960a());
             f3963z = prefs.getBoolean("backup_location_sd", false);
+            f3964K = prefs.getInt("backup_format_index", 0);
             f3931B = prefs.getInt("color_bg", 10);
             f3930A = f3931B;
             f3932C = f3931B;

@@ -81,41 +81,42 @@ public class Phase9JsonExportImportTest {
                 src.contains("AppMain.io()"));
     }
 
-    // --- SettingsFragment ---
+    // --- SettingsFragment (Phase 10.8: SAF replaced by direct app-scoped paths) ---
 
     @Test
-    public void settingsFragmentHasExportJsonRequestCode() {
+    public void settingsFragmentHasExportRoute() {
         String src = readSource(SRC + "SettingsFragment.java");
-        assertTrue("SettingsFragment must declare REQUEST_EXPORT_JSON constant",
-                src.contains("REQUEST_EXPORT_JSON"));
+        assertTrue("SettingsFragment must declare a doExport() entry point",
+                src.contains("doExport()"));
     }
 
     @Test
-    public void settingsFragmentHasImportJsonRequestCode() {
+    public void settingsFragmentHasImportRoute() {
         String src = readSource(SRC + "SettingsFragment.java");
-        assertTrue("SettingsFragment must declare REQUEST_IMPORT_JSON constant",
-                src.contains("REQUEST_IMPORT_JSON"));
+        assertTrue("SettingsFragment must declare a doImport() entry point",
+                src.contains("doImport()"));
     }
 
     @Test
-    public void settingsFragmentLaunchesCreateDocumentIntent() {
+    public void settingsFragmentExportRoutesByFormat() {
         String src = readSource(SRC + "SettingsFragment.java");
-        assertTrue("SettingsFragment must use Intent.ACTION_CREATE_DOCUMENT for export",
-                src.contains("ACTION_CREATE_DOCUMENT"));
+        assertTrue("doExport must branch on backup format index (JSON vs TXT)",
+                src.contains("getBackupFormatIndex"));
+        assertTrue("doExport must call OutlineStore.exportJsonToDir for JSON format",
+                src.contains("OutlineStore.exportJsonToDir"));
+        assertTrue("doExport must call OutlineStore.exportTxtToDir for TXT format",
+                src.contains("OutlineStore.exportTxtToDir"));
     }
 
     @Test
-    public void settingsFragmentLaunchesOpenDocumentIntent() {
+    public void settingsFragmentImportRoutesByFormat() {
         String src = readSource(SRC + "SettingsFragment.java");
-        assertTrue("SettingsFragment must use Intent.ACTION_OPEN_DOCUMENT for import",
-                src.contains("ACTION_OPEN_DOCUMENT"));
-    }
-
-    @Test
-    public void settingsFragmentHasOnActivityResultOverride() {
-        String src = readSource(SRC + "SettingsFragment.java");
-        assertTrue("SettingsFragment must override onActivityResult to receive SAF picker results",
-                src.contains("onActivityResult"));
+        assertTrue("doImport must branch on backup format index",
+                src.contains("getBackupFormatIndex"));
+        assertTrue("Import must call OutlineStore.importTxtFromUri for TXT format",
+                src.contains("OutlineStore.importTxtFromUri"));
+        assertTrue("Import must call OutlineStore.importFromUri for JSON format",
+                src.contains("OutlineStore.importFromUri"));
     }
 
     @Test

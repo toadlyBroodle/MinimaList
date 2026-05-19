@@ -113,6 +113,89 @@ public class OutlineStore extends AppSettings {
         }
     }
 
+    // Phase 10.7: read a plain-text outline (the legacy m4967r export format) from a
+    // SAF URI and return it as a single-entry HashMap keyed by the sublist name
+    // derived from the file's display name. Must be called on a background thread.
+    // Returns null on any parse/IO failure or if the file has zero parseable rows.
+    //
+    // Export format per row (one row per line, written by m4967r):
+    //   <indent-spaces> + ("x-" | " -") + <text>
+    // i.e. indent = leading-spaces-before-marker, completed = marker starts with 'x'.
+    static HashMap<String, ArrayList<OutlineRow>> importTxtFromUri(Context ctx, Uri uri) {
+        try (InputStream is = ctx.getContentResolver().openInputStream(uri)) {
+            if (is == null) return null;
+            byte[] bytes = readAllBytes(is);
+            String txt = new String(bytes, "UTF-8");
+            ArrayList<OutlineRow> rows = parseTxtRows(txt);
+            if (rows.isEmpty()) return null;
+            String name = sublistNameFromUri(ctx, uri);
+            HashMap<String, ArrayList<OutlineRow>> map = new HashMap<>();
+            map.put(name, rows);
+            return map;
+        } catch (Exception e) {
+            Log.e(f3974s, "importTxtFromUri failed: " + e.getMessage());
+            return null;
+        }
+    }
+
+    static ArrayList<OutlineRow> parseTxtRows(String txt) {
+        ArrayList<OutlineRow> rows = new ArrayList<>();
+        for (String line : txt.split("\\r?\\n", -1)) {
+            if (line.isEmpty()) continue;
+            int n = line.length();
+            int leading = 0;
+            while (leading < n && line.charAt(leading) == ' ') leading++;
+            if (leading >= n) continue;
+            char marker = line.charAt(leading);
+            int textStart;
+            int indent;
+            boolean complete;
+            if (marker == 'x' && leading + 1 < n && line.charAt(leading + 1) == '-') {
+                indent = leading;
+                complete = true;
+                textStart = leading + 2;
+            } else if (marker == '-' && leading > 0) {
+                // " -" marker: the last leading space was the marker space.
+                indent = leading - 1;
+                complete = false;
+                textStart = leading + 1;
+            } else {
+                continue; // malformed line, skip silently
+            }
+            String text = textStart < n ? line.substring(textStart) : "";
+            rows.add(new OutlineRow(indent, text, complete, false, 0L, false));
+        }
+        return rows;
+    }
+
+    // Use the SAF file's display name, strip the .txt extension and any trailing
+    // 13-digit epoch-ms stamp (m5014c() appended by the legacy m4967r exporter).
+    private static String sublistNameFromUri(Context ctx, Uri uri) {
+        String display = null;
+        try (android.database.Cursor c = ctx.getContentResolver()
+                .query(uri, new String[]{android.provider.OpenableColumns.DISPLAY_NAME},
+                        null, null, null)) {
+            if (c != null && c.moveToFirst() && !c.isNull(0)) display = c.getString(0);
+        } catch (Exception ignored) { /* fall through to last-resort */ }
+        if (display == null || display.isEmpty()) display = "Imported";
+        if (display.endsWith(".txt") || display.endsWith(".TXT")) {
+            display = display.substring(0, display.length() - 4);
+        }
+        // Strip trailing legacy epoch-ms stamp (13 digits) if present.
+        int len = display.length();
+        if (len > 13) {
+            int i = len - 1;
+            int digits = 0;
+            while (i >= 0 && Character.isDigit(display.charAt(i)) && digits < 13) {
+                i--;
+                digits++;
+            }
+            if (digits == 13) display = display.substring(0, i + 1);
+        }
+        display = display.trim();
+        return display.isEmpty() ? "Imported" : display;
+    }
+
     private static byte[] readAllBytes(InputStream is) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         byte[] buf = new byte[4096];
@@ -204,34 +287,73 @@ public class OutlineStore extends AppSettings {
     // Phase 3.1: removed m4966q() — cloud push to sublist_collections/<uid>.
 
     static void m4967r() {
-        if (m4969t()) {
-            for (OutlineFragment frag : f3938a.mo4786x()) {
-                ArrayList<OutlineRowView> rows = frag.mo4849af().f3987b;
-                File file = new File(m4970u(),
-                        frag.getTag() + DateTimeUtil.m5014c() + ".txt");
-                try {
-                    FileOutputStream fos = new FileOutputStream(file);
-                    OutputStreamWriter writer = new OutputStreamWriter(fos);
-                    for (OutlineRowView rv : rows) {
-                        String indent = "";
-                        for (int i = 0; i < rv.m4859a(); i++) {
-                            indent = indent + " ";
-                        }
-                        writer.append("\n" + indent + (rv.f3823f ? "x-" : " -")
-                                + rv.f3822e.getText().toString().replaceAll("\n", " "));
-                    }
-                    writer.close();
-                    fos.close();
-                    Toast.makeText(f3938a.mo4775m(),
-                            f3938a.mo4775m().getString(R.string.toast_external_backup_saved,
-                                    file.getAbsolutePath()), Toast.LENGTH_LONG).show();
-                } catch (IOException ex) {
-                    ex.getMessage();
-                    m4968s();
-                    return;
+        exportTxtToDir(m4970u());
+    }
+
+    // Phase 10.8: parameterized TXT export — write each open sublist to <dir>/<name>.txt
+    // using the same line format the legacy m4967r() shipped. Returns the parent dir
+    // path on success (for toast) or null on failure. The 13-digit epoch suffix the
+    // legacy exporter appended is dropped — filenames are now plain sublist names so
+    // a re-export overwrites the previous file rather than littering the directory.
+    static String exportTxtToDir(File dir) {
+        if (dir == null) return null;
+        if (!dir.exists() && !dir.mkdirs()) return null;
+        for (OutlineFragment frag : f3938a.mo4786x()) {
+            ArrayList<OutlineRowView> rows = frag.mo4849af().f3987b;
+            String name = frag.getTag();
+            if (name == null || name.isEmpty()) name = "Imported";
+            File file = new File(dir, sanitizeFileName(name) + ".txt");
+            try {
+                FileOutputStream fos = new FileOutputStream(file);
+                OutputStreamWriter writer = new OutputStreamWriter(fos);
+                for (OutlineRowView rv : rows) {
+                    StringBuilder indent = new StringBuilder();
+                    for (int i = 0; i < rv.m4859a(); i++) indent.append(' ');
+                    writer.append("\n").append(indent)
+                            .append(rv.f3823f ? "x-" : " -")
+                            .append(rv.f3822e.getText().toString().replaceAll("\n", " "));
                 }
+                writer.close();
+                fos.close();
+            } catch (IOException ex) {
+                Log.e(f3974s, "exportTxtToDir failed: " + ex.getMessage());
+                return null;
             }
         }
+        return dir.getAbsolutePath();
+    }
+
+    // Phase 10.8: direct JSON export (no SAF) — writes all open sublists to
+    // <dir>/minimalist_export.json. Returns the file path on success or null on failure.
+    static String exportJsonToDir(File dir) {
+        if (dir == null) return null;
+        if (!dir.exists() && !dir.mkdirs()) return null;
+        String json = new Gson().toJson(OutlineFragment.m4892a(f3938a.mo4786x()));
+        File file = new File(dir, "minimalist_export.json");
+        try (FileOutputStream fos = new FileOutputStream(file, false)) {
+            fos.write(json.getBytes("UTF-8"));
+            return file.getAbsolutePath();
+        } catch (IOException ex) {
+            Log.e(f3974s, "exportJsonToDir failed: " + ex.getMessage());
+            return null;
+        }
+    }
+
+    // Strip filename-unfriendly characters so the user's sublist name maps to a
+    // legal cross-FS filename. Keeps unicode letters/digits, replaces the rest with '_'.
+    private static String sanitizeFileName(String name) {
+        StringBuilder sb = new StringBuilder(name.length());
+        for (int i = 0; i < name.length(); i++) {
+            char c = name.charAt(i);
+            if (c == '/' || c == '\\' || c == ':' || c == '*' || c == '?'
+                    || c == '"' || c == '<' || c == '>' || c == '|'
+                    || c == '\n' || c == '\r' || c == '\t') {
+                sb.append('_');
+            } else {
+                sb.append(c);
+            }
+        }
+        return sb.toString();
     }
 
     static void m4968s() {

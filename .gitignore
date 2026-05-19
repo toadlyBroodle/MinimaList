@@ -11,6 +11,7 @@ captures/
 # Keystore
 *.jks
 *.keystore
+release.keystore.properties
 
 # OS
 .DS_Store
@@ -18,3 +19,5 @@ Thumbs.db
 
 # Agent run logs — may capture secrets verbatim from source files they read
 .skill-runs/
+
+data/

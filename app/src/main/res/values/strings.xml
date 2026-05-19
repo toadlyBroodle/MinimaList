@@ -172,7 +172,15 @@
     <string name="settings_export_json">Export JSON</string>
     <string name="settings_export_txt">Export to .txt</string>
     <string name="settings_import_json">Import JSON</string>
+    <string name="settings_import_txt">Import .txt</string>
+    <string name="settings_export">Export</string>
+    <string name="settings_import">Import</string>
+    <string name="settings_location_local">Local</string>
+    <string name="settings_location_sd">SD card</string>
+    <string name="settings_format_json">JSON</string>
+    <string name="settings_format_txt">TXT</string>
     <string name="dialog_title_import_json">Import JSON Data</string>
+    <string name="dialog_title_import_pick_file">Pick a file to import</string>
     <string name="dialog_message_import_json">Choose how to import:\n\nReplace — removes all current lists and loads from file.\nMerge — adds lists from file that do not already exist by name.</string>
     <string name="dialog_import_replace">Replace</string>
     <string name="dialog_import_merge">Merge</string>
@@ -180,6 +188,11 @@
     <string name="toast_json_export_fail">Export failed.</string>
     <string name="toast_json_imported">JSON imported.</string>
     <string name="toast_json_import_fail">Import failed. Not a valid JSON export file.</string>
+    <string name="toast_txt_imported">TXT imported as new list.</string>
+    <string name="toast_txt_import_fail">Import failed. Not a valid .txt export file.</string>
+    <string name="toast_export_done_fmt">Exported to %s</string>
+    <string name="toast_no_files_found">No matching files in that location.</string>
+    <string name="settings_browse">Browse…</string>
     <string name="settings_help_poor_dev_header">Open source — contribute via PRs on GitHub.</string>
     <string name="settings_load_backup">Load Backup</string>
     <string name="settings_save_as_txt_file">Save as .txt file</string>

@@ -1,6 +1,13 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+}
+
+val releaseKeystoreProps = Properties().apply {
+    val f = rootProject.file("app/release.keystore.properties")
+    if (f.exists()) f.inputStream().use { load(it) }
 }
 
 android {
@@ -15,6 +22,17 @@ android {
         versionName = "107"
     }
 
+    signingConfigs {
+        if (releaseKeystoreProps.isNotEmpty()) {
+            create("release") {
+                storeFile = rootProject.file("app/" + releaseKeystoreProps.getProperty("storeFile"))
+                storePassword = releaseKeystoreProps.getProperty("storePassword")
+                keyAlias = releaseKeystoreProps.getProperty("keyAlias")
+                keyPassword = releaseKeystoreProps.getProperty("keyPassword")
+            }
+        }
+    }
+
     buildTypes {
         debug {
             applicationIdSuffix = ".dev"
@@ -26,6 +44,9 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            if (releaseKeystoreProps.isNotEmpty()) {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
     }
 

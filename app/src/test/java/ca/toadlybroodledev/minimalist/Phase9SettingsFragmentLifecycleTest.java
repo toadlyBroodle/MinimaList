@@ -10,20 +10,28 @@ import java.nio.file.Files;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Phase 9.3 review follow-up: lifecycle guard in SettingsFragment import callbacks.
+ * Phase 10.8 supersedes the Phase 9.3 lifecycle guard.
  *
- * doImportReplace and doImportMerge each dispatch IO work via AppMain.io().execute() and
- * post results back to the main thread. If the activity is destroyed (rotation, back-press)
- * between the IO dispatch and the main.post() callback firing, the lambda runs on a dead
- * fragment: this.f3881an.mo4769a(map) silently applies imported data to the old activity
- * instance; the new activity retains the pre-import state and the user's import is lost.
+ * Old (Phase 9.3) pattern: guard each main.post() lambda with
+ *   if (!isAdded() || getActivity() == null) return;
+ * That guard is INSUFFICIENT for the SAF round-trip: opening an
+ * ACTION_OPEN_DOCUMENT picker triggers MainActivity.onStop, which calls
+ * mo4764a → mo4771b and detaches every current fragment. When the picker
+ * returns and the import IO completes, isAdded() is false because
+ * SettingsFragment is no longer the attached fragment — the import was
+ * silently dropped.
  *
- * Fix: add "if (!isAdded() || getActivity() == null) return;" at the top of each
- * main.post() success lambda in both doImportReplace and doImportMerge.
+ * New (Phase 10.8) pattern: each of doImportReplace, doImportMerge, doImportTxt
+ * captures `final HostContract host = this.f3881an;` BEFORE going async and
+ * guards `if (host == null) return;` inside the main.post() lambda. The
+ * captured host reference (the MainActivity) outlives the fragment detach,
+ * so the import lands either way.
  *
- * Tests use occurrence-count checks (>= 2) so that removing the guard from either method
- * alone fails the test — bare src.contains() is insufficient because a single occurrence in
- * the other method would still return true.
+ * Tests assert >= 3 occurrences of both lines — one per import method.
+ * Removing the capture-and-guard from any one method drops the count below
+ * 3 and fails the assertion. Counted with occurrence-counting (not
+ * src.contains()) so a single occurrence in any one method would not give
+ * a false pass.
  */
 public class Phase9SettingsFragmentLifecycleTest {
 
@@ -58,23 +66,25 @@ public class Phase9SettingsFragmentLifecycleTest {
             "app/src/main/java/ca/toadlybroodledev/minimalist/SettingsFragment.java";
 
     @Test
-    public void bothImportMethodsHaveIsAddedGuard() {
+    public void allImportMethodsCaptureHostBeforeAsync() {
         String src = readSource(SETTINGS_FRAGMENT);
         assertTrue(
-                "Both doImportReplace and doImportMerge must call isAdded() in their " +
-                "main.post() success lambdas (expected >= 2 occurrences, one per method). " +
-                "A single occurrence means one method's guard was removed, re-opening the " +
-                "data-loss hazard on rotation during IO.",
-                countOccurrences(src, "isAdded()") >= 2);
+                "doImportReplace, doImportMerge, and doImportTxt must each capture " +
+                "`final HostContract host = this.f3881an;` BEFORE going async " +
+                "(expected >= 3 occurrences). The captured reference is what " +
+                "survives the SAF picker's onStop fragment detach.",
+                countOccurrences(src, "final HostContract host = this.f3881an;") >= 3);
     }
 
     @Test
-    public void bothImportMethodsHaveGetActivityGuard() {
+    public void allImportMethodsGuardHostInLambda() {
         String src = readSource(SETTINGS_FRAGMENT);
         assertTrue(
-                "Both doImportReplace and doImportMerge must check getActivity() == null in " +
-                "their main.post() success lambdas (expected >= 2 occurrences, one per method). " +
-                "A single occurrence means one method's guard was removed.",
-                countOccurrences(src, "getActivity() == null") >= 2);
+                "doImportReplace, doImportMerge, and doImportTxt must each guard " +
+                "`if (host == null) return;` inside their main.post() success " +
+                "lambda (expected >= 3 occurrences). Drops below 3 means one " +
+                "method's guard was removed, re-opening the SAF-round-trip " +
+                "data-loss hazard.",
+                countOccurrences(src, "if (host == null) return;") >= 3);
     }
 }

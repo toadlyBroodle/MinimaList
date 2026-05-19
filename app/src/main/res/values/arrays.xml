@@ -1,96 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--
+      Phase 10.3: muted-modern palette. Slot order preserved from the original
+      Material 2018 arrays so saved user preferences (color_bg, color_accent,
+      color_700 indexes in SharedPrefs) keep landing on the same hue family
+      after this swap — only the saturation drops. 20 picker slots per array,
+      cohesive across roles: 300=light tints, 500=mid backgrounds, 700=dark
+      title bars, a400=accents (slightly higher saturation so accent reads).
+    -->
     <string-array name="colors_300_array">
         <item>Highlighted Color</item>
-        <item>#e57373</item>
-        <item>#F06292</item>
-        <item>#BA68C8</item>
-        <item>#9575CD</item>
-        <item>#7986CB</item>
-        <item>#64B5F6</item>
-        <item>#4FC3F7</item>
-        <item>#4DD0E1</item>
-        <item>#4DB6AC</item>
-        <item>#81C784</item>
-        <item>#AED581</item>
-        <item>#DCE775</item>
-        <item>#FFF176</item>
-        <item>#FFD54F</item>
-        <item>#FFB74D</item>
-        <item>#FF8A65</item>
-        <item>#A1887F</item>
-        <item>#9e9e9e</item>
-        <item>#606365</item>
-        <item>#2a2a2a</item>
+        <item>#B89898</item>
+        <item>#B898A1</item>
+        <item>#AC98B8</item>
+        <item>#9E98B8</item>
+        <item>#98A1B8</item>
+        <item>#98ABB8</item>
+        <item>#98B5B8</item>
+        <item>#98B8B0</item>
+        <item>#98B8A4</item>
+        <item>#98B89E</item>
+        <item>#A4B898</item>
+        <item>#B0B898</item>
+        <item>#B8B098</item>
+        <item>#B8A898</item>
+        <item>#B89E98</item>
+        <item>#B09A95</item>
+        <item>#A89E96</item>
+        <item>#B0B2B5</item>
+        <item>#909296</item>
+        <item>#5E6063</item>
     </string-array>
     <string-array name="colors_500_array">
         <item>Background Color</item>
-        <item>#f44336</item>
-        <item>#E91E63</item>
-        <item>#9C27B0</item>
-        <item>#673AB7</item>
-        <item>#3F51B5</item>
-        <item>#2196F3</item>
-        <item>#03A9F4</item>
-        <item>#00BCD4</item>
-        <item>#009688</item>
-        <item>#4CAF50</item>
-        <item>#8BC34A</item>
-        <item>#CDDC39</item>
-        <item>#FFEB3B</item>
-        <item>#FFC107</item>
-        <item>#FF9800</item>
-        <item>#FF5722</item>
-        <item>#795548</item>
-        <item>#bdbdbd</item>
-        <item>#495153</item>
-        <item>#050505</item>
+        <item>#7A5C5C</item>
+        <item>#7A5C66</item>
+        <item>#6E5C7A</item>
+        <item>#605C7A</item>
+        <item>#5C667A</item>
+        <item>#5C707A</item>
+        <item>#5C787A</item>
+        <item>#5C7A72</item>
+        <item>#5C7A66</item>
+        <item>#5C7A5C</item>
+        <item>#687A5C</item>
+        <item>#757A5C</item>
+        <item>#7A745C</item>
+        <item>#7A6A5C</item>
+        <item>#7A605C</item>
+        <item>#6E5C5C</item>
+        <item>#6F635A</item>
+        <item>#6B6E70</item>
+        <item>#3D3F42</item>
+        <item>#1E2022</item>
     </string-array>
     <string-array name="colors_700_array">
         <item>Title Bar Color</item>
-        <item>#d32f2f</item>
-        <item>#C2185B</item>
-        <item>#7B1FA2</item>
-        <item>#512DA8</item>
-        <item>#303F9F</item>
-        <item>#1976D2</item>
-        <item>#0288D1</item>
-        <item>#0097A7</item>
-        <item>#00796B</item>
-        <item>#388E3C</item>
-        <item>#689F38</item>
-        <item>#AFB42B</item>
-        <item>#FBC02D</item>
-        <item>#FFA000</item>
-        <item>#F57C00</item>
-        <item>#E64A19</item>
-        <item>#5D4037</item>
-        <item>#757575</item>
-        <item>#2B2B2B</item>
-        <item>#000000</item>
+        <item>#4A3838</item>
+        <item>#4A383E</item>
+        <item>#44384A</item>
+        <item>#3C384A</item>
+        <item>#383E4A</item>
+        <item>#38454A</item>
+        <item>#384A48</item>
+        <item>#384A44</item>
+        <item>#384A3E</item>
+        <item>#384A38</item>
+        <item>#404A38</item>
+        <item>#474A38</item>
+        <item>#4A4538</item>
+        <item>#4A4038</item>
+        <item>#4A3A38</item>
+        <item>#443838</item>
+        <item>#3F3833</item>
+        <item>#404244</item>
+        <item>#25272A</item>
+        <item>#0A0A0C</item>
     </string-array>
     <string-array name="colors_a400_array">
         <item>Accent Color</item>
-        <item>#ff1744</item>
-        <item>#F50057</item>
-        <item>#D500F9</item>
-        <item>#651FFF</item>
-        <item>#3D5AFE</item>
-        <item>#2979FF</item>
-        <item>#00B0FF</item>
-        <item>#00E5FF</item>
-        <item>#1DE9B6</item>
-        <item>#00E676</item>
-        <item>#76FF03</item>
-        <item>#C6FF00</item>
-        <item>#FFEA00</item>
-        <item>#FFC400</item>
-        <item>#FF9100</item>
-        <item>#FF3D00</item>
-        <item>#A1887F</item>
-        <item>#9e9e9e</item>
-        <item>#606365</item>
-        <item>#2a2a2a</item>
+        <item>#9C5454</item>
+        <item>#9C5466</item>
+        <item>#84549C</item>
+        <item>#6E549C</item>
+        <item>#54669C</item>
+        <item>#54789C</item>
+        <item>#5490A0</item>
+        <item>#549C8A</item>
+        <item>#549C72</item>
+        <item>#549C54</item>
+        <item>#6A9C54</item>
+        <item>#849C54</item>
+        <item>#9C9454</item>
+        <item>#9C8454</item>
+        <item>#9C7054</item>
+        <item>#9C6254</item>
+        <item>#856B5C</item>
+        <item>#909296</item>
+        <item>#5E6063</item>
+        <item>#2F3134</item>
     </string-array>
     <string-array name="colors_text_array">
         <item>Text Color</item>
@@ -109,5 +117,16 @@
         <item>16f</item>
         <item>20f</item>
         <item>24f</item>
+    </string-array>
+    <!-- Phase 10.8: Backup/Export/Import section simplified to Location × Format +
+         two action buttons. Indexes are stored as ints in AppSettings; do not
+         reorder without also bumping a migration. -->
+    <string-array name="backup_locations_array">
+        <item>@string/settings_location_local</item>
+        <item>@string/settings_location_sd</item>
+    </string-array>
+    <string-array name="backup_formats_array">
+        <item>@string/settings_format_json</item>
+        <item>@string/settings_format_txt</item>
     </string-array>
 </resources>
