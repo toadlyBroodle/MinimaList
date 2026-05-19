@@ -158,6 +158,9 @@ existing Phase-4 / Phase-9 code. Tests 224 → 258. `./gradlew :app:assembleDebu
 green. Phase 8.2 (reminders) and 8.3 (widget) remain open; the Robolectric
 harness added here unblocks behavioral tests for both.
 
+**Review follow-ups (open — schedule as the next `/sst-dev-cycle` cycle):**
+- [ ] [easy] [should-fix] `app/src/test/java/ca/toadlybroodle/minimalist/Phase8CrudTest.java` — 8.1's spec bullet enumerates "create / **edit** / delete outline rows" and 8.1 was flipped `[x]` as acceptance-complete, but none of the 21 tests exercises editing an existing row's text. `rowState_survivesRoundTripThroughOutlineRowModel` only proves text set at row *creation* reaches the persisted model; no test mutates an `OutlineRowView.f3822e` EditText after creation. The edit path (`OutlineRow.getListOfEntSers` reading live `f3822e.getText()`, plus the Phase-9.2a text-change autosave) is the core operation of an outliner and is left unverified despite 8.1 reading as fully acceptance-tested. Proposed fix: add a test that creates a row, sets `f3822e` text to a new value, runs `OutlineRow.getListOfEntSers`, and asserts the serialised `OutlineRow.text` reflects the edit.
+
 ### Phase 9: Local persistence layer
 
 Replace the gutted Firebase Realtime Database with a Room-backed local store. Add a user-driven JSON export/import so backup is a deliberate action, not an always-on cloud sync.

@@ -31,6 +31,7 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Order: blockers first, then highest-impact.
 -->
 
+- [easy] [should-fix] `Phase8CrudTest.java` — no test covers editing an existing row's text (the "edit" in 8.1's "create/edit/delete"); add a create→mutate-`f3822e`→`getListOfEntSers` edit-then-serialise test — review of 40c829b
 - [medium] 8.2 Reminders: setting a reminder fires a notification at the scheduled time; rescheduling on device boot works. Reason: 8.1 closed; OutlineRowView.m4861b/m4862c (AlarmManager) + ReceiverNotification now testable under the Robolectric harness added in the 8.1+8.4 cycle.
 - [medium] 8.3 Home-screen widget renders the current list and survives app data update. Reason: 8.1 closed; WidgetProvider now testable under the Robolectric harness added in the 8.1+8.4 cycle.
 - [easy] 11.1 High-def drawer menu header icon (vector drawable or full density set). Reason: blurry on the new device's xxxhdpi display post-Phase-10.8 re-smoke; Phase-1 resource filter left only mdpi/hdpi raster.
