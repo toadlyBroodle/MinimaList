@@ -18,8 +18,6 @@ public class AppSettings {
     private static int f3934E;
     private static int f3935F;
     private static int f3936G;
-    private static boolean f3937H;
-
     protected static HostContract f3938a;
 
     static int f3939b;
@@ -117,11 +115,6 @@ public class AppSettings {
         m4956u();
     }
 
-    static void m4935c(boolean z) {
-        f3937H = z;
-        m4947l();
-    }
-
     static int m4936d() {
         return Color.parseColor(m4952q());
     }
@@ -163,16 +156,11 @@ public class AppSettings {
         return Color.parseColor(m4955t());
     }
 
-    static boolean m4946k() {
-        return f3937H;
-    }
-
     protected static boolean m4947l() {
         SharedPreferences.Editor editor = f3938a.mo4775m()
                 .getSharedPreferences("SublistPrefsFile", 0).edit();
         editor.putInt("last_visible_sub_frag", f3941d);
         editor.putBoolean("is_premium", f3942e);
-        editor.putBoolean("send_anon_anal", f3937H);
         editor.putBoolean("show_completed", f3962y);
         editor.putBoolean("def_persist_tskbr_icon", f3944g);
         editor.putBoolean("def_compl_butt_overflow", f3946i);
@@ -217,7 +205,6 @@ public class AppSettings {
                     .getSharedPreferences("SublistPrefsFile", 0);
             f3941d = prefs.getInt("last_visible_sub_frag", -1);
             f3942e = prefs.getBoolean("is_premium", false);
-            f3937H = prefs.getBoolean("send_anon_anal", true);
             f3962y = prefs.getBoolean("show_completed", true);
             f3944g = prefs.getBoolean("def_persist_tskbr_icon", true);
             f3946i = prefs.getBoolean("def_compl_butt_overflow", false);

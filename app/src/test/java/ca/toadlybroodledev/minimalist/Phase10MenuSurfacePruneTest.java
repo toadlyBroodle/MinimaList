@@ -70,17 +70,24 @@ public class Phase10MenuSurfacePruneTest {
     // with InstantiationException. Stub is dropped in Phase 10.2 rename.
 
     @Test
-    public void profileFragmentIsMinimalStub() {
-        assertTrue("ProfileFragment.java stub must exist (Phase 10.4 FM crash fix)",
+    public void profileFragmentStubDeleted() {
+        // Phase 10.2 closeout: the old-package FM saved-state hazard no longer exists
+        // after the package rename; the stub has served its purpose.
+        assertFalse("ProfileFragment.java stub must be deleted after Phase 10.2 package rename",
                 exists("app/src/main/java/ca/toadlybroodledev/minimalist/ProfileFragment.java"));
+    }
+
+    @Test
+    public void appSettingsDropsAnalyticsMethods() {
+        // m4935c (send_anon_anal setter) and m4946k (getter) are vestigial — Firebase
+        // Analytics collection was removed in Phase 3.2 and the UI toggle was removed
+        // in the Phase 10 follow-up cycle. No callers remain.
         String src = read(
-                "app/src/main/java/ca/toadlybroodledev/minimalist/ProfileFragment.java");
-        assertTrue("ProfileFragment stub must extend Fragment",
-                src.contains("extends Fragment"));
-        assertFalse("ProfileFragment stub must not contain cloud-profile code",
-                src.contains("mo4865ac"));
-        assertFalse("ProfileFragment stub must not import Firebase",
-                src.contains("import com.google.firebase"));
+                "app/src/main/java/ca/toadlybroodledev/minimalist/AppSettings.java");
+        assertFalse("AppSettings must not contain m4935c (orphaned analytics setter, Phase 10.2 follow-up)",
+                src.contains("m4935c"));
+        assertFalse("AppSettings must not contain m4946k (orphaned analytics getter, Phase 10.2 follow-up)",
+                src.contains("m4946k"));
     }
 
     @Test
