@@ -31,6 +31,7 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Order: blockers first, then highest-impact.
 -->
 
+- [medium] [should-fix] `OutlineStore:parseTxtRows` — no behavioral tests for the TXT import row-parser (pure-JVM, data-integrity path; silent row loss on any parse bug). Add `Phase10TxtRoundtripTest.java` covering completed/incomplete/root/nested rows + empty-input case — review of ff851ce
 - [hard] 8.1 CRUD: create/edit/delete outline rows; nesting indent works; collapsed-state persists across app restart. Reason: Phase 7 device test passed; Phase 9 Room wiring in place; acceptance testing can now begin.
 - [medium] 8.2 Reminders: setting a reminder fires a notification at the scheduled time; rescheduling on device boot works. Reason: depends on 8.1.
 - [medium] 8.3 Home-screen widget renders the current list and survives app data update. Reason: depends on 8.1; widget provider verified in Phase 7.
