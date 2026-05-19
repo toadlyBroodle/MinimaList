@@ -85,7 +85,9 @@ public class OutlineRowView {
         this.f3822e.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable editable) {
-                if (OutlineRowView.this.f3822e.getLayout().getLineCount() > 3) {
+                // getLayout() returns null before the view's first layout pass.
+                if (OutlineRowView.this.f3822e.getLayout() != null &&
+                        OutlineRowView.this.f3822e.getLayout().getLineCount() > 3) {
                     OutlineRowView.this.f3822e.getText()
                             .delete(OutlineRowView.this.f3822e.getText().length() - 1,
                                     OutlineRowView.this.f3822e.getText().length());

@@ -12,6 +12,7 @@ import android.content.Context;
 import ca.toadlybroodle.minimalist.iface.HostContract;
 import ca.toadlybroodle.minimalist.iface.OutlineHost;
 import ca.toadlybroodle.minimalist.model.OutlineRow;
+import ca.toadlybroodle.minimalist.OutlineStore;
 
 import org.junit.After;
 import org.junit.Before;
@@ -50,6 +51,7 @@ public class Phase8CrudTest {
         Context ctx = RuntimeEnvironment.getApplication();
         host = mock(HostContract.class);
         when(host.mo4775m()).thenReturn(ctx);
+        when(host.mo4779q()).thenReturn(mock(OutlineStore.class));
         outlineHost = mock(OutlineHost.class);
         tree = new OutlineTree(host, outlineHost, null);
         // Engine-behaviour flags are static; default them to a known state so
@@ -103,6 +105,20 @@ public class Phase8CrudTest {
         assertEquals("first", tree.m4988a().get(0).f3822e.getText().toString());
         assertEquals("second", tree.m4988a().get(1).f3822e.getText().toString());
         assertEquals("third", tree.m4988a().get(2).f3822e.getText().toString());
+    }
+
+    // --- edit ---
+
+    @Test
+    public void editRow_mutatedTextSurvivesSerialisation() {
+        // getListOfEntSers reads the live f3822e EditText, not the OutlineRow
+        // created at construction — so a post-creation mutation must reach the
+        // persisted model. This is the core edit path of the outliner.
+        OutlineRowView rv = addRow(0, "original", false, false);
+        rv.f3822e.setText("edited");
+        ArrayList<OutlineRow> serialised = OutlineRow.getListOfEntSers(tree.m4988a());
+        assertEquals(1, serialised.size());
+        assertEquals("edited", serialised.get(0).text);
     }
 
     // --- delete ---
