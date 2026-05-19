@@ -11,11 +11,11 @@ val releaseKeystoreProps = Properties().apply {
 }
 
 android {
-    namespace = "ca.toadlybroodledev.minimalist"
+    namespace = "ca.toadlybroodle.minimalist"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "ca.toadlybroodledev.minimalist"
+        applicationId = "ca.toadlybroodle.minimalist"
         minSdk = 21
         targetSdk = 35
         versionCode = 107

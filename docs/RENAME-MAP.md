@@ -111,3 +111,18 @@ domain types listed in the spec carve-out (`SublistEntity`, `SublistDao`,
 shared-UID or `adb pull` workflow has a single named call site to wire
 cross-package data recovery through. Standard Android sandboxing blocks direct
 cross-package filesDir reads, so on a stock install the stub is a logged no-op.
+
+## Phase 12 — vanity package-segment drop
+
+Phase 12 drops the `dev` from the org segment: the active package and
+`applicationId` move from `ca.toadlybroodledev.minimalist` to
+`ca.toadlybroodle.minimalist`. Source trees relocate `ca/toadlybroodledev/` →
+`ca/toadlybroodle/` for `main` + `test`; all four app-referring class names from
+Phase 10.2 are unchanged. `AppMain.LEGACY_PACKAGE` deliberately stays
+`ca.toadlybroodledev.sublist` — it names the original 2018 install, not the
+Phase 10.2 intermediate. `decompiled/` paths are unchanged (read-only reference).
+
+| Phase 10.2 name | Phase 12 name | scope |
+|---|---|---|
+| package `ca.toadlybroodledev.minimalist` | package `ca.toadlybroodle.minimalist` | active tree only — decompiled/ paths unchanged |
+| `applicationId = "ca.toadlybroodledev.minimalist"` | `applicationId = "ca.toadlybroodle.minimalist"` | `app/build.gradle.kts`; debug `.dev` suffix preserved |

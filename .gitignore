@@ -21,3 +21,6 @@ Thumbs.db
 .skill-runs/
 
 data/
+
+# Build artifacts
+*.apk
