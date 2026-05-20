@@ -49,7 +49,12 @@ public class DrawerCustomLayout extends DrawerLayout {
     void m4798a(OutlineFragment fragment) {
         int id = m4797c(fragment);
         this.f3731g.add(0, id, this.f3731g.size() - 1, fragment.mo4848ae());
-        this.f3731g.findItem(id).setIcon(R.drawable.ic_action_minimalist_drawer_logo);
+        MenuItem item = this.f3731g.findItem(id);
+        item.setIcon(R.drawable.ic_action_minimalist_drawer_logo);
+        // NavigationView only reports state_checked for a checkable item, so the
+        // accent ColorStateList in applyDrawerAccentColors() never resolves
+        // otherwise — the active sublist would stay default white.
+        item.setCheckable(true);
     }
 
     void m4799b(OutlineFragment fragment) {
@@ -110,6 +115,21 @@ public class DrawerCustomLayout extends DrawerLayout {
         ColorStateList csl = new ColorStateList(
                 new int[][]{ new int[]{android.R.attr.state_checked}, new int[]{} },
                 new int[]{ accent, 0xFFF4F4F2 });
+        // Every navigable leaf must be checkable or NavigationView never adds
+        // state_checked to its item-view drawable state, so the csl above always
+        // resolves to the default-white branch (the Phase 13.4 bug).
+        Menu menu = this.f3729e.getMenu();
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem topItem = menu.getItem(i);
+            if (topItem.hasSubMenu()) {
+                SubMenu sub = topItem.getSubMenu();
+                for (int j = 0; j < sub.size(); j++) {
+                    sub.getItem(j).setCheckable(true);
+                }
+            } else {
+                topItem.setCheckable(true);
+            }
+        }
         this.f3729e.setItemTextColor(csl);
         this.f3729e.setItemIconTintList(csl);
     }

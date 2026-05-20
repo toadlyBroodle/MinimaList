@@ -66,10 +66,12 @@ class StringArraySpinnerAdapter extends BaseAdapter {
             textView.setBackgroundColor(bg);
             textView.setTextColor(contrastingTextColor(bg));
         } else {
-            // Plain label: full text on the accent/highlight background.
+            // Plain label (Location / Format pickers): white text on the accent
+            // background, matching the Settings buttons. contrastingTextColor
+            // returned black for light palette accents (Phase 13.1 follow-up).
             int bg = AppSettings.m4939e();
             textView.setBackgroundColor(bg);
-            textView.setTextColor(contrastingTextColor(bg));
+            textView.setTextColor(0xFFF4F4F2);
         }
         return v;
     }
