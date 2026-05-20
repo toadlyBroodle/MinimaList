@@ -113,12 +113,17 @@ public class DrawerCustomLayout extends DrawerLayout {
     }
 
     void applyDrawerAccentColors() {
-        int accent = AppSettings.m4939e();
-        int onAccent = StringArraySpinnerAdapter.contrastingTextColor(accent);
+        // m4945j() is the colour the Settings "accent" picker (colors_a400_array)
+        // actually writes. m4939e() — despite the name "accent" used at its call
+        // sites — reads a different pref (the 300-tint of the background hue), so
+        // the highlight must read m4945j() to track the picker. m4943h() is the
+        // colour the Settings text-colour picker writes.
+        int accent = AppSettings.m4945j();
+        int textColor = AppSettings.m4943h();
         int[][] states = new int[][]{ new int[]{android.R.attr.state_checked}, new int[]{} };
-        // Text + icon: contrast against the accent background when the row is the
-        // active one, light grey-white against the dark drawer otherwise.
-        ColorStateList content = new ColorStateList(states, new int[]{ onAccent, 0xFFF4F4F2 });
+        // Active row: the chosen text colour; every other row: light white on the
+        // dark drawer background.
+        ColorStateList content = new ColorStateList(states, new int[]{ textColor, 0xFFF4F4F2 });
         // The "you are here" highlight: the active row gets an accent-filled
         // background, every other row stays transparent. This replaces the flat
         // grey NavigationView paints on the checked item by default. NavigationView

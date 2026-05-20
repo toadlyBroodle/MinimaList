@@ -177,21 +177,23 @@ public class Phase13UiPolishTest {
                 "app/src/main/java/ca/toadlybroodle/minimalist/DrawerCustomLayout.java");
         assertTrue(
                 "DrawerCustomLayout must call setItemBackground with a checked-state drawable "
-                        + "so the active row's background is the runtime accent, not the default "
+                        + "so the active row's background is the chosen accent, not the default "
                         + "grey (Phase 13.4 correction)",
                 src.contains("setItemBackground") && src.contains("StateListDrawable"));
         assertTrue(
-                "DrawerCustomLayout must call setItemTextColor so the active entry's text "
-                        + "contrasts with the accent pill (Phase 13.4)",
-                src.contains("setItemTextColor"));
+                "DrawerCustomLayout must call setItemTextColor / setItemIconTintList with a "
+                        + "ColorStateList for the checked/default states (Phase 13.4)",
+                src.contains("setItemTextColor") && src.contains("setItemIconTintList")
+                        && src.contains("ColorStateList"));
         assertTrue(
-                "DrawerCustomLayout must call setItemIconTintList to tint icons with the "
-                        + "same checked/default ColorStateList (Phase 13.4)",
-                src.contains("setItemIconTintList"));
-        assertTrue(
-                "DrawerCustomLayout must build a ColorStateList for the checked/default "
-                        + "states (Phase 13.4)",
-                src.contains("ColorStateList"));
+                "The drawer highlight must read the Settings accent picker (m4945j) and the "
+                        + "chosen text colour (m4943h) (Phase 13.4 colour-source correction)",
+                src.contains("m4945j()") && src.contains("m4943h()"));
+        assertFalse(
+                "applyDrawerAccentColors must NOT source the highlight from m4939e() — that "
+                        + "pref is the background-hue tint, unaffected by the accent picker "
+                        + "(Phase 13.4 colour-source fix)",
+                src.contains("AppSettings.m4939e()"));
     }
 
     @Test
