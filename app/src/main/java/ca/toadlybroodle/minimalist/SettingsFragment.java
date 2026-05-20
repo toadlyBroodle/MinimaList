@@ -312,6 +312,24 @@ public class SettingsFragment extends Fragment
         }
     }
 
+    /**
+     * Re-render every settings spinner's collapsed view. onItemSelected only
+     * refreshes the spinner the user touched (via its own setSelection(0)); a
+     * colour change repaints the accent / background of all the others too, so
+     * they must all be invalidated. notifyDataSetChanged forces Spinner to
+     * re-call the adapter's getView for the selected slot on the next layout.
+     */
+    void refreshSpinners() {
+        Spinner[] all = {
+                this.f3885e, this.f3886f, this.f3887g, this.f3888h,
+                this.spinnerBackupLocation, this.spinnerBackupFormat };
+        for (Spinner s : all) {
+            if (s != null && s.getAdapter() instanceof StringArraySpinnerAdapter) {
+                ((StringArraySpinnerAdapter) s.getAdapter()).notifyDataSetChanged();
+            }
+        }
+    }
+
     // Phase 10.8: unified Export — write all open sublists to the chosen
     // Location in the chosen Format. No SAF; deterministic file paths so the
     // user knows where to find the file (toast confirms the path).

@@ -366,6 +366,13 @@ public class MainActivity extends AppCompatActivity
         } catch (Exception e6) {
             Log.d(this.f3712v, e6.getMessage());
         }
+        try {
+            // A colour change repaints every spinner's accent / background, not
+            // just the one the user touched — refresh them all.
+            this.f3709s.refreshSpinners();
+        } catch (Exception e7) {
+            Log.d(this.f3712v, e7.getMessage());
+        }
         // Phase 10.3: the legacy fragment-recreate branch (z=true on prefs change)
         // tore down the SettingsFragment and rebuilt it just to refresh spinner item
         // colors. That left a window where the just-tapped Spinner was detached when

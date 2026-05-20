@@ -72,6 +72,24 @@ public class Phase13UiPolishTest {
     }
 
     @Test
+    public void colorChangeRefreshesAllSettingsSpinners() {
+        String main = read(
+                "app/src/main/java/ca/toadlybroodle/minimalist/MainActivity.java");
+        String settings = read(
+                "app/src/main/java/ca/toadlybroodle/minimalist/SettingsFragment.java");
+        assertTrue(
+                "MainActivity.mo4772b must call refreshSpinners() so a colour change "
+                        + "repaints every spinner background, not only the touched one "
+                        + "(Phase 13.1 follow-up)",
+                main.contains("refreshSpinners"));
+        assertTrue(
+                "SettingsFragment.refreshSpinners must notifyDataSetChanged on the spinner "
+                        + "adapters to force a collapsed-view re-render (Phase 13.1 follow-up)",
+                settings.contains("void refreshSpinners()")
+                        && settings.contains("notifyDataSetChanged"));
+    }
+
+    @Test
     public void spinnerPlainLabelsUseWhiteText() {
         String src = read(
                 "app/src/main/java/ca/toadlybroodle/minimalist/StringArraySpinnerAdapter.java");
