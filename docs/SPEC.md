@@ -182,6 +182,10 @@ and `onUpdate` completes without exception under Robolectric (null bitmap from m
 screenshot file is absorbed by the existing try-catch). No production code changed for 8.3.
 Tests 259 → 274. `./gradlew :app:assembleDebug` green.
 
+**Review follow-ups (open — schedule as the next `/sst-dev-cycle` cycle):**
+- [ ] [medium] [blocker] `ReceiverNotification.java:64-73` — `rescheduleAlarmsAfterBoot` calls `repo.getRowsWithFutureReminders(now)` synchronously from `onReceive()` (main thread); `MinimaListDatabase` has no `allowMainThreadQueries()` so Room throws `IllegalStateException` caught silently; boot rescheduling silently fails on every real device. The behavioral test injects a mock repo (bypassing Room's thread check) so the test passes while the real path does nothing. Proposed fix: use `BroadcastReceiver.goAsync()` to extend the receiver's deadline, dispatch the query + alarm registration onto `AppMain.io()`, and call `pendingResult.finish()` when done.
+- [ ] [medium] [should-fix] `OutlineRowView.java:163` and `ReceiverNotification.java:69` — PendingIntent request code mismatch: `m4861b()` schedules alarms with `hashCode()` of the view object; `rescheduleAlarmsAfterBoot` re-registers with `(int) row.id`; `m4862c()` cancels with `hashCode()`. After any boot rescheduling the cancel call targets the wrong PendingIntent — "cancelled" reminders still fire after a device reboot. Proposed fix: unify on a stable per-row identifier across all three sites; since `OutlineRow` (POJO) has no DB id, add a `long id` field populated from `OutlineRowEntity.id` in `OutlineRepositoryImpl.loadAllAsHashMap` and use `(int) row.id` in `m4861b()` and `m4862c()`.
+
 ### Phase 9: Local persistence layer
 
 Replace the gutted Firebase Realtime Database with a Room-backed local store. Add a user-driven JSON export/import so backup is a deliberate action, not an always-on cloud sync.

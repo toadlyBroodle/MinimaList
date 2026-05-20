@@ -32,5 +32,7 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Order: blockers first, then highest-impact.
 -->
 
+- [medium] [blocker] `ReceiverNotification.java:64-73` rescheduleAlarmsAfterBoot — main-thread Room query throws IllegalStateException silently; boot rescheduling silently fails on real devices — review of 2251c2a (group with alarm-request-code)
+- [medium] [should-fix] `OutlineRowView.java:163` + `ReceiverNotification.java:69` — PendingIntent request code mismatch (hashCode vs row.id); cancel-after-boot-reschedule targets wrong PendingIntent; "cancelled" reminders still fire after reboot — review of 2251c2a (group with alarm-request-code)
 - [easy] 11.1 High-def drawer menu header icon (vector drawable or full density set). Reason: blurry on the new device's xxxhdpi display post-Phase-10.8 re-smoke; Phase-1 resource filter left only mdpi/hdpi raster.
 - [easy] 11.2 Drawer menu: only the *currently active* sublist title is accent-colored — reset all titles to default before tinting the active one. Reason: accent color accumulates across opened sublists; observed on the new device during Phase-10.8 re-smoke.
