@@ -88,6 +88,7 @@ public class OutlineRepositoryImpl implements OutlineRepository {
             ArrayList<OutlineRow> rows = new ArrayList<>();
             for (OutlineRowEntity e : rowDao.getRowsForSublist(sub.id)) {
                 OutlineRow row = new OutlineRow();
+                row.id = e.id;
                 row.text = e.text != null ? e.text : "";
                 row.complete = e.complete;
                 row.collapsed = e.collapsed;

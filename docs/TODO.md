@@ -10,6 +10,7 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Append-on-close, newest first. Trim to most recent 10.
 -->
 
+- Fix boot-reschedule main-thread Room crash (goAsync + AppMain.io) + unify alarm request codes on row.id across m4861b/m4862c/rescheduleAlarmsAfterBoot; OutlineRow.id field; OutlineRepositoryImpl.loadAllAsHashMap populates it; AppMain.EXECUTOR narrowed to Executor; 3 new tests (source-scan + behavioral) — by sst-dev-cycle at 2026-05-20T14:00Z
 - Phase 8.2 + 8.3 acceptance: AlarmManager schedule/cancel behavioral tests; ReceiverNotification notification delivery; boot rescheduling (RECEIVE_BOOT_COMPLETED permission + intent filter + rescheduleAlarmsAfterBoot via new getRowsWithFutureReminders DAO query); Phase8WidgetTest manifest/source-scan + Robolectric onUpdate coverage — by sst-dev-cycle at 2026-05-20T12:30Z
 - Phase8CrudTest: add editRow_mutatedTextSurvivesSerialisation test; guard OutlineRowView TextWatcher against null getLayout() — by sst-dev-cycle at 2026-05-20T11:00Z
 - Phase 8.1 + 8.4 acceptance: added Robolectric 4.14.1 unit-test harness; Phase8CrudTest (21 tests) exercises the real OutlineTree CRUD engine — create/delete/indent/collapse/complete + auto-delete/auto-complete cascades + OutlineRow round-trip; Phase8SettingsPrefsTest (13 tests) verifies every AppSettings settings/appearance toggle round-trips through SharedPreferences; no production code changed; tests 224 → 258 — by sst-dev-cycle at 2026-05-19T22:42Z
@@ -32,7 +33,5 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Order: blockers first, then highest-impact.
 -->
 
-- [medium] [blocker] `ReceiverNotification.java:64-73` rescheduleAlarmsAfterBoot — main-thread Room query throws IllegalStateException silently; boot rescheduling silently fails on real devices — review of 2251c2a (group with alarm-request-code)
-- [medium] [should-fix] `OutlineRowView.java:163` + `ReceiverNotification.java:69` — PendingIntent request code mismatch (hashCode vs row.id); cancel-after-boot-reschedule targets wrong PendingIntent; "cancelled" reminders still fire after reboot — review of 2251c2a (group with alarm-request-code)
 - [easy] 11.1 High-def drawer menu header icon (vector drawable or full density set). Reason: blurry on the new device's xxxhdpi display post-Phase-10.8 re-smoke; Phase-1 resource filter left only mdpi/hdpi raster.
 - [easy] 11.2 Drawer menu: only the *currently active* sublist title is accent-colored — reset all titles to default before tinting the active one. Reason: accent color accumulates across opened sublists; observed on the new device during Phase-10.8 re-smoke.

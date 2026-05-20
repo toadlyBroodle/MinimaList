@@ -60,18 +60,26 @@ public class ReceiverNotification extends BroadcastReceiver {
         if (repo == null) return;
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (am == null) return;
+        // goAsync() extends the BroadcastReceiver's deadline so the Room query (which Room
+        // forbids on the main thread) can run on the IO executor without triggering
+        // IllegalStateException or the 10-second ANR watchdog.
+        final PendingResult pendingResult = goAsync();
         long now = System.currentTimeMillis();
-        try {
-            List<OutlineRowEntity> rows = repo.getRowsWithFutureReminders(now);
-            for (OutlineRowEntity row : rows) {
-                Intent alarmIntent = new Intent(context, ReceiverNotification.class);
-                alarmIntent.putExtra("notification", row.text != null ? row.text : "");
-                PendingIntent pi = PendingIntent.getBroadcast(context, (int) row.id, alarmIntent,
-                        PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-                am.set(AlarmManager.RTC_WAKEUP, row.reminder, pi);
+        AppMain.io().execute(() -> {
+            try {
+                List<OutlineRowEntity> rows = repo.getRowsWithFutureReminders(now);
+                for (OutlineRowEntity row : rows) {
+                    Intent alarmIntent = new Intent(context, ReceiverNotification.class);
+                    alarmIntent.putExtra("notification", row.text != null ? row.text : "");
+                    PendingIntent pi = PendingIntent.getBroadcast(context, (int) row.id, alarmIntent,
+                            PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+                    am.set(AlarmManager.RTC_WAKEUP, row.reminder, pi);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (pendingResult != null) pendingResult.finish();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        });
     }
 }

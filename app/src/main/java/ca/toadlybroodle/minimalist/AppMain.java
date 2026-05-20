@@ -49,7 +49,7 @@ public class AppMain extends Application {
     private static final String MIGRATED_FLAG = "repo_migrated_v1";
 
     private static volatile OutlineRepository REPOSITORY;
-    private static volatile ExecutorService EXECUTOR;
+    private static volatile Executor EXECUTOR;
 
     @Override
     public void onCreate() {

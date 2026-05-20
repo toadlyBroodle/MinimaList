@@ -189,16 +189,58 @@ public class Phase8RemindersTest {
 
         Field repoField = AppMain.class.getDeclaredField("REPOSITORY");
         repoField.setAccessible(true);
+        Field executorField = AppMain.class.getDeclaredField("EXECUTOR");
+        executorField.setAccessible(true);
         Object originalRepo = repoField.get(null);
+        Object originalExecutor = executorField.get(null);
         try {
             repoField.set(null, mockRepo);
+            // Inject a synchronous executor so the async dispatch completes before assertion.
+            executorField.set(null, (java.util.concurrent.Executor) Runnable::run);
             new ReceiverNotification().onReceive(ctx,
                     new Intent(Intent.ACTION_BOOT_COMPLETED));
             assertFalse("AlarmManager must have a rescheduled alarm after BOOT_COMPLETED",
                     shadowAlarmManager.getScheduledAlarms().isEmpty());
         } finally {
             repoField.set(null, originalRepo);
+            executorField.set(null, originalExecutor);
         }
+    }
+
+    @Test
+    public void bootRescheduling_usesGoAsyncToAvoidMainThreadRoomQuery() {
+        String src = readSource(
+                "app/src/main/java/ca/toadlybroodle/minimalist/ReceiverNotification.java");
+        assertTrue("rescheduleAlarmsAfterBoot must call goAsync() to extend the receiver lifetime",
+                src.contains("goAsync()"));
+        assertTrue("rescheduleAlarmsAfterBoot must dispatch to AppMain.io() to avoid main-thread Room query",
+                src.contains("AppMain.io()"));
+    }
+
+    // --- alarm request-code stability ---
+
+    @Test
+    public void scheduleReminder_usesRowIdAsRequestCode() {
+        OutlineRow row = new OutlineRow(0, "Task with id", false, false, 0L, false);
+        row.id = 42L;
+        OutlineRowView view = new OutlineRowView(host, outlineHost, row);
+        long futureMs = System.currentTimeMillis() + 3_600_000;
+        DateTimeUtil.f3991a = futureMs;
+        view.m4861b();
+        assertFalse("alarm must be scheduled", shadowAlarmManager.getScheduledAlarms().isEmpty());
+        int requestCode = Shadows.shadowOf(
+                shadowAlarmManager.getScheduledAlarms().get(0).operation).getRequestCode();
+        assertEquals("PendingIntent request code must equal row.id, not hashCode()", 42, requestCode);
+    }
+
+    @Test
+    public void alarmSites_doNotUseHashCodeAsRequestCode() {
+        String src = readSource(
+                "app/src/main/java/ca/toadlybroodle/minimalist/OutlineRowView.java");
+        assertFalse("m4861b and m4862c must not use object hashCode() as alarm request code",
+                src.contains("getBroadcast(ctx, hashCode()"));
+        assertTrue("OutlineRowView must store row.id in a field used as alarm request code",
+                src.contains("f3829l"));
     }
 
     private File projectRoot() {

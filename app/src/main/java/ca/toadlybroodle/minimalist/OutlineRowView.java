@@ -35,6 +35,7 @@ public class OutlineRowView {
 
     private final String f3827j = "fuckn" + getClass().getSimpleName();
     private int f3828k;      // indent
+    public long f3829l;      // DB row ID; stable alarm request code (0 for unpersisted rows)
 
     OutlineRowView(HostContract host, OutlineHost outlineHost, OutlineRow row) {
         this.f3818a = host;
@@ -50,6 +51,7 @@ public class OutlineRowView {
         this.f3822e.setText(row.text);
         this.f3825h = row.reminder;
         this.f3826i = row.isInstr;
+        this.f3829l = row.id;
         this.f3821d.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -160,7 +162,7 @@ public class OutlineRowView {
         Context ctx = this.f3818a.mo4775m();
         Intent intent = new Intent(ctx, ReceiverNotification.class);
         intent.putExtra("notification", this.f3822e.getText());
-        PendingIntent pi = PendingIntent.getBroadcast(ctx, hashCode(), intent, PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent pi = PendingIntent.getBroadcast(ctx, (int) this.f3829l, intent, PendingIntent.FLAG_IMMUTABLE);
         AlarmManager am = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
         if (DateTimeUtil.f3991a <= DateTimeUtil.m5016d()) {
             Toast.makeText(ctx, R.string.choose_future_date_time, Toast.LENGTH_LONG).show();
@@ -181,7 +183,7 @@ public class OutlineRowView {
         Intent intent = new Intent(ctx, ReceiverNotification.class);
         intent.putExtra("notification", this.f3822e.getText());
         ((AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE))
-                .cancel(PendingIntent.getBroadcast(ctx, hashCode(), intent, PendingIntent.FLAG_IMMUTABLE));
+                .cancel(PendingIntent.getBroadcast(ctx, (int) this.f3829l, intent, PendingIntent.FLAG_IMMUTABLE));
         this.f3825h = 0L;
         this.f3818a.mo4759F();
         Toast.makeText(ctx, R.string.reminder_canceled, Toast.LENGTH_SHORT).show();

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 // Ported from decompiled p032c/C0554a. Plain POJO — Firebase annotations stripped in Phase 3.1.
 public class OutlineRow implements Serializable {
+    public long id;    // DB-assigned row ID; 0 for in-memory rows not yet persisted
     public int indent;
     public String text;
     public boolean complete;
