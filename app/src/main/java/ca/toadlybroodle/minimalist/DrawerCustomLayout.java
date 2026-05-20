@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
+
 import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.navigation.NavigationView;
 import ca.toadlybroodle.minimalist.iface.RowActionListener;
@@ -85,7 +86,14 @@ public class DrawerCustomLayout extends DrawerLayout {
                 }
                 Menu menu = DrawerCustomLayout.this.f3729e.getMenu();
                 for (int i = 0; i < menu.size(); i++) {
-                    DrawerCustomLayout.this.f3729e.getMenu().getItem(i).setChecked(false);
+                    MenuItem topItem = menu.getItem(i);
+                    topItem.setChecked(false);
+                    if (topItem.hasSubMenu()) {
+                        SubMenu sub = topItem.getSubMenu();
+                        for (int j = 0; j < sub.size(); j++) {
+                            sub.getItem(j).setChecked(false);
+                        }
+                    }
                 }
                 item.setChecked(true);
                 DrawerCustomLayout.this.closeDrawers();

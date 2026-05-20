@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="50dp"
+    android:height="50dp"
+    android:viewportWidth="50"
+    android:viewportHeight="50">
+
+    <!-- Indent-level 0: filled circle at (10,10) + horizontal rule -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M 5,10 A 5,5 0 1,0 15,10 A 5,5 0 1,0 5,10 Z"/>
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:pathData="M 18,10 L 44,10"/>
+
+    <!-- Indent-level 1: filled circle at (18,25) + horizontal rule -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M 13,25 A 5,5 0 1,0 23,25 A 5,5 0 1,0 13,25 Z"/>
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:pathData="M 26,25 L 44,25"/>
+
+    <!-- Indent-level 2: filled circle at (26,40) + horizontal rule -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M 21,40 A 5,5 0 1,0 31,40 A 5,5 0 1,0 21,40 Z"/>
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:pathData="M 34,40 L 44,40"/>
+
+</vector>

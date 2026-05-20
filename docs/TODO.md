@@ -10,6 +10,7 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Append-on-close, newest first. Trim to most recent 10.
 -->
 
+- Phase 11.1 + 11.2: drawer header icon → vector drawable (5 density PNGs removed); drawer SubMenu reset-loop fix so only the active sublist stays accent-colored — by sst-dev-cycle at 2026-05-20T15:45Z
 - Fix boot-reschedule main-thread Room crash (goAsync + AppMain.io) + unify alarm request codes on row.id across m4861b/m4862c/rescheduleAlarmsAfterBoot; OutlineRow.id field; OutlineRepositoryImpl.loadAllAsHashMap populates it; AppMain.EXECUTOR narrowed to Executor; 3 new tests (source-scan + behavioral) — by sst-dev-cycle at 2026-05-20T14:00Z
 - Phase 8.2 + 8.3 acceptance: AlarmManager schedule/cancel behavioral tests; ReceiverNotification notification delivery; boot rescheduling (RECEIVE_BOOT_COMPLETED permission + intent filter + rescheduleAlarmsAfterBoot via new getRowsWithFutureReminders DAO query); Phase8WidgetTest manifest/source-scan + Robolectric onUpdate coverage — by sst-dev-cycle at 2026-05-20T12:30Z
 - Phase8CrudTest: add editRow_mutatedTextSurvivesSerialisation test; guard OutlineRowView TextWatcher against null getLayout() — by sst-dev-cycle at 2026-05-20T11:00Z
@@ -21,7 +22,6 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
 - MainActivity.onStop:582 guard: wrap OutlineStore.m4962a call with isEmpty()/f3941d>=0/f3941d<size() check to prevent AIOOBE on first-launch / no-sublists; tests 203 → 206 — by sst-dev-cycle at 2026-05-19T22:00Z
 - Phase 10.2 closeout: delete ProfileFragment stub + AppSettings.m4935c/m4946k orphaned analytics methods + f3937H field/prefs; Phase 7 re-smoke ca.toadlybroodledev.minimalist.dev on Moto G (install OK, launcher/widget/MainActivity bind clean, no fatal exceptions); tests 202 → 203 — by sst-dev-cycle at 2026-05-19T21:15Z
 - Phase 10.2 code rename: relocate `ca.toadlybroodledev.sublist` → `ca.toadlybroodledev.minimalist` across 53 Java files + build.gradle.kts namespace/applicationId + 2 activity_main.xml layouts + AndroidManifest comment scrub; rename 4 app-referring classes (SublistDatabase→MinimaListDatabase, SublistFragment→OutlineFragment, WelcomeSublistFragment→WelcomeFragment, SearchSublistFragment→SearchFragment), preserve Sublist* domain types (Entity/Dao/Renderer/NewSublistDialog); DateTimeUtil.m5007a switched to ctx.getPackageName(); AppMain gets LEGACY_PACKAGE + migrateLegacyPackage stub; RENAME-MAP.md gets Phase 10.2 supersession table; Phase10PackageRenameTest (15 tests) self-skips + concatenates the legacy literal to avoid sed-rewrite self-corruption; tests 187 → 202 — by sst-dev-cycle at 2026-05-19T19:00Z
-- Phase 10 follow-up: prune SettingsFragment cloud-era UI (rate/support/privacy_policy/send_anon_data — 4 buttons + Switch, layout/ + layout-large/ + handlers + 5 strings) + refine 10.3 colors.xml to sage-neutral palette (#7A8471 accent / #4B5358 primary / #2F3438 primary-dark + softened colorTextWhite #F4F4F2 / colorTextWhiteCompleted #A8AAA5 + matched firebaseColor* vestigials); add f3880ap.setBackgroundColor(accent) for Contribute on GitHub button missed by 10.4/10.5; drop dead SublistFragment.onResume m4946k() empty if-block; Phase10ColorsTest hexes refreshed + 5 new Phase10MenuSurfacePruneTest regression guards; tests 182 → 187 — by sst-dev-cycle at 2026-05-19T17:30Z
 
 ## Next up (queued for next cycle)
 
@@ -33,5 +33,3 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Order: blockers first, then highest-impact.
 -->
 
-- [easy] 11.1 High-def drawer menu header icon (vector drawable or full density set). Reason: blurry on the new device's xxxhdpi display post-Phase-10.8 re-smoke; Phase-1 resource filter left only mdpi/hdpi raster.
-- [easy] 11.2 Drawer menu: only the *currently active* sublist title is accent-colored — reset all titles to default before tinting the active one. Reason: accent color accumulates across opened sublists; observed on the new device during Phase-10.8 re-smoke.
