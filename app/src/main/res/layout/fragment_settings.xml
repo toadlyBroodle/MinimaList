@@ -7,6 +7,26 @@
         android:id="@+id/fragment_settings_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:paddingBottom="8dp">
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/minimalist_nav_drawer_logo"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingStart="8dp"
+                android:textSize="18sp"
+                android:textColor="@color/colorTextWhite"
+                android:text="@string/menu_settings"/>
+        </LinearLayout>
         <TextView
             android:theme="@style/ThemeOverlay.HeaderText"
             android:layout_width="wrap_content"

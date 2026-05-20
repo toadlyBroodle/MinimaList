@@ -351,7 +351,7 @@ public class MainActivity extends AppCompatActivity
             Log.d(this.f3712v, e4.getMessage());
         }
         try {
-            int btnText = StringArraySpinnerAdapter.contrastingTextColor(accent);
+            int btnText = 0xFFF4F4F2; // Settings buttons always white; contrastingTextColor returns black for many palette entries
             this.f3709s.f3871a.setBackgroundColor(secondary);
             tintButton(this.f3709s.f3872ae, accent, btnText);
             tintButton(this.f3709s.f3873af, accent, btnText);
@@ -360,6 +360,11 @@ public class MainActivity extends AppCompatActivity
             tintButton(this.f3709s.f3880ap, accent, btnText);
         } catch (Exception e5) {
             Log.d(this.f3712v, e5.getMessage());
+        }
+        try {
+            this.f3713x.applyDrawerAccentColors();
+        } catch (Exception e6) {
+            Log.d(this.f3712v, e6.getMessage());
         }
         // Phase 10.3: the legacy fragment-recreate branch (z=true on prefs change)
         // tore down the SettingsFragment and rebuilt it just to refresh spinner item

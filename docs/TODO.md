@@ -10,6 +10,7 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Append-on-close, newest first. Trim to most recent 10.
 -->
 
+- Phase 13.1–13.4: Settings buttons always white text; centered logo+title headers in Settings+Search fragments; nav-drawer logo hollow circles + butt caps; active drawer item accent color via dynamic ColorStateList — by sst-dev-cycle at 2026-05-20T16:45Z
 - Phase 11.1 + 11.2: drawer header icon → vector drawable (5 density PNGs removed); drawer SubMenu reset-loop fix so only the active sublist stays accent-colored — by sst-dev-cycle at 2026-05-20T15:45Z
 - Fix boot-reschedule main-thread Room crash (goAsync + AppMain.io) + unify alarm request codes on row.id across m4861b/m4862c/rescheduleAlarmsAfterBoot; OutlineRow.id field; OutlineRepositoryImpl.loadAllAsHashMap populates it; AppMain.EXECUTOR narrowed to Executor; 3 new tests (source-scan + behavioral) — by sst-dev-cycle at 2026-05-20T14:00Z
 - Phase 8.2 + 8.3 acceptance: AlarmManager schedule/cancel behavioral tests; ReceiverNotification notification delivery; boot rescheduling (RECEIVE_BOOT_COMPLETED permission + intent filter + rescheduleAlarmsAfterBoot via new getRowsWithFutureReminders DAO query); Phase8WidgetTest manifest/source-scan + Robolectric onUpdate coverage — by sst-dev-cycle at 2026-05-20T12:30Z

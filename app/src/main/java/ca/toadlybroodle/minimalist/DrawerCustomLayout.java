@@ -1,6 +1,7 @@
 package ca.toadlybroodle.minimalist;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.util.AttributeSet;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -96,10 +97,20 @@ public class DrawerCustomLayout extends DrawerLayout {
                     }
                 }
                 item.setChecked(true);
+                applyDrawerAccentColors();
                 DrawerCustomLayout.this.closeDrawers();
                 return true;
             }
         });
         this.f3727c.mo4772b(false);
+    }
+
+    void applyDrawerAccentColors() {
+        int accent = AppSettings.m4939e();
+        ColorStateList csl = new ColorStateList(
+                new int[][]{ new int[]{android.R.attr.state_checked}, new int[]{} },
+                new int[]{ accent, 0xFFF4F4F2 });
+        this.f3729e.setItemTextColor(csl);
+        this.f3729e.setItemIconTintList(csl);
     }
 }
