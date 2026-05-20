@@ -143,6 +143,11 @@ public class OutlineRepositoryImpl implements OutlineRepository {
     }
 
     @Override
+    public List<OutlineRowEntity> getRowsWithFutureReminders(long nowMs) {
+        return rowDao.getRowsWithFutureReminders(nowMs);
+    }
+
+    @Override
     public void importLegacy(HashMap<String, ArrayList<OutlineRow>> data) {
         db.runInTransaction(() -> {
             int position = 0;

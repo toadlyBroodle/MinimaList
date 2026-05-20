@@ -26,6 +26,10 @@
     <!-- Phase 6.1-lint-fix-d: required on API 33+ to post notifications at runtime. -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
+    <!-- Phase 8.2: required to receive BOOT_COMPLETED so reminder alarms can be rescheduled
+         after a device restart (AlarmManager alarms do not survive a reboot). -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <!-- Phase 6.3: required on API 30+ so resolveActivity() returns non-null for email apps. -->
     <!-- Phase 10.5: https scheme added so resolveActivity() finds browsers for the
          "Contribute on GitHub" link in SettingsFragment. -->
@@ -69,10 +73,17 @@
                 android:resource="@xml/widget_info" />
         </receiver>
 
-        <!-- Phase 4.5: ReceiverNotification re-added now that the class is ported. -->
+        <!-- Phase 4.5: ReceiverNotification re-added now that the class is ported.
+             Phase 8.2: exported="true" and BOOT_COMPLETED filter added so the system
+             can deliver the boot broadcast to reschedule reminder alarms after a restart.
+             exported="true" is required for implicit system broadcasts on API 26+. -->
         <receiver
             android:name=".ReceiverNotification"
-            android:exported="false" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
 
     </application>
 

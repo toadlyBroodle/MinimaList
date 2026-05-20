@@ -38,4 +38,8 @@ public interface OutlineRepository {
     // Persists the current in-memory state. Walks the HashMap, ensuring each sublist exists
     // (by name) and atomically replacing its rows.
     void saveAllAsHashMap(HashMap<String, ArrayList<OutlineRow>> data);
+
+    // Returns all rows whose reminder epoch is after nowMs. Used by the boot receiver to
+    // reschedule alarms that were lost when the device restarted.
+    List<OutlineRowEntity> getRowsWithFutureReminders(long nowMs);
 }

@@ -34,6 +34,9 @@ public interface OutlineRowDao {
     @Query("DELETE FROM outline_rows WHERE sublist_id = :sublistId")
     void deleteAllRowsForSublist(long sublistId);
 
+    @Query("SELECT * FROM outline_rows WHERE reminder > :nowMs")
+    List<OutlineRowEntity> getRowsWithFutureReminders(long nowMs);
+
     @Transaction
     default void replaceForSublist(long sublistId, List<OutlineRowEntity> rows) {
         deleteAllRowsForSublist(sublistId);

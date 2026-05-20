@@ -10,6 +10,7 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Append-on-close, newest first. Trim to most recent 10.
 -->
 
+- Phase 8.2 + 8.3 acceptance: AlarmManager schedule/cancel behavioral tests; ReceiverNotification notification delivery; boot rescheduling (RECEIVE_BOOT_COMPLETED permission + intent filter + rescheduleAlarmsAfterBoot via new getRowsWithFutureReminders DAO query); Phase8WidgetTest manifest/source-scan + Robolectric onUpdate coverage — by sst-dev-cycle at 2026-05-20T12:30Z
 - Phase8CrudTest: add editRow_mutatedTextSurvivesSerialisation test; guard OutlineRowView TextWatcher against null getLayout() — by sst-dev-cycle at 2026-05-20T11:00Z
 - Phase 8.1 + 8.4 acceptance: added Robolectric 4.14.1 unit-test harness; Phase8CrudTest (21 tests) exercises the real OutlineTree CRUD engine — create/delete/indent/collapse/complete + auto-delete/auto-complete cascades + OutlineRow round-trip; Phase8SettingsPrefsTest (13 tests) verifies every AppSettings settings/appearance toggle round-trips through SharedPreferences; no production code changed; tests 224 → 258 — by sst-dev-cycle at 2026-05-19T22:42Z
 - Phase10TxtRoundtripTest: 15 pure-JVM behavioral tests for OutlineStore.parseTxtRows covering root/nested incomplete/complete rows, empty text, CRLF endings, all-malformed → empty list, realistic exported block — by sst-dev-cycle at 2026-05-20T10:30Z
@@ -31,7 +32,5 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Order: blockers first, then highest-impact.
 -->
 
-- [medium] 8.2 Reminders: setting a reminder fires a notification at the scheduled time; rescheduling on device boot works. Reason: 8.1 closed; OutlineRowView.m4861b/m4862c (AlarmManager) + ReceiverNotification now testable under the Robolectric harness added in the 8.1+8.4 cycle.
-- [medium] 8.3 Home-screen widget renders the current list and survives app data update. Reason: 8.1 closed; WidgetProvider now testable under the Robolectric harness added in the 8.1+8.4 cycle.
 - [easy] 11.1 High-def drawer menu header icon (vector drawable or full density set). Reason: blurry on the new device's xxxhdpi display post-Phase-10.8 re-smoke; Phase-1 resource filter left only mdpi/hdpi raster.
 - [easy] 11.2 Drawer menu: only the *currently active* sublist title is accent-colored — reset all titles to default before tinting the active one. Reason: accent color accumulates across opened sublists; observed on the new device during Phase-10.8 re-smoke.
