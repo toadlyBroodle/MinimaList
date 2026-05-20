@@ -2,6 +2,8 @@ package ca.toadlybroodle.minimalist;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.StateListDrawable;
 import android.util.AttributeSet;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -112,12 +114,23 @@ public class DrawerCustomLayout extends DrawerLayout {
 
     void applyDrawerAccentColors() {
         int accent = AppSettings.m4939e();
-        ColorStateList csl = new ColorStateList(
-                new int[][]{ new int[]{android.R.attr.state_checked}, new int[]{} },
-                new int[]{ accent, 0xFFF4F4F2 });
+        int onAccent = StringArraySpinnerAdapter.contrastingTextColor(accent);
+        int[][] states = new int[][]{ new int[]{android.R.attr.state_checked}, new int[]{} };
+        // Text + icon: contrast against the accent background when the row is the
+        // active one, light grey-white against the dark drawer otherwise.
+        ColorStateList content = new ColorStateList(states, new int[]{ onAccent, 0xFFF4F4F2 });
+        // The "you are here" highlight: the active row gets an accent-filled
+        // background, every other row stays transparent. This replaces the flat
+        // grey NavigationView paints on the checked item by default. NavigationView
+        // clones the drawable per item (getConstantState().newDrawable()), so one
+        // shared StateListDrawable tracks each row's own checked state correctly.
+        StateListDrawable itemBg = new StateListDrawable();
+        itemBg.addState(new int[]{android.R.attr.state_checked}, new ColorDrawable(accent));
+        itemBg.addState(new int[]{}, new ColorDrawable(0x00000000));
         // Every navigable leaf must be checkable or NavigationView never adds
-        // state_checked to its item-view drawable state, so the csl above always
-        // resolves to the default-white branch (the Phase 13.4 bug).
+        // state_checked to its item-view drawable state, so neither the state list
+        // nor the state drawable above ever resolves to its checked branch
+        // (the Phase 13.4 bug).
         Menu menu = this.f3729e.getMenu();
         for (int i = 0; i < menu.size(); i++) {
             MenuItem topItem = menu.getItem(i);
@@ -130,7 +143,8 @@ public class DrawerCustomLayout extends DrawerLayout {
                 topItem.setCheckable(true);
             }
         }
-        this.f3729e.setItemTextColor(csl);
-        this.f3729e.setItemIconTintList(csl);
+        this.f3729e.setItemTextColor(content);
+        this.f3729e.setItemIconTintList(content);
+        this.f3729e.setItemBackground(itemBg);
     }
 }

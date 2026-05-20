@@ -154,20 +154,25 @@ public class Phase13UiPolishTest {
     }
 
     @Test
-    public void drawerSetsItemTextColorDynamically() {
+    public void drawerSetsItemColorsDynamically() {
         String src = read(
                 "app/src/main/java/ca/toadlybroodle/minimalist/DrawerCustomLayout.java");
         assertTrue(
-                "DrawerCustomLayout must call setItemTextColor to apply the runtime accent "
-                        + "to the active sublist entry (Phase 13.4)",
+                "DrawerCustomLayout must call setItemBackground with a checked-state drawable "
+                        + "so the active row's background is the runtime accent, not the default "
+                        + "grey (Phase 13.4 correction)",
+                src.contains("setItemBackground") && src.contains("StateListDrawable"));
+        assertTrue(
+                "DrawerCustomLayout must call setItemTextColor so the active entry's text "
+                        + "contrasts with the accent pill (Phase 13.4)",
                 src.contains("setItemTextColor"));
         assertTrue(
                 "DrawerCustomLayout must call setItemIconTintList to tint icons with the "
-                        + "same runtime accent ColorStateList (Phase 13.4)",
+                        + "same checked/default ColorStateList (Phase 13.4)",
                 src.contains("setItemIconTintList"));
         assertTrue(
                 "DrawerCustomLayout must build a ColorStateList for the checked/default "
-                        + "text-color states (Phase 13.4)",
+                        + "states (Phase 13.4)",
                 src.contains("ColorStateList"));
     }
 
