@@ -31,6 +31,7 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Order: blockers first, then highest-impact.
 -->
 
+- [easy] [should-fix] [batch-sizing] docs/TODO.md — dev-skill input 63k at medium (band 200-300k); 14.3 was available for bundling but not picked — review of a8c0879
 - [medium] 14.3 Free SMTP `RCPT TO` mailbox probe (modeled on redaiteam `finder._verify_smtp`), run from the VPS, throttled; three-way classify (confirmed / unverifiable / rejected); produce tiered `data/outreach/active.txt` + funnel counts + expected bounce rate in `docs/PROMOTION_PLAN.md`. Reason: SPEC Phase 14
 - [medium] 14.4 Research F-Droid inclusion (reproducible builds, fdroiddata metadata, fastlane layout, RFP vs merge request); write `docs/FDROID.md` submission checklist. Docs only. Reason: SPEC Phase 14
 - [medium] 14.5 Write `docs/PROMOTION_PLAN.md` — botlab.dev SPF/DKIM/DMARC audit, legal framing, warmup/volume caps, plain-text content draft, monitoring kill-switch. No send scheduled. Reason: SPEC Phase 14
