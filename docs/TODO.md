@@ -35,6 +35,7 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Order: blockers first, then highest-impact.
 -->
 
+- [easy] [should-fix] `Phase14OutreachSetupTest.java` — add `emailListExistsInOutreachDir()` test asserting `data/outreach/emails.txt` exists; current suite is green even when the input file is absent — review of 903d57d
 - [medium] 14.2 Build `tools/outreach/validate.py` — normalize, RFC-5322 syntax check, dedupe, per-domain MX lookup, role/disposable flagging; fail-closed, output a strict subset; emit bucket-count report + `validated.txt`. No network send. Reason: SPEC Phase 14
 - [medium] 14.3 Free SMTP `RCPT TO` mailbox probe (modeled on redaiteam `finder._verify_smtp`), run from the VPS, throttled; three-way classify (confirmed / unverifiable / rejected); produce tiered `data/outreach/active.txt` + funnel counts + expected bounce rate in `docs/PROMOTION_PLAN.md`. Reason: SPEC Phase 14
 - [medium] 14.4 Research F-Droid inclusion (reproducible builds, fdroiddata metadata, fastlane layout, RFP vs merge request); write `docs/FDROID.md` submission checklist. Docs only. Reason: SPEC Phase 14
