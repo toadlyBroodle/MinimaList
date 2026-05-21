@@ -121,4 +121,11 @@ public class Phase14SendTest {
         assertTrue("send.py must set the List-Unsubscribe header on composed messages",
                 src.contains("List-Unsubscribe"));
     }
+
+    @Test
+    public void sendPyBodyTemplateHasMailingAddressPlaceholder() {
+        String src = read("tools/outreach/send.py");
+        assertTrue("BODY_TEMPLATE must contain [mailing address] placeholder (CAN-SPAM requirement)",
+                src.contains("[mailing address]"));
+    }
 }

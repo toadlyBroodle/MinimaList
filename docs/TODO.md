@@ -10,6 +10,7 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Append-on-close, newest first. Trim to most recent 10.
 -->
 
+- send.py BODY_TEMPLATE: add [mailing address] CAN-SPAM placeholder; Python tests 74 → 76; Java tests 326 → 327 — by sst-dev-cycle at 2026-05-21T13:10Z
 - Phase 14.5 + 14.6: PROMOTION_PLAN.md five-section campaign plan (sender audit, legal, volume, content, monitoring); send.py DRY_RUN tool; Python tests 53 → 74; Java tests 314 → 326 — by sst-dev-cycle at 2026-05-21T12:20Z
 - Phase 14.3 + 14.4: SMTP RCPT-TO probe → 1104 active addresses (1032 confirmed + 72 unverifiable, ~6% expected bounce rate); docs/FDROID.md 7-step checklist; Python tests 32 → 53; Java tests 301 → 314 — by sst-dev-cycle at 2026-05-21T11:05Z
 - Phase 14.2 review: batch-sizing rule acknowledged — same-phase items must be bundled when tokens remain below band lower edge — by sst-dev-cycle at 2026-05-21T11:05Z
@@ -32,5 +33,4 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Order: blockers first, then highest-impact.
 -->
 
-- [easy] [should-fix] `tools/outreach/send.py:BODY_TEMPLATE` — add `[mailing address]` placeholder (missing from template; present in PROMOTION_PLAN.md §(d) content draft; live send violates CAN-SPAM without it) — review of 016b0b8
 
