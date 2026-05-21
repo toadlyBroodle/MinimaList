@@ -32,4 +32,5 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Order: blockers first, then highest-impact.
 -->
 
+- [easy] [should-fix] `tools/outreach/send.py:BODY_TEMPLATE` — add `[mailing address]` placeholder (missing from template; present in PROMOTION_PLAN.md §(d) content draft; live send violates CAN-SPAM without it) — review of 016b0b8
 
