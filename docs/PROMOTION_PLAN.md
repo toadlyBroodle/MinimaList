@@ -73,10 +73,169 @@ Warmup sends should target the confirmed tier first.
 
 ---
 
-## Phases 14.4–14.6 (planned)
+## Phase 14.5 — Full campaign plan
 
-Full campaign plan (sender setup, legal framing, volume plan, content draft,
-monitoring) will be added in Phase 14.5.
+**No send is scheduled. Executing the campaign is a separate future phase
+requiring the user's direct approval before any message is transmitted.**
 
-Executing the campaign is a separate future phase requiring the user's
-direct approval. No send is scheduled.
+---
+
+### (a) Sender setup — botlab.dev audit
+
+Sender identity for any future campaign: `rob@botlab.dev`  
+VPS: `server1.botlab.dev` (203.161.57.177), Postfix + OpenDKIM milter on port 8891.
+
+**SPF** (`v=spf1 ip4:203.161.57.177 -all`)  
+Status: **pass**. Single IP authorization with hard fail (`-all`). No gaps.
+
+**DKIM** (selector `mail._domainkey.botlab.dev`, RSA-2048 / SHA-256)  
+Status: **pass**. OpenDKIM milter wired to Postfix; key published and valid.
+
+**DMARC** (`v=DMARC1; p=quarantine; pct=100; rua=...postmarkapp.com; aspf=r;`)  
+Status: **partial**. Aggregate reports go to Postmark. `p=quarantine` means
+spoofed mail lands in spam rather than bouncing. `p=reject` is the hardened
+target.
+
+**Gaps to close before any send:**
+
+| Gap | Action |
+|-----|--------|
+| DMARC at `p=quarantine`, not `p=reject` | Review Postmark aggregate reports for a clean week, then step to `p=reject` |
+| No Google Postmaster Tools domain registration | Register `botlab.dev` at postmaster.google.com (free) — surfaces Gmail-specific complaint rate |
+| No `List-Unsubscribe-Post` (RFC 8058 one-click) header | Add alongside `List-Unsubscribe` mailto in send.py for Gmail compliance |
+| No PTR / rDNS verified | Confirm `203.161.57.177` has a matching PTR record pointing to `server1.botlab.dev` |
+
+---
+
+### (b) Legal framing
+
+**Classification:** one-time service announcement to users who voluntarily installed
+the app, not recurring marketing.
+
+**CAN-SPAM (US):** applies to commercial email. This message is transactional /
+informational (app re-release notice), which has lighter requirements. At minimum:
+- Physical postal address in the message body or footer (required). Use:
+  `[your mailing address]` — fill in before sending.
+- A clear, working unsubscribe mechanism honored within 10 business days.
+  `List-Unsubscribe` header + in-body reply instruction satisfies this.
+- `From` and `Reply-To` must identify the real sender. `rob@botlab.dev` does.
+- No deceptive subject lines. "MinimaList — the app you installed is back" is
+  factually accurate.
+
+**GDPR (EU):** the legacy Play Store email list was collected under Google's Play
+privacy policy, not under a direct consent mechanism for subsequent marketing emails.
+EU recipients are the highest-risk cohort.
+- Practical posture: treat every recipient as potentially EU-resident.
+- One-time service announcement (no tracking pixels, no profiling, no re-targeting)
+  is the safest approach; legitimate interest is a defensible basis for a single
+  re-engagement notice to a user who explicitly installed the app.
+- Include a clear unsubscribe path. Honor it permanently.
+- Do not append or enrich the list (no third-party data merge).
+
+**CASL (Canada):** stricter than CAN-SPAM. Installing an app on Play Store can
+constitute "implied consent" under CASL s.10(9)(a) (existing business relationship)
+for up to 2 years after last interaction. Given the ~7-year gap, implied consent has
+lapsed for most Canadian addresses. Practical mitigation: same as GDPR posture —
+single message, easy unsubscribe, no repeat sends.
+
+**Bottom line:** one message, clear sender, working unsubscribe, no re-send, no
+enrichment. Add a postal address before sending.
+
+---
+
+### (c) Volume plan — warmup ramp
+
+`botlab.dev` is an established transactional sender (botlab.dev AI tools) so it has
+some sending reputation, but no bulk-email history. The warmup schedule below is
+conservative relative to what a cold domain requires.
+
+**Hard limits (Gmail/Yahoo/Microsoft 2026):**
+- Spam complaint rate: hard cap 0.3%, target <0.1%
+- Bounce rate: hard cap 5%, target <2% (the ~6% unverifiable share is the risk)
+- `5,000+/day` to Gmail = permanent "bulk sender" classification (not applicable here)
+
+**Warmup schedule for botlab.dev bulk send:**
+
+| Week | Daily volume | Notes |
+|------|-------------|-------|
+| 1 | 20–30/day | Confirmed tier only; monitor bounce + complaint rate closely |
+| 2 | 50–75/day | Continue confirmed tier if week-1 complaints < 0.05% |
+| 3 | 100–150/day | Extend to unverifiable tier if bounce rate from week 2 < 2% |
+| 4 | 200–300/day | Full list if metrics hold |
+
+**Never raise volume >20% day-over-day.**
+
+Total list: 1,104 addresses. At 200/day the full list sends in ~6 days.
+At 50/day: ~22 days. Recommend 50–100/day for a single-message campaign of this
+size; the warmup cost is low relative to the reputation risk.
+
+**Throttle in send.py:** default 5s between messages; `--throttle` flag overrides.
+
+---
+
+### (d) Content draft
+
+**Subject:** `MinimaList — the app you installed is back, cloud-free`
+
+**From:** `Rob (MinimaList) <rob@botlab.dev>`
+
+**List-Unsubscribe:** `<mailto:rob@botlab.dev?subject=unsubscribe>`
+
+**Body (plain text):**
+
+```
+Hi,
+
+You installed MinimaList (formerly Sublist) from Google Play a few years ago.
+The app has been rewritten from scratch — cloud-free, no ads, no tracking, no
+accounts.
+
+Download the latest build:
+  https://github.com/toadlyBroodle/MinimaList/releases
+
+An F-Droid listing is in progress. All outline data stays on your device.
+
+– Rob
+
+[mailing address]
+
+---
+To stop receiving messages from this address, reply with "unsubscribe" in the
+subject line, or use the link below.
+```
+
+**Notes before sending:**
+1. Replace `[mailing address]` with a real postal address (CAN-SPAM requirement).
+2. Once the F-Droid listing is live, update the link to the F-Droid page.
+3. A GitHub Releases fallback is appropriate until F-Droid is available.
+4. No tracking pixels, no UTM parameters — consistent with the privacy posture.
+
+---
+
+### (e) Monitoring and kill-switch
+
+**Metrics to watch:**
+
+| Metric | Stop threshold | Action |
+|--------|---------------|--------|
+| Spam complaint rate | > 0.1% | Pause immediately; investigate before resuming |
+| Bounce rate | > 2% | Pause; review unverifiable tier strategy |
+| Unsubscribe rate | > 2% | Review content; do not re-send to unsubscribers |
+| Send failures | > 5% | Check Postfix queue and SMTP relay health |
+
+**Sources for complaint rate:**
+- Google Postmaster Tools (`postmaster.google.com`) — free, shows Gmail-specific
+  complaint rate by domain. Register before sending.
+- Postmark DMARC aggregate reports (already configured via `rua=` in DMARC record).
+
+**Kill-switch protocol:**
+1. Set `DRY_RUN = True` in `tools/outreach/send.py` and stop the run.
+2. Do not resume until the metric has been investigated and resolved.
+3. Never re-send to an address that bounced hard or unsubscribed.
+
+**send.py safety properties (enforced, not advisory):**
+- `DRY_RUN = True` is the module default — live sends require a deliberate code
+  change by the user.
+- The send log (`data/outreach/send_log.csv`) prevents double-sends on re-runs.
+- Unsubscribed addresses in `data/outreach/unsubscribed.txt` are suppressed before
+  composition — they are never even composed for in dry-run.
