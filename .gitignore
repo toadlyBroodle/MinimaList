@@ -24,3 +24,4 @@ data/
 
 # Build artifacts
 *.apk
+v106.keystore.properties

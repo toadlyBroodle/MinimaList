@@ -10,6 +10,7 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Append-on-close, newest first. Trim to most recent 10.
 -->
 
+- Phase14OutreachSetupTest: add emailListExistsInOutreachDir() asserting data/outreach/emails.txt exists; tests 296 → 297 — by sst-dev-cycle at 2026-05-21T09:05Z
 - Phase 14.1: copy legacy email list to gitignored data/outreach/; create docs/PROMOTION_PLAN.md provenance stub — by sst-dev-cycle at 2026-05-21T00:10Z
 - Phase 13.1–13.4: Settings buttons always white text; centered logo+title headers in Settings+Search fragments; nav-drawer logo hollow circles + butt caps; active drawer item accent color via dynamic ColorStateList — by sst-dev-cycle at 2026-05-20T16:45Z
 - Phase 11.1 + 11.2: drawer header icon → vector drawable (5 density PNGs removed); drawer SubMenu reset-loop fix so only the active sublist stays accent-colored — by sst-dev-cycle at 2026-05-20T15:45Z
@@ -35,7 +36,6 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Order: blockers first, then highest-impact.
 -->
 
-- [easy] [should-fix] `Phase14OutreachSetupTest.java` — add `emailListExistsInOutreachDir()` test asserting `data/outreach/emails.txt` exists; current suite is green even when the input file is absent — review of 903d57d
 - [medium] 14.2 Build `tools/outreach/validate.py` — normalize, RFC-5322 syntax check, dedupe, per-domain MX lookup, role/disposable flagging; fail-closed, output a strict subset; emit bucket-count report + `validated.txt`. No network send. Reason: SPEC Phase 14
 - [medium] 14.3 Free SMTP `RCPT TO` mailbox probe (modeled on redaiteam `finder._verify_smtp`), run from the VPS, throttled; three-way classify (confirmed / unverifiable / rejected); produce tiered `data/outreach/active.txt` + funnel counts + expected bounce rate in `docs/PROMOTION_PLAN.md`. Reason: SPEC Phase 14
 - [medium] 14.4 Research F-Droid inclusion (reproducible builds, fdroiddata metadata, fastlane layout, RFP vs merge request); write `docs/FDROID.md` submission checklist. Docs only. Reason: SPEC Phase 14

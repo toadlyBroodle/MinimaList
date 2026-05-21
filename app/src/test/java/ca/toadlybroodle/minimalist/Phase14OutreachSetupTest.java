@@ -62,4 +62,11 @@ public class Phase14OutreachSetupTest {
         assertTrue("provenance stub must reference the outreach data directory",
                 src.contains("data/outreach") || src.contains("emails"));
     }
+
+    @Test
+    public void emailListExistsInOutreachDir() {
+        assertTrue(
+                "data/outreach/emails.txt must exist locally — Phase 14.2 validate.py requires it as input",
+                new File(projectRoot(), "data/outreach/emails.txt").exists());
+    }
 }
