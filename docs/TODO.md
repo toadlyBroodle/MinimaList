@@ -10,6 +10,7 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Append-on-close, newest first. Trim to most recent 10.
 -->
 
+- 15.5 follow-up: fix FDROID.md Step 6 UpdateCheckData template (libs.versions.toml → app/build.gradle.kts) + direct operator to copy draft YAML; tests 360 → 363 — by sst-dev-cycle at 2026-05-22T20:00Z
 - 15.2+15.4+15.5: fastlane metadata (short/full/title/changelog/icon), v107 tag+GitHub release, fdroiddata YAML linted; tests 631 → 653 — by sst-dev-cycle at 2026-05-22T19:00Z
 - FDROID.md Step 1 + Step 4 checkboxes ticked and Prerequisites table updated after 15.1/15.3 shipped; tests 626 → 631 — by sst-dev-cycle at 2026-05-22T10:10Z
 - 15.1 + 15.3: add MIT LICENSE (copyright toadlyBroodle) + pin buildToolsVersion = "35.0.0"; tests 327 → 333 — by sst-dev-cycle at 2026-05-22T00:05Z
@@ -19,12 +20,6 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
 - Phase 14.2 review: batch-sizing rule acknowledged — same-phase items must be bundled when tokens remain below band lower edge — by sst-dev-cycle at 2026-05-21T11:05Z
 - Phase 14.2: build tools/outreach/validate.py (normalize, RFC-5322, dedupe, MX lookup, role/disposable flagging); Phase14ValidateTest 4 source-scan checks; 32 pytest behavioral tests; tests 297 → 301 — by sst-dev-cycle at 2026-05-21T10:30Z
 - Phase14OutreachSetupTest: add emailListExistsInOutreachDir() asserting data/outreach/emails.txt exists; tests 296 → 297 — by sst-dev-cycle at 2026-05-21T09:05Z
-- Phase 14.1: copy legacy email list to gitignored data/outreach/; create docs/PROMOTION_PLAN.md provenance stub — by sst-dev-cycle at 2026-05-21T00:10Z
-- Phase 13.1–13.4: Settings buttons always white text; centered logo+title headers in Settings+Search fragments; nav-drawer logo hollow circles + butt caps; active drawer item accent color via dynamic ColorStateList — by sst-dev-cycle at 2026-05-20T16:45Z
-- Phase 11.1 + 11.2: drawer header icon → vector drawable (5 density PNGs removed); drawer SubMenu reset-loop fix so only the active sublist stays accent-colored — by sst-dev-cycle at 2026-05-20T15:45Z
-- Fix boot-reschedule main-thread Room crash (goAsync + AppMain.io) + unify alarm request codes on row.id across m4861b/m4862c/rescheduleAlarmsAfterBoot; OutlineRow.id field; OutlineRepositoryImpl.loadAllAsHashMap populates it; AppMain.EXECUTOR narrowed to Executor; 3 new tests (source-scan + behavioral) — by sst-dev-cycle at 2026-05-20T14:00Z
-- Phase 8.2 + 8.3 acceptance: AlarmManager schedule/cancel behavioral tests; ReceiverNotification notification delivery; boot rescheduling (RECEIVE_BOOT_COMPLETED permission + intent filter + rescheduleAlarmsAfterBoot via new getRowsWithFutureReminders DAO query); Phase8WidgetTest manifest/source-scan + Robolectric onUpdate coverage — by sst-dev-cycle at 2026-05-20T12:30Z
-- Phase8CrudTest: add editRow_mutatedTextSurvivesSerialisation test; guard OutlineRowView TextWatcher against null getLayout() — by sst-dev-cycle at 2026-05-20T11:00Z
 
 ## Next up (queued for next cycle)
 
@@ -35,8 +30,6 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Difficulty: easy / medium / hard.
   Order: blockers first, then highest-impact.
 -->
-
-- [easy] [should-fix] 15.5 `docs/FDROID.md:Step 6` UpdateCheckData template points at libs.versions.toml (no versionCode) instead of app/build.gradle.kts — broken auto-update regex if operator copies template — review of 83ddf8b
 
 <!-- Operator-only (not autonomous): docs/HUMAN.md H15.1 — submit the fdroiddata merge request once 15.1–15.5 are done. -->
 

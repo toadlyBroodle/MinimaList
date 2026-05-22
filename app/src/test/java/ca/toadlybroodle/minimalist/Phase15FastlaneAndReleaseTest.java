@@ -8,6 +8,7 @@ import java.io.UncheckedIOException;
 import java.nio.file.Files;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -206,5 +207,29 @@ public class Phase15FastlaneAndReleaseTest {
         String doc = read("docs/FDROID.md");
         assertTrue("FDROID.md Prerequisites table must show F-Droid YAML row as Done",
                 doc.contains("| F-Droid YAML in fdroiddata fork | **Done**"));
+    }
+
+    // ── 15.5 follow-up: UpdateCheckData template fix ──────────────────────────
+
+    @Test
+    public void fdroidMdStep6UpdateCheckDataPointsAtBuildGradle() {
+        String doc = read("docs/FDROID.md");
+        assertTrue("FDROID.md Step 6 UpdateCheckData must reference app/build.gradle.kts",
+                doc.contains("app/build.gradle.kts"));
+    }
+
+    @Test
+    public void fdroidMdStep6UpdateCheckDataDoesNotReferenceLibsVersionsToml() {
+        String doc = read("docs/FDROID.md");
+        // The template must not point at libs.versions.toml — versionCode lives in build.gradle.kts
+        assertFalse("FDROID.md Step 6 UpdateCheckData must not reference libs.versions.toml",
+                doc.contains("libs.versions.toml|versionCode"));
+    }
+
+    @Test
+    public void fdroidMdStep6DirectsOperatorToCopyDraftYaml() {
+        String doc = read("docs/FDROID.md");
+        assertTrue("FDROID.md Step 6 must direct operator to copy docs/fdroid/ca.toadlybroodle.minimalist.yml directly",
+                doc.contains("docs/fdroid/ca.toadlybroodle.minimalist.yml"));
     }
 }

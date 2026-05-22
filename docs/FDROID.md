@@ -142,8 +142,13 @@ Builds:
 
 AutoUpdateMode: Version
 UpdateCheckMode: Tags
-UpdateCheckData: gradle/libs.versions.toml|versionCode\s*=\s*"([^"]+)"|.|v$1
+UpdateCheckData: app/build.gradle.kts|versionCode\s*=\s*([0-9]+)|.|v$1
 ```
+
+**Use the linted draft directly.** Rather than transcribing this skeleton, copy
+`docs/fdroid/ca.toadlybroodle.minimalist.yml` from this repo into your
+`fdroiddata` fork — it already has the correct `UpdateCheckData` regex and has
+passed `fdroid lint` locally.
 
 - [ ] Fork `fdroiddata` on GitLab.
 - [ ] Add the YAML above (updated with correct license + commit hash).
