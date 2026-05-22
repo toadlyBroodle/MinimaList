@@ -76,11 +76,8 @@ An F-Droid listing is in progress. All outline data stays on your device.
 
 – Rob
 
-[mailing address]
-
 ---
-To stop receiving messages from this address, reply with "unsubscribe" in \
-the subject line, or use the link below.
+To be removed from future emails, reply to this email with UNSUBSCRIBE.
 """
 
 

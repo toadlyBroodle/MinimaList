@@ -110,12 +110,17 @@ target.
 **Classification:** one-time service announcement to users who voluntarily installed
 the app, not recurring marketing.
 
-**CAN-SPAM (US):** applies to commercial email. This message is transactional /
-informational (app re-release notice), which has lighter requirements. At minimum:
-- Physical postal address in the message body or footer (required). Use:
-  `[your mailing address]` — fill in before sending.
-- A clear, working unsubscribe mechanism honored within 10 business days.
-  `List-Unsubscribe` header + in-body reply instruction satisfies this.
+**CAN-SPAM (US):** applies to commercial email. This message is treated as
+transactional / informational (app re-release notice to existing users), which is
+exempt from the physical-postal-address requirement that applies to commercial mail.
+At minimum:
+- No postal address is included (decision 2026-05-22). This relies on the message
+  qualifying as transactional/relationship content rather than commercial. If the
+  content ever gains a promotional slant and is judged commercial, a valid physical
+  postal address becomes legally required — revisit before sending in that case.
+- A clear, working unsubscribe mechanism honored within 10 business days. The
+  `List-Unsubscribe` header plus an in-body "reply with UNSUBSCRIBE" instruction
+  satisfies this; replies are processed manually into `unsubscribed.txt`.
 - `From` and `Reply-To` must identify the real sender. `rob@botlab.dev` does.
 - No deceptive subject lines. "MinimaList — the app you installed is back" is
   factually accurate.
@@ -137,7 +142,7 @@ lapsed for most Canadian addresses. Practical mitigation: same as GDPR posture �
 single message, easy unsubscribe, no repeat sends.
 
 **Bottom line:** one message, clear sender, working unsubscribe, no re-send, no
-enrichment. Add a postal address before sending.
+enrichment.
 
 ---
 
@@ -195,18 +200,18 @@ An F-Droid listing is in progress. All outline data stays on your device.
 
 – Rob
 
-[mailing address]
-
 ---
-To stop receiving messages from this address, reply with "unsubscribe" in the
-subject line, or use the link below.
+To be removed from future emails, reply to this email with UNSUBSCRIBE.
 ```
 
 **Notes before sending:**
-1. Replace `[mailing address]` with a real postal address (CAN-SPAM requirement).
+1. No postal address — the message is sent as a transactional/relationship notice
+   (see Legal framing). Do not add promotional content that would reclassify it.
 2. Once the F-Droid listing is live, update the link to the F-Droid page.
 3. A GitHub Releases fallback is appropriate until F-Droid is available.
 4. No tracking pixels, no UTM parameters — consistent with the privacy posture.
+5. Unsubscribe replies (subject or body containing "unsubscribe" / "UNSUBSCRIBE")
+   are processed manually into `data/outreach/unsubscribed.txt` between batches.
 
 ---
 

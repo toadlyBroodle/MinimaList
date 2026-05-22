@@ -75,16 +75,16 @@ def test_compose_message_body_has_unsubscribe_instructions():
     assert "unsubscribe" in body.lower()
 
 
-def test_body_template_contains_mailing_address_placeholder():
-    """CAN-SPAM requires a physical mailing address; placeholder must be present."""
-    assert "[mailing address]" in S.BODY_TEMPLATE
+def test_body_template_has_no_unfilled_placeholder():
+    """No fill-in-me placeholders (e.g. the old [mailing address]) may ship in the body."""
+    assert "[" not in S.BODY_TEMPLATE and "]" not in S.BODY_TEMPLATE
 
 
-def test_compose_message_body_contains_mailing_address_placeholder():
-    """Composed message body must carry the [mailing address] placeholder."""
+def test_compose_message_body_has_unsubscribe_reply_keyword():
+    """The body must instruct recipients to reply with the UNSUBSCRIBE keyword."""
     msg = S.compose_message("alice@example.com")
     body = msg.get_payload(decode=True).decode("utf-8")
-    assert "[mailing address]" in body
+    assert "UNSUBSCRIBE" in body
 
 
 # ---------------------------------------------------------------------------

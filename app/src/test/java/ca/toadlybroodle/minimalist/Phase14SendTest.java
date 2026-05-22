@@ -123,9 +123,9 @@ public class Phase14SendTest {
     }
 
     @Test
-    public void sendPyBodyTemplateHasMailingAddressPlaceholder() {
+    public void sendPyBodyTemplateHasUnsubscribeReplyInstruction() {
         String src = read("tools/outreach/send.py");
-        assertTrue("BODY_TEMPLATE must contain [mailing address] placeholder (CAN-SPAM requirement)",
-                src.contains("[mailing address]"));
+        assertTrue("BODY_TEMPLATE must instruct recipients to reply with UNSUBSCRIBE",
+                src.contains("UNSUBSCRIBE"));
     }
 }
