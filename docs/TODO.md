@@ -10,6 +10,7 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Append-on-close, newest first. Trim to most recent 10.
 -->
 
+- 15.1 + 15.3: add MIT LICENSE (copyright toadlyBroodle) + pin buildToolsVersion = "35.0.0"; tests 327 → 333 — by sst-dev-cycle at 2026-05-22T00:05Z
 - send.py BODY_TEMPLATE: add [mailing address] CAN-SPAM placeholder; Python tests 74 → 76; Java tests 326 → 327 — by sst-dev-cycle at 2026-05-21T13:10Z
 - Phase 14.5 + 14.6: PROMOTION_PLAN.md five-section campaign plan (sender audit, legal, volume, content, monitoring); send.py DRY_RUN tool; Python tests 53 → 74; Java tests 314 → 326 — by sst-dev-cycle at 2026-05-21T12:20Z
 - Phase 14.3 + 14.4: SMTP RCPT-TO probe → 1104 active addresses (1032 confirmed + 72 unverifiable, ~6% expected bounce rate); docs/FDROID.md 7-step checklist; Python tests 32 → 53; Java tests 301 → 314 — by sst-dev-cycle at 2026-05-21T11:05Z
@@ -33,9 +34,7 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Order: blockers first, then highest-impact.
 -->
 
-- [easy] 15.1 Add a FOSS `LICENSE` file at the repo root (MIT default — see SPEC 15.1). Reason: SPEC Phase 15
 - [medium] 15.2 Add fastlane metadata under `fastlane/metadata/android/en-US/` (short/full description, title, `changelogs/107.txt`, 512×512 `icon.png`). Reason: SPEC Phase 15
-- [easy] 15.3 Pin `buildToolsVersion` in `app/build.gradle.kts` for reproducible builds. Reason: SPEC Phase 15
 - [medium] 15.4 Tag `v107` + publish the GitHub Release with the signed `minimalist-v107-release.apk`. Reason: SPEC Phase 15
 - [medium] 15.5 Draft + `fdroid lint` the metadata YAML at `docs/fdroid/ca.toadlybroodle.minimalist.yml`. Reason: SPEC Phase 15
 
