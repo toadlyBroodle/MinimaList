@@ -45,8 +45,8 @@ avoids the RFP wait queue.
 F-Droid's inclusion policy requires a recognized FOSS license declared in a
 `LICENSE` file at the repo root and in the fdroiddata YAML `License:` field.
 
-- [ ] Choose a license (MIT, Apache-2.0, or GPL-3.0-only are all valid).
-- [ ] Add `LICENSE` file at repo root.
+- [x] Choose a license (MIT, Apache-2.0, or GPL-3.0-only are all valid).
+- [x] Add `LICENSE` file at repo root.
 - [ ] Update `README.md` with the license badge (optional but conventional).
 
 The app has no license file today — this is the first blocker.
@@ -98,7 +98,7 @@ requirements:
 - Build-tools version pinned via `buildToolsVersion` in `app/build.gradle.kts`
   (currently unset — F-Droid's server picks latest; pinning removes ambiguity).
 
-- [ ] Add `buildToolsVersion = "34.0.0"` (or current stable) to
+- [x] Add `buildToolsVersion = "35.0.0"` to
   `app/build.gradle.kts` defaultConfig.
 - [x] Gradle wrapper is already version-pinned.
 - [x] AGP version is pinned in `libs.versions.toml`.
@@ -168,11 +168,11 @@ after initial review: 24–72 hours.
 
 | Item | Status | Phase |
 |------|--------|-------|
-| `LICENSE` file at repo root | **MISSING** | Add in Phase 14.4 or earlier |
-| Fastlane metadata directory | **MISSING** | Add before MR |
-| GitHub release tag (`v107`) | **MISSING** | Add before MR |
-| `buildToolsVersion` pin | **MISSING** (minor) | Add before MR |
-| F-Droid YAML in fdroiddata fork | **MISSING** | Write during MR |
+| `LICENSE` file at repo root | **Done** | Phase 15.1 |
+| Fastlane metadata directory | **MISSING** | Add before MR (Phase 15.2) |
+| GitHub release tag (`v107`) | **MISSING** | Add before MR (Phase 15.4) |
+| `buildToolsVersion` pin | **Done** | Phase 15.3 |
+| F-Droid YAML in fdroiddata fork | **MISSING** | Write during MR (Phase 15.5) |
 
 Everything else (zero proprietary deps, gitignored secrets, clean Gradle
 build, working APK) is already in place.
