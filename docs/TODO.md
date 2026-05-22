@@ -36,6 +36,7 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Order: blockers first, then highest-impact.
 -->
 
+- [easy] [should-fix] 15.5 `docs/FDROID.md:Step 6` UpdateCheckData template points at libs.versions.toml (no versionCode) instead of app/build.gradle.kts — broken auto-update regex if operator copies template — review of 83ddf8b
 
 <!-- Operator-only (not autonomous): docs/HUMAN.md H15.1 — submit the fdroiddata merge request once 15.1–15.5 are done. -->
 
