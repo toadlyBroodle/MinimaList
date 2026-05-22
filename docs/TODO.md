@@ -10,6 +10,7 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Append-on-close, newest first. Trim to most recent 10.
 -->
 
+- 15.2+15.4+15.5: fastlane metadata (short/full/title/changelog/icon), v107 tag+GitHub release, fdroiddata YAML linted; tests 631 → 653 — by sst-dev-cycle at 2026-05-22T19:00Z
 - FDROID.md Step 1 + Step 4 checkboxes ticked and Prerequisites table updated after 15.1/15.3 shipped; tests 626 → 631 — by sst-dev-cycle at 2026-05-22T10:10Z
 - 15.1 + 15.3: add MIT LICENSE (copyright toadlyBroodle) + pin buildToolsVersion = "35.0.0"; tests 327 → 333 — by sst-dev-cycle at 2026-05-22T00:05Z
 - send.py BODY_TEMPLATE: add [mailing address] CAN-SPAM placeholder; Python tests 74 → 76; Java tests 326 → 327 — by sst-dev-cycle at 2026-05-21T13:10Z
@@ -35,9 +36,6 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Order: blockers first, then highest-impact.
 -->
 
-- [medium] 15.2 Add fastlane metadata under `fastlane/metadata/android/en-US/` (short/full description, title, `changelogs/107.txt`, 512×512 `icon.png`). Reason: SPEC Phase 15
-- [medium] 15.4 Tag `v107` + publish the GitHub Release with the signed `minimalist-v107-release.apk`. Reason: SPEC Phase 15
-- [medium] 15.5 Draft + `fdroid lint` the metadata YAML at `docs/fdroid/ca.toadlybroodle.minimalist.yml`. Reason: SPEC Phase 15
 
 <!-- Operator-only (not autonomous): docs/HUMAN.md H15.1 — submit the fdroiddata merge request once 15.1–15.5 are done. -->
 

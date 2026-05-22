@@ -1,0 +1,1 @@
+Resurrection of the abandoned 2018 "sublist" app. All cloud services removed: Firebase, AdMob, Google Sign-In, Analytics, FCM, Cast, Crashlytics, Play Billing. Rebuilt with AndroidX, Room local database, modern SDK (targetSdk 35). Local-only — no network, no account, no tracking.

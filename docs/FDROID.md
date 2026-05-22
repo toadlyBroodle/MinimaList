@@ -40,7 +40,7 @@ avoids the RFP wait queue.
 
 ## Ordered checklist: current repo state → submitted MR
 
-### Step 1 — Add a FOSS license file (MISSING)
+### Step 1 — Add a FOSS license file (Done)
 
 F-Droid's inclusion policy requires a recognized FOSS license declared in a
 `LICENSE` file at the repo root and in the fdroiddata YAML `License:` field.
@@ -71,10 +71,10 @@ fastlane/
           phoneScreenshots/     (up to 5, 1080 × 1920 px recommended)
 ```
 
-- [ ] Write `short_description.txt` — one-liner describing the app.
-- [ ] Write `full_description.txt` — plain text or basic HTML, ≤ 4000 chars.
-- [ ] Add `changelogs/107.txt` — summary of changes since the 2018 build.
-- [ ] Add `icon.png` — 512 × 512 export of the current vector icon.
+- [x] Write `short_description.txt` — one-liner describing the app.
+- [x] Write `full_description.txt` — plain text or basic HTML, ≤ 4000 chars.
+- [x] Add `changelogs/107.txt` — summary of changes since the 2018 build.
+- [x] Add `icon.png` — 512 × 512 export of the current vector icon.
 - [ ] (Optional) add 1–3 screenshots in `phoneScreenshots/`.
 
 ### Step 3 — Verify all dependencies are FOSS
@@ -109,8 +109,8 @@ F-Droid's YAML references a specific git commit (or tag).  A named tag makes
 the YAML `commit:` field readable and the `UpdateCheckMode: Tags` automation
 usable.
 
-- [ ] Create a signed git tag (e.g. `v107`) pointing at the current HEAD.
-- [ ] Push the tag to GitHub.
+- [x] Create a signed git tag (e.g. `v107`) pointing at the current HEAD.
+- [x] Push the tag to GitHub.
 
 ### Step 6 — Create `metadata/ca.toadlybroodle.minimalist.yml` in fdroiddata
 
@@ -147,7 +147,7 @@ UpdateCheckData: gradle/libs.versions.toml|versionCode\s*=\s*"([^"]+)"|.|v$1
 
 - [ ] Fork `fdroiddata` on GitLab.
 - [ ] Add the YAML above (updated with correct license + commit hash).
-- [ ] Run `fdroid lint metadata/ca.toadlybroodle.minimalist.yml` locally
+- [x] Run `fdroid lint metadata/ca.toadlybroodle.minimalist.yml` locally
   (`pip install fdroidserver`) to catch schema errors before submitting.
 - [ ] Open a merge request against `fdroiddata` main.
 
@@ -169,10 +169,10 @@ after initial review: 24–72 hours.
 | Item | Status | Phase |
 |------|--------|-------|
 | `LICENSE` file at repo root | **Done** | Phase 15.1 |
-| Fastlane metadata directory | **MISSING** | Add before MR (Phase 15.2) |
-| GitHub release tag (`v107`) | **MISSING** | Add before MR (Phase 15.4) |
+| Fastlane metadata directory | **Done** | Phase 15.2 |
+| GitHub release tag (`v107`) | **Done** | Phase 15.4 |
 | `buildToolsVersion` pin | **Done** | Phase 15.3 |
-| F-Droid YAML in fdroiddata fork | **MISSING** | Write during MR (Phase 15.5) |
+| F-Droid YAML in fdroiddata fork | **Done** | Phase 15.5 |
 
 Everything else (zero proprietary deps, gitignored secrets, clean Gradle
 build, working APK) is already in place.
