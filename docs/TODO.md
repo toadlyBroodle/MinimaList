@@ -33,4 +33,11 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Order: blockers first, then highest-impact.
 -->
 
+- [easy] 15.1 Add a FOSS `LICENSE` file at the repo root (MIT default — see SPEC 15.1). Reason: SPEC Phase 15
+- [medium] 15.2 Add fastlane metadata under `fastlane/metadata/android/en-US/` (short/full description, title, `changelogs/107.txt`, 512×512 `icon.png`). Reason: SPEC Phase 15
+- [easy] 15.3 Pin `buildToolsVersion` in `app/build.gradle.kts` for reproducible builds. Reason: SPEC Phase 15
+- [medium] 15.4 Tag `v107` + publish the GitHub Release with the signed `minimalist-v107-release.apk`. Reason: SPEC Phase 15
+- [medium] 15.5 Draft + `fdroid lint` the metadata YAML at `docs/fdroid/ca.toadlybroodle.minimalist.yml`. Reason: SPEC Phase 15
+
+<!-- Operator-only (not autonomous): docs/HUMAN.md H15.1 — submit the fdroiddata merge request once 15.1–15.5 are done. -->
 
