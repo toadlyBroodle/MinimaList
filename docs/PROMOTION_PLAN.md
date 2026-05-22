@@ -34,12 +34,6 @@ connections. No email sent. Three-way classification: confirmed (250 accepted,
 domain is not a catch-all) / unverifiable (connection failure, catch-all
 domain, or ambiguous code) / rejected (hard 5xx).
 
-Note: Gmail accounts for 1,092 of 1,141 valid addresses (95.7 %). Gmail's MX
-servers return 250 for both valid and invalid addresses (anti-harvesting
-catch-all behaviour), so all Gmail addresses land in the unverifiable tier.
-The confirmed tier will consist primarily of addresses at smaller domains
-whose MX servers disclose mailbox existence.
-
 **Domain distribution of validated list:**
 - gmail.com: 1,092 (95.7 %)
 - hotmail.com: 9
@@ -70,6 +64,10 @@ disclosure).
 Active list written to: `data/outreach/active.txt` (gitignored — PII).
 Two-section format: `# tier:confirmed` followed by `# tier:unverifiable`.
 Warmup sends should target the confirmed tier first.
+
+The 37 hard-rejected addresses were removed from `validated.txt` (now 1,104, matching
+the active list) and saved to `data/outreach/rejected.txt` (gitignored — PII) as a
+permanent suppression record, so they are never re-probed or sent to.
 
 ---
 
