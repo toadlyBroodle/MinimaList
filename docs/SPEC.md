@@ -398,6 +398,8 @@ Phase 14.4 produced `docs/FDROID.md`, the F-Droid submission checklist. This pha
 
 Once 15.1–15.5 are complete the repository is submittable. The merge request itself — forking `fdroiddata` on GitLab, adding the YAML, opening the MR, and the reviewer exchange — is tracked as `docs/HUMAN.md` H15.1 and is the operator's step.
 
+**Phase 15 follow-up 2026-05-23.** H15.1 executed: fork `toadlyBroodle/fdroiddata` created, branch `add-ca.toadlybroodle.minimalist` adds `metadata/ca.toadlybroodle.minimalist.yml` at commit `1f67b85e`, MR `!38936` opened against `fdroid/fdroiddata` master and awaiting reviewer. Three corrections to the in-repo YAML draft (`docs/fdroid/ca.toadlybroodle.minimalist.yml`) were folded in before submission and committed back to the repo (`77a39ac`): `Categories: Productivity` → `Note` + `Task` (F-Droid's canonical category set has no `Productivity`); added `AuthorName`; added `CurrentVersion` / `CurrentVersionCode`. CI on the fork is intentionally disabled (`builds_access_level=disabled`) because GitLab requires SMS phone verification before its shared runners run jobs and verification was declined — reviewers should evaluate the YAML directly. Full status + verify line in `docs/HUMAN.md` H15.1.
+
 ## Deferred / out of scope
 
 - Re-listing on the Play Store. Side-load only for now; if we re-list, Play Console requires a privacy policy + data-handling disclosure that's only worth writing once the local-only architecture is stable. Revisit after Phase 9.

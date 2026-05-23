@@ -29,10 +29,11 @@ Each entry uses the form:
 
 - [ ] H15.1 [medium] **F-Droid merge request — open, awaiting reviewer**
   MR opened 2026-05-23 against `gitlab.com/fdroid/fdroiddata` via the GitLab REST API (a personal access token in the user's normal browser; playwright-mcp was Cloudflare-blocked on gitlab.com sign-in). Source branch `add-ca.toadlybroodle.minimalist` on the user's fork `toadlyBroodle/fdroiddata` (id 82491652); commit `1f67b85e` adds `metadata/ca.toadlybroodle.minimalist.yml`. Three corrections to the in-repo YAML draft were folded in before submission: Categories `Productivity` → `Note` + `Task` (F-Droid's canonical category set has no `Productivity`); added `AuthorName`; added `CurrentVersion` / `CurrentVersionCode`. MR title: "New app: ca.toadlybroodle.minimalist (MinimaList)". Now awaiting F-Droid maintainer review (typically 24–72 h for first comment, then iterate). Item stays open until merged.
+  CI on the fork is intentionally off — GitLab requires SMS phone verification before its shared runners will pick up jobs (anti-crypto-mining policy since ~2023) and verification was declined. Pipelines disabled on the fork via Settings → General → Visibility, project features, permissions → Repository → CI/CD sub-toggle (`builds_access_level=disabled`, confirmed via API); the MR therefore shows no pipeline status rather than a stuck red failure. The lack of CI on the fork is by design — reviewers should evaluate the YAML directly, and F-Droid runs its own validation server-side on merge.
   MR: https://gitlab.com/fdroid/fdroiddata/-/merge_requests/38936
   Blocks: none — terminal deliverable of Phase 15; depends on 15.1–15.5 being complete first.
   Verify: curl -s "https://gitlab.com/api/v4/projects/36528/merge_requests/38936" | python3 -c 'import json,sys; d=json.load(sys.stdin); sys.exit(0 if d.get("state")=="merged" else 1)'
-  Filed by: claude (chat with user) at 2026-05-22T08:11Z; updated 2026-05-23T23:10Z (MR opened).
+  Filed by: claude (chat with user) at 2026-05-22T08:11Z; updated 2026-05-23T23:10Z (MR opened); 2026-05-23T23:45Z (CI/phone-verification note + pipelines-disabled on fork).
   Source: chat with user 2026-05-22 + 2026-05-23 + docs/FDROID.md Steps 6–7.
 
 ## Medium

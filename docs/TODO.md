@@ -31,5 +31,5 @@ Cross-cycle state. Three sections, in this order. Primary spec: `docs/SPEC.md`.
   Order: blockers first, then highest-impact.
 -->
 
-<!-- Operator-only (not autonomous): docs/HUMAN.md H15.1 — submit the fdroiddata merge request once 15.1–15.5 are done. -->
+<!-- Operator-only (not autonomous): docs/HUMAN.md H15.1 — fdroiddata MR !38936 open and awaiting reviewer (https://gitlab.com/fdroid/fdroiddata/-/merge_requests/38936); CI on fork intentionally disabled (GitLab SMS verification declined). H15.1 closes automatically when the MR merges (Verify line). -->
 
