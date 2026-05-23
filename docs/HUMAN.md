@@ -27,11 +27,13 @@ Each entry uses the form:
 
 (Important but not actively blocking the cycle. The dev cycle continues past these unless picked-item gating exists.)
 
-- [ ] H15.1 [medium] **Submit the F-Droid merge request to fdroiddata**
-  F-Droid listings are created by a merge request against `gitlab.com/fdroid/fdroiddata`, not from the app repo. Once Phase 15.1–15.5 are complete (LICENSE, fastlane metadata, `buildToolsVersion` pin, the `v107` tag, and the linted `docs/fdroid/ca.toadlybroodle.minimalist.yml` draft), fork `fdroiddata` on GitLab, add the YAML at `metadata/ca.toadlybroodle.minimalist.yml`, and open the merge request — then monitor it and respond to reviewer feedback over the following days. The autonomous cycle cannot do this: it needs a GitLab account, the GitLab web UI/auth, and a multi-day human reviewer exchange. Full procedure in `docs/FDROID.md` Steps 6–7.
+- [ ] H15.1 [medium] **F-Droid merge request — open, awaiting reviewer**
+  MR opened 2026-05-23 against `gitlab.com/fdroid/fdroiddata` via the GitLab REST API (a personal access token in the user's normal browser; playwright-mcp was Cloudflare-blocked on gitlab.com sign-in). Source branch `add-ca.toadlybroodle.minimalist` on the user's fork `toadlyBroodle/fdroiddata` (id 82491652); commit `1f67b85e` adds `metadata/ca.toadlybroodle.minimalist.yml`. Three corrections to the in-repo YAML draft were folded in before submission: Categories `Productivity` → `Note` + `Task` (F-Droid's canonical category set has no `Productivity`); added `AuthorName`; added `CurrentVersion` / `CurrentVersionCode`. MR title: "New app: ca.toadlybroodle.minimalist (MinimaList)". Now awaiting F-Droid maintainer review (typically 24–72 h for first comment, then iterate). Item stays open until merged.
+  MR: https://gitlab.com/fdroid/fdroiddata/-/merge_requests/38936
   Blocks: none — terminal deliverable of Phase 15; depends on 15.1–15.5 being complete first.
-  Filed by: claude (chat with user) at 2026-05-22T08:11Z.
-  Source: chat with user 2026-05-22 + docs/FDROID.md Steps 6–7.
+  Verify: curl -s "https://gitlab.com/api/v4/projects/36528/merge_requests/38936" | python3 -c 'import json,sys; d=json.load(sys.stdin); sys.exit(0 if d.get("state")=="merged" else 1)'
+  Filed by: claude (chat with user) at 2026-05-22T08:11Z; updated 2026-05-23T23:10Z (MR opened).
+  Source: chat with user 2026-05-22 + 2026-05-23 + docs/FDROID.md Steps 6–7.
 
 ## Medium
 
