@@ -19,8 +19,8 @@ android {
         applicationId = "ca.toadlybroodle.minimalist"
         minSdk = 21
         targetSdk = 35
-        versionCode = 107
-        versionName = "107"
+        versionCode = 108
+        versionName = "108"
     }
 
     signingConfigs {

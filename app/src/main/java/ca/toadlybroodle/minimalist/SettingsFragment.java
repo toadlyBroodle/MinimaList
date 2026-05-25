@@ -39,6 +39,10 @@ public class SettingsFragment extends Fragment
 
     // Phase 10.8: SAF fallback for Import when the chosen Location has no matching files.
     static final int REQUEST_IMPORT_SAF = 1004;
+    // SD-location SAF export: JSON picks a file (CREATE_DOCUMENT), TXT picks a folder
+    // (OPEN_DOCUMENT_TREE) because TXT writes one file per sublist.
+    static final int REQUEST_EXPORT_SAF_JSON = 1005;
+    static final int REQUEST_EXPORT_SAF_TXT_TREE = 1006;
 
     LinearLayout f3871a;
     Button f3872ae;
@@ -330,16 +334,20 @@ public class SettingsFragment extends Fragment
         }
     }
 
-    // Phase 10.8: unified Export — write all open sublists to the chosen
-    // Location in the chosen Format. No SAF; deterministic file paths so the
-    // user knows where to find the file (toast confirms the path).
+    // Phase 10.8: unified Export — Local writes to a deterministic app-scoped
+    // dir (filesDir for JSON+TXT). SD launches a SAF picker so the user can
+    // pick a visible location: ACTION_CREATE_DOCUMENT for JSON (single file)
+    // and ACTION_OPEN_DOCUMENT_TREE for TXT (one file per sublist into the
+    // chosen folder). Toast on completion confirms the chosen location.
     private void doExport() {
-        android.content.Context ctx = this.f3881an.mo4775m();
         int locIdx = AppSettings.getBackupLocationIndex();
         int fmtIdx = AppSettings.getBackupFormatIndex();
-        java.io.File dir = locIdx == 1
-                ? ctx.getExternalFilesDir(null)
-                : ctx.getFilesDir();
+        if (locIdx == 1) {
+            launchSafExport(fmtIdx);
+            return;
+        }
+        android.content.Context ctx = this.f3881an.mo4775m();
+        java.io.File dir = ctx.getFilesDir();
         Handler main = new Handler(Looper.getMainLooper());
         AppMain.io().execute(() -> {
             String path = fmtIdx == 1
@@ -359,16 +367,51 @@ public class SettingsFragment extends Fragment
         });
     }
 
-    // Phase 10.8: unified Import — scan the chosen Location for files with the
-    // chosen Format's extension. 0 found = toast; 1 found = import directly;
-    // multiple = AlertDialog chooser.
+    private void launchSafExport(int fmtIdx) {
+        if (fmtIdx == 1) {
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+            startActivityForResult(intent, REQUEST_EXPORT_SAF_TXT_TREE);
+        } else {
+            Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("application/json");
+            intent.putExtra(Intent.EXTRA_TITLE, "minimalist_export.json");
+            startActivityForResult(intent, REQUEST_EXPORT_SAF_JSON);
+        }
+    }
+
+    private void runSafExport(Uri uri, boolean txtTree) {
+        android.content.Context ctx = this.f3881an.mo4775m();
+        Handler main = new Handler(Looper.getMainLooper());
+        AppMain.io().execute(() -> {
+            String path = txtTree
+                    ? OutlineStore.exportTxtToTreeUri(ctx, uri)
+                    : OutlineStore.exportJsonToUri(ctx, uri);
+            main.post(() -> {
+                if (path == null) {
+                    Toast.makeText(ctx, R.string.toast_json_export_fail,
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(ctx,
+                            getString(R.string.toast_export_done_fmt, path),
+                            Toast.LENGTH_LONG).show();
+                }
+            });
+        });
+    }
+
+    // Phase 10.8: unified Import — Local scans its app-scoped dir for files
+    // with the chosen Format's extension (0/1/many handling below); SD goes
+    // straight to SAF so the user picks the file from wherever they saved it.
     private void doImport() {
         android.content.Context ctx = this.f3881an.mo4775m();
         int locIdx = AppSettings.getBackupLocationIndex();
         int fmtIdx = AppSettings.getBackupFormatIndex();
-        java.io.File dir = locIdx == 1
-                ? ctx.getExternalFilesDir(null)
-                : ctx.getFilesDir();
+        if (locIdx == 1) {
+            launchSafImport(fmtIdx);
+            return;
+        }
+        java.io.File dir = ctx.getFilesDir();
         final String ext = fmtIdx == 1 ? ".txt" : ".json";
         java.io.File[] all = dir == null ? null : dir.listFiles();
         java.util.ArrayList<java.io.File> matches = new java.util.ArrayList<>();
@@ -421,6 +464,10 @@ public class SettingsFragment extends Fragment
         if (uri == null) return;
         if (requestCode == REQUEST_IMPORT_SAF) {
             importByUri(this.f3881an.mo4775m(), uri, AppSettings.getBackupFormatIndex());
+        } else if (requestCode == REQUEST_EXPORT_SAF_JSON) {
+            runSafExport(uri, false);
+        } else if (requestCode == REQUEST_EXPORT_SAF_TXT_TREE) {
+            runSafExport(uri, true);
         }
     }
 

@@ -339,6 +339,99 @@ public class OutlineStore extends AppSettings {
         }
     }
 
+    // SD-via-SAF JSON export. Caller obtained `uri` via ACTION_CREATE_DOCUMENT, so
+    // the system already created the document at the user's chosen location and
+    // we only need to write bytes through the content resolver. Returns the URI
+    // string on success (used in the toast so the user can see where it landed).
+    static String exportJsonToUri(Context ctx, Uri uri) {
+        if (uri == null) return null;
+        String json = new Gson().toJson(OutlineFragment.m4892a(f3938a.mo4786x()));
+        try (OutputStream os = ctx.getContentResolver().openOutputStream(uri, "wt")) {
+            if (os == null) return null;
+            os.write(json.getBytes("UTF-8"));
+            return uri.toString();
+        } catch (IOException ex) {
+            Log.e(f3974s, "exportJsonToUri failed: " + ex.getMessage());
+            return null;
+        }
+    }
+
+    // SD-via-SAF TXT export. Caller obtained `treeUri` via ACTION_OPEN_DOCUMENT_TREE.
+    // For each open sublist, find any existing child with the same display name and
+    // delete it (so the user's repeated exports overwrite rather than producing
+    // "name (1).txt", "name (2).txt" copies — matching the deterministic behaviour
+    // of exportTxtToDir), then createDocument + stream the rows out. Returns the
+    // tree's display name on success or null on any failure.
+    static String exportTxtToTreeUri(Context ctx, Uri treeUri) {
+        if (treeUri == null) return null;
+        android.content.ContentResolver cr = ctx.getContentResolver();
+        try {
+            Uri parentDocUri = android.provider.DocumentsContract.buildDocumentUriUsingTree(
+                    treeUri, android.provider.DocumentsContract.getTreeDocumentId(treeUri));
+            for (OutlineFragment frag : f3938a.mo4786x()) {
+                String name = frag.getTag();
+                if (name == null || name.isEmpty()) name = "Imported";
+                String filename = sanitizeFileName(name) + ".txt";
+                deleteTreeChildByName(cr, treeUri, parentDocUri, filename);
+                Uri docUri = android.provider.DocumentsContract.createDocument(
+                        cr, parentDocUri, "text/plain", filename);
+                if (docUri == null) {
+                    Log.e(f3974s, "exportTxtToTreeUri: createDocument returned null for " + filename);
+                    return null;
+                }
+                ArrayList<OutlineRowView> rows = frag.mo4849af().f3987b;
+                try (OutputStream os = cr.openOutputStream(docUri, "wt");
+                        OutputStreamWriter writer = new OutputStreamWriter(os)) {
+                    for (OutlineRowView rv : rows) {
+                        StringBuilder indent = new StringBuilder();
+                        for (int i = 0; i < rv.m4859a(); i++) indent.append(' ');
+                        writer.append("\n").append(indent)
+                                .append(rv.f3823f ? "x-" : " -")
+                                .append(rv.f3822e.getText().toString().replaceAll("\n", " "));
+                    }
+                }
+            }
+            return queryTreeDisplayName(cr, parentDocUri, treeUri.toString());
+        } catch (Exception ex) {
+            Log.e(f3974s, "exportTxtToTreeUri failed: " + ex.getMessage(), ex);
+            return null;
+        }
+    }
+
+    private static void deleteTreeChildByName(android.content.ContentResolver cr,
+            Uri treeUri, Uri parentDocUri, String displayName) {
+        Uri childrenUri = android.provider.DocumentsContract.buildChildDocumentsUriUsingTree(
+                treeUri, android.provider.DocumentsContract.getDocumentId(parentDocUri));
+        String[] proj = {
+                android.provider.DocumentsContract.Document.COLUMN_DOCUMENT_ID,
+                android.provider.DocumentsContract.Document.COLUMN_DISPLAY_NAME };
+        try (android.database.Cursor c = cr.query(childrenUri, proj, null, null, null)) {
+            if (c == null) return;
+            while (c.moveToNext()) {
+                if (displayName.equals(c.getString(1))) {
+                    Uri victim = android.provider.DocumentsContract.buildDocumentUriUsingTree(
+                            treeUri, c.getString(0));
+                    try {
+                        android.provider.DocumentsContract.deleteDocument(cr, victim);
+                    } catch (Exception ignore) { }
+                }
+            }
+        }
+    }
+
+    private static String queryTreeDisplayName(android.content.ContentResolver cr,
+            Uri parentDocUri, String fallback) {
+        try (android.database.Cursor c = cr.query(parentDocUri,
+                new String[] { android.provider.DocumentsContract.Document.COLUMN_DISPLAY_NAME },
+                null, null, null)) {
+            if (c != null && c.moveToFirst()) {
+                String name = c.getString(0);
+                if (name != null && !name.isEmpty()) return name;
+            }
+        } catch (Exception ignore) { }
+        return fallback;
+    }
+
     // Strip filename-unfriendly characters so the user's sublist name maps to a
     // legal cross-FS filename. Keeps unicode letters/digits, replaces the rest with '_'.
     private static String sanitizeFileName(String name) {

@@ -1,0 +1,1 @@
+Backup location "SD card" now uses the system file picker so backups land where the user chooses (Downloads, Documents, etc.) instead of the hidden app-scoped external dir. JSON export prompts for a filename; TXT export prompts for a folder. Import on SD opens the file picker directly. Local backup unchanged.
