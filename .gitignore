@@ -25,3 +25,13 @@ data/
 # Build artifacts
 *.apk
 v106.keystore.properties
+
+# JADX/apktool reference dumps (porting aids, not built sources)
+decompiled/
+AndroidManifest.xml
+
+# Non-F-Droid material (kept on disk, not tracked)
+docs/
+tools/outreach/
+.playwright-mcp/
+**/__pycache__/
