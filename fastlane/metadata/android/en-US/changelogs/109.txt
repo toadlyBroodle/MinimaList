@@ -1,0 +1,1 @@
+No user-facing changes. Build hygiene release: source tree no longer carries historical reference material alongside the app.
